@@ -1,0 +1,860 @@
+
+
+sudo sysctl -w net.ipv4.ip_forward=1
+
+nano /etc/sysctl.conf
+
+
+sudo apt-get install apt-transport-https ca-certificates curl gnupg lsb-release wget curl bash-completion net-tools
+
+
+
+sudo ln -s /var/lib/snapd/snap /snap
+
+sudo systemctl enable --now snapd.socket
+
+
+
+
+curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
+
+curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+echo \
+  "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+sudo apt-get update
+
+sudo apt-get install docker-ce docker-ce-cli containerd.io
+
+# https://github.com/docker/compose/releases/download/1.29.1/docker-compose-Darwin-x86_64
+# https://github.com/docker/compose/releases/download/1.29.1/docker-compose-Darwin-x86_64.sha256
+
+# https://github.com/docker/compose/releases/download/1.29.1/docker-compose-Darwin-x86_64.tgz
+# https://github.com/docker/compose/releases/download/1.29.1/docker-compose-Darwin-x86_64.tgz.sha256
+
+# https://github.com/docker/compose/releases/download/1.29.1/docker-compose-Linux-x86_64
+# https://github.com/docker/compose/releases/download/1.29.1/docker-compose-Linux-x86_64.sha256
+
+# https://github.com/docker/compose/releases/download/1.29.1/docker-compose-Windows-x86_64.exe
+# https://github.com/docker/compose/releases/download/1.29.1/docker-compose-Windows-x86_64.exe.sha256
+
+# https://github.com/docker/compose/releases/download/1.29.1/run.sh
+# https://github.com/docker/compose/archive/refs/tags/1.29.1.zip
+# https://github.com/docker/compose/archive/refs/tags/1.29.1.tar.gz
+
+wget "https://github.com/docker/compose/releases/download/1.29.1/docker-compose-Linux-x86_64"
+
+sudo cp -f ./docker-compose-Linux-x86_64 /usr/local/bin/docker-compose
+rm -rf ./docker-compose-Linux-x86_64
+sudo chmod +x /usr/local/bin/docker-compose
+
+sudo docker ps
+sudo docker exec -i -t 6ee6223a3ce3 bash
+
+
+sudo groupadd docker
+sudo usermod -aG docker mikl
+
+
+
+
+
+
+Portainer to 1.24
+
+sudo docker volume create portainer_data
+
+sudo docker run -d -p 9000:9000 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer
+
+sudo docker run -d -p 9000:9000 -p 8000:8000 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce
+
+
+
+
+
+Deploying Portainer CE in Docker
+
+Portainer Server Deployment
+docker volume create portainer_data
+docker run -d -p 8000:8000 -p 9000:9000 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce
+
+Portainer Agent Only Deployment
+Run the following command to deploy the Agent in your Docker host.
+docker run -d -p 9001:9001 --name portainer_agent --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v /var/lib/docker/volumes:/var/lib/docker/volumes portainer/agent
+
+
+
+Deploying Portainer Business in Docker
+
+Portainer Server Deployment
+docker volume create portainer_data
+docker run -d -p 8000:8000 -p 9000:9000 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ee:latest
+
+Portainer Agent Only Deployment
+Run the following command to deploy the Agent in your Docker host
+docker run -d -p 9001:9001 --name portainer_agent --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v /var/lib/docker/volumes:/var/lib/docker/volumes portainer/agent:2.0.0
+
+
+
+
+
+Portainer to 2.0.0
+
+mkdir -p portainer-data && cd portainer-data
+nano docker-compose.yml
+
+version: "3"
+
+volumes:
+  portainer_data:
+
+services:
+
+  portainer:
+    image: portainer/portainer-ce
+    container_name: portainer
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    ports:
+      - 9000:9000
+      - 8000:8000
+    restart: always
+
+
+
+
+
+openssl rand -base64 48
+If3VUCE75QBEbbhervInaHvfJcPC5/g3k4C5gli1hU6BTZfp3mOKTTOEjqhegl1l
+
+
+
+https://download.nextcloud.com/server/releases/nextcloud-21.0.0.zip
+
+
+
+Create a docker-compose.yml file similar to this:
+
+version: '3'
+services:
+  app:
+    image: 'jc21/nginx-proxy-manager:latest'
+    ports:
+      - '80:80'
+      - '81:81'
+      - '443:443'
+    environment:
+      DB_MYSQL_HOST: "db"
+      DB_MYSQL_PORT: 3306
+      DB_MYSQL_USER: "npm"
+      DB_MYSQL_PASSWORD: "npm"
+      DB_MYSQL_NAME: "npm"
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+  db:
+    image: 'jc21/mariadb-aria:latest'
+    environment:
+      MYSQL_ROOT_PASSWORD: 'npm'
+      MYSQL_DATABASE: 'npm'
+      MYSQL_USER: 'npm'
+      MYSQL_PASSWORD: 'npm'
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+
+
+docker-compose up -d
+
+http://127.0.0.1:81
+
+Default Admin User:
+
+Email:    admin@example.com
+Password: changeme
+
+Upgrading to new versions
+docker-compose pull
+docker-compose up -d
+
+
+
+
+
+
+
+
+version: "2"
+
+services:
+
+  bitwardenrs:
+    image: bitwardenrs/server:latest
+    container_name: bitwardenrs
+    volumes:
+      - BitWardenRS:/data/
+    ports:
+      - 8100:80
+    restart: unless-stopped
+
+
+
+
+mkdir searx && cd searx
+nano docker-compose.yml
+
+version: '2.3'
+
+services:
+  searx:
+    container_name: searx
+    image: angristan/searx:latest
+    restart: always
+    ports:
+      - "8585:8888"
+    environment:
+      - IMAGE_PROXY=true
+      - BASE_URL=http://192.168.0.120:8585
+      - UID=1000
+      - GID=1000
+      
+
+
+
+
+mkdir -p ./heimdall/config && cd ./heimdall
+nano docker-compose.yml
+
+
+---
+version: "2.1"
+services:
+  heimdall:
+    image: ghcr.io/linuxserver/heimdall
+    container_name: heimdall
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Moscow
+    volumes:
+      - ./config:/config
+    ports:
+      - 8787:80
+    restart: unless-stopped
+
+
+sudo docker-compose up -d
+
+
+
+cp ./config/nginx/site-confs/default ./ng-site-default
+    volumes:
+      - ./ssl/:/etc/openssl/
+      - ./ng-site-default:/config/nginx/site-confs/default
+
+
+nginx.conf - to primer:
+
+server {
+    listen 80;
+    server_name docr.smmhub.ru;
+    server_tokens off;
+
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
+
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
+server {
+    listen 443 ssl;
+    server_name docr.smmhub.ru;
+    server_tokens off;
+
+    ssl_certificate /etc/letsencrypt/live/docr.smmhub.ru/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/docr.smmhub.ru/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+    
+    # ssl_certificate /etc/openssl/domain.crt;
+	# ssl_certificate_key /etc/openssl/domain.key;
+    # ssl_dhparam /etc/openssl/dhparam.pem;
+    
+    location / {
+        root   /usr/share/nginx/html;
+        index  index.html;
+    }
+}
+
+
+openssl genrsa -out rootCA.key 2048
+openssl req -x509 -new -key rootCA.key -days 10000 -out rootCA.crt
+openssl genrsa -out domain.key 2048
+openssl req -new -key domain.key -out domain.req
+openssl x509 -req -in domain.req -CA rootCA.crt -CAkey rootCA.key -CAcreateserial -out domain.crt -days 5000
+rm -rf domain.req
+cat rootCA.crt domain.crt > server.crt
+
+openssl rsa -in domain.key -out domain.nopass.key
+openssl dhparam -out dhparam.pem 2048
+
+wget https://github.com/FiloSottile/mkcert/releases/download/v1.4.3/mkcert-v1.4.3-linux-amd64
+sudo cp mkcert-v1.4.3-linux-amd64 /usr/local/bin/mkcert
+rm -rf mkcert-v1.4.3-linux-amd64
+sudo chmod +x /usr/local/bin/mkcert
+mkcert -key-file key.pem -cert-file cert.pem -p12-file pks.p12 warden.vps.com "*.wrden.vps.com" localhost 127.0.0.1
+
+
+sudo a2enmod headers
+sudo a2enmod ssl
+sudo a2enmod proxy
+sudo a2enmod proxy_http
+sudo a2enmod proxy_balancer
+sudo a2enmod lbmethod_byrequests
+
+sudo systemctl restart apache2
+
+<VirtualHost *:80>
+ ProxyPreserveHost On
+
+ ProxyPass / http://127.0.0.1:8080/
+ ProxyPassReverse / http://127.0.0.1:8080/
+</VirtualHost>
+
+sudo nano /etc/apache2/sites-enabled/000-default.conf
+
+<VirtualHost *:443>
+    
+    SSLEngine on
+    SSLCertificateFile /etc/ssl/domain.crt
+    SSLCertificateKeyFile /etc/ssl/domain.key
+    SSLCACertificateFile /etc/ssl/rootCA.crt
+    
+    ProxyPreserveHost On
+    ProxyPass / http://localhost:8005/
+    ProxyPassReverse / http://localhost:8005/
+</VirtualHost>
+
+/usr/local/share/ca-certificates/
+sudo update-ca-certificates
+sudo update-ca-trust
+
+
+sudo apt-get install libnss3-tools
+sudo openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout /home/mikl/ssl/localhost.key -out /home/mikl/ssl/localhost.crt -config /home/mikl/ssl/openssl.cnf
+mkdir -p $HOME/.pki/nssdb
+certutil -d sql:$HOME/.pki/nssdb -A -t "P,," -n localhost.crt -i /home/mikl/ssl/localhost.crt
+
+
+
+mkdir -p ~/nginx_proxy/ssl && cd ~/nginx_proxy/ssl
+openssl req -newkey rsa:2048 -nodes -keyout domain.key -out domain.csr
+openssl x509 -signkey domain.key -in domain.csr -req -days 365 -out domain.crt
+or one command:
+openssl req -newkey rsa:2048 -nodes -keyout domain.key -x509 -days 365 -out domain.crt
+
+For Android:
+openssl x509 -in domain.crt -inform PEM -outform DER -out ca-cert.crt
+openssl pkcs12 -export -out private.p12 -inkey domain.key -in domain.crt -certfile site.ca-bundle
+openssl pkcs12 -export -out private.pfx -inkey domain.key -in domain.crt -certfile site.ca-bundle
+
+sudo nano /etc/nginx/conf.d/proxy_ssl.conf
+
+server {
+  listen 8443;
+  ssl on;
+  ssl_certificate /home/mikl/nginx_proxy/ssl/domain.crt;
+  ssl_certificate_key /home/mikl/nginx_proxy/ssl/domain.key;
+  ssl_dhparam /etc/ssl/dhparam.pem;
+  location / {
+     proxy_pass http://192.168.0.120:8005;
+  }
+}
+
+sudo systemctl restart nginx
+
+
+docker run -d --name nginx -p 80:80 -v /path/to/nginx/config/default.conf:/etc/nginx/conf.d/default.conf nginx
+
+
+nano docker-compose.yml
+nginx-proxy:
+
+
+version: '3'
+
+services:
+  memcached:
+    image: memcached:latest
+
+  nginxgogs:
+    image: nginx:latest
+    links:
+      - memcached:memcached
+    container_name: nginx-gogs
+    restart: unless-stopped
+    ports:
+      - "8443:443"
+    volumes:
+      - ./nginx/conf.d/:/etc/nginx/conf.d
+      - ./ssl:/etc/ssl/
+    networks:
+      - nginxproxy
+
+networks:
+  nginxproxy:
+    driver: bridge
+
+
+sudo docker-compose up -d
+
+
+------------------------------------
+
+JDownloader 2.
+
+version: 2
+services:
+  jdownloader-2:
+    image: jlesage/jdownloader-2
+    ports:
+      - 5800:5800
+    volumes:
+      - /srv/dev-disk-by-label-Files/Config/JDownloader-2:/config:rw
+      - /srv/dev-disk-by-label-Files/YouTube:/output:rw
+      
+
+
+Ports
+Port	Mapping to host	Description
+5800	Mandatory	Port used to access the application’s GUI via the web interface.
+5900	Optional	Port used to access the application’s GUI via the VNC protocol. Optional if no VNC client is used.
+3129	Optional	Port used by MyJDownloader mobile applications and browser extensions to establish a direct connect to the JDownloader Docker container instance. Port needs to be exposed only if MyJDownloader is enabled and configured in Direct Connection mode. NOTE: Since this port is being reported to the MyJDownloader online service, the port mapped on the host side must be the same (i.e. 3129).
+
+
+That’s it. Once you have your Stack configured, you can click the “Deploy the Stack” button and wait for the container to deploy.
+
+Once the container has deployed, you can open your browser and go to http://your-server-ip:5800 and start downloading whatever you’d like to download.
+
+
+----------------------------------------
+
+AdGuard.
+
+
+---
+version: "2"
+services:
+  adguardhome:
+    image: adguard/adguardhome
+    container_name: adguardhome
+    ports:
+      - 53:53/tcp
+      - 53:53/udp
+      - 67:67/udp
+      - 68:68/tcp
+      - 68:68/udp
+      - 853:853/tcp
+      - 80:80/tcp #change this to something like 81:80 if port 80 is already in use
+      - 3000:3000/tcp
+    volumes:
+      - /srv/dev-disk-by-label-Files/config/AdGuard1/workdir:/opt/adguardhome/work
+      - /srv/dev-disk-by-label-Files/config/AdGuard1/confdir:/opt/adguardhome/conf
+    restart: unless-stopped
+
+
+Change port 3000 to whatever port you’d like to use to access the admin interface.
+
+Change the volumes to match wherever you like to put your configuration files.
+
+Click “Deploy Container” and wait a minute for it to deploy.
+
+Open a new browser tab and go to http://your-server-address:3000. Make sure to change port 80 on the first page to whatever port you designated in your Stack. Complete the rest of the pages of installation by just filling in the blanks with basic information.
+
+Now you can point individual devices’ DNS to your server’s IP address and things should work from there.
+
+Method 2: SSH
+
+docker run --name adguardhome -v /srv/dev-disk-by-label-Files/config/AdGuard/workdir:/opt/adguardhome/work -v /srv/dev-disk-by-label-Files/config/AdGuard/confdir:/opt/adguardhome/conf -p 53:53/tcp -p 53:53/udp -p 67:67/udp -p 68:68/tcp -p 68:68/udp -p 853:853/tcp -p 3000:3000/tcp -d adguard/adguardhome
+
+
+Change port 3000 to whatever port you’d like to use to access the admin interface.
+
+Change the volumes to match wherever you like to put your configuration files.
+
+Click “Deploy Container” and wait a minute for it to deploy.
+
+Open a new browser tab and go to http://your-server-address:3000. Make sure to change port 80 on the first page to whatever port you designated in your Stack. Complete the rest of the pages of installation by just filling in the blanks with basic information.
+
+Now you can point individual devices’ DNS to your server’s IP address and things should work from there.
+
+
+---------------------------------------
+
+Fixing noexec
+Now open an SSH program like Putty and login to your server using root.
+
+Type:
+
+nano /etc/openmediavault/config.xml
+
+Then do a search for “mntent”
+
+You should be brought to a section that is a different color because it is commented out. Use your arrow keys to press down until you get to the next section and look for the “<opts>” line and remove the “noexec” option from that line. Then press CTRL+X and then press Y to confirm.
+
+That will bring you back to the main screen of your Putty program. While you’re there, type this:
+
+omv-salt deploy run fstab
+
+Press Enter on your keyboard. It will look like nothing happened and that’s fine. Now type in:
+
+reboot
+
+And then press Enter on your keyboard.
+
+Once the system has rebooted, you can log in to the server via Putty again using root and type in:
+
+cat /proc/mounts
+
+Then look for your hard drives (sda1 or sdb1) and make sure there is no “noexec” in any of the lines associated with your hard drives.
+
+Create Shares
+You’ll need to go your OpenMediaVault user interface and click “Shared Folders”
+
+Create each of the following:
+
+Config
+Movies
+TV
+Music
+The “Config” folder is the only required folder. You can adjust your media folder names to fit your needs, but these are the defaults.
+
+Make sure the permissions for each of the folders is set to “Everyone: read/write”.
+
+Hover over any of the header titles (Name, Device, Relative Path, etc) and click the dropdown arrow. Then hover over “Columns” and check the box that says “Absolute Path” as we’ll need that later.
+
+Then go to “SMB/CIFS”. Make sure this is set to “Enable” and then go to “Shares” in the blue bar.
+
+Click “Add” for add each of the folders you created a moment ago and make sure the “Public” setting is set to “Only guests”.
+
+Click “Save” after each one and once you have all your folders saved, you can click the “Apply” button in the yellow bar at the top of the page.
+
+Post Continues After This Ad Break
+
+Install Plex
+Now go back to your OpenMediaVault server and login to the user interface.
+
+Click on “OMV-Extras” and then click “Docker” in the blue bar. Then click the “Portainer” dropdown and click “Open web”.
+
+Tell it that you want to control a local server. Then click on the section that says local.
+
+Click “Containers”. Then click “Add container”
+
+In a separate browser window, open this link: https://hub.docker.com/r/linuxserver/plex
+
+In the “Create Container” window, fill in each of the fields based on the “docker-compose” information in the linuxserver/plex page.
+
+You’ll need to open Putty again to get your UID and GID.
+
+Under “Volumes” click “map additional volume” 1 time for each of the folders you created. Click the blue “bind” button for each one as well.
+
+For the “Config” folder, you’ll type:
+
+/config
+
+in the “container” field. Then you’ll type the absolute path of that from the “Shared Folders” page on your OpenMediaVault page and append it with /Plex. Mine looks like this with all the folders added
+
+
+Volumes:
+
+container - BIND
+host - writable
+
+/config
+/srv/dev-disk-by-label-Files/Config/Plex
+
+/kids
+/srv/dev-disk-by-label-Files/Kids
+
+/movies
+/srv/dev-disk-by-label-Files/Movies
+
+/tv
+/srv/dev-disk-by-label-Files/TV
+
+
+ENV:
+
+PUID=998
+PGID=100
+VERSION=docker
+UMASK_SET=022
+
+
+Next, go to the “Restart policy” tab and change it to “Unless stopped”.
+
+That’s it. Now you can click the “Deploy the container” button right above the “Advanced container settings”
+
+Once it has completed, you can go to http://your-server-ip:32400/web/index.html
+
+-------------------------------------------
+
+Ajenti-V:
+
+https://hub.docker.com/r/linuxlife/ajenti-v
+
+Быстрый запуск Докера:
+1)mkdir -p /app/ajenticp/{backup,www}
+2)docker run -p 80:80 -p 443:443 -p 7777:22 -p 8888:8000 -v /app/ajenticp/www:/www -v /app/ajenticp/backup:/backup -d linuxlife/ajenti-v:v0.23
+
+
+ajenti-ajenti-v/nginx_for_wordpress/conf.txt
+
+https://github.com/linuxlifepage/ajenti-ajenti-v/blob/main/nginx_for_wordpress/conf.txt
+
+location ^~ /.well-known/acme-challenge {
+    alias /var/www/dehydrated;
+  }
+
+
+# Global restrictions configuration file.
+# Designed to be included in any server {} block.
+location = /favicon.ico {
+    log_not_found off;
+    access_log off;
+}
+ 
+location = /robots.txt {
+    allow all;
+    log_not_found off;
+    access_log off;
+}
+ 
+# Deny all attempts to access hidden files such as .htaccess, .htpasswd, .DS_Store (Mac).
+# Keep logging the requests to parse later (or to pass to firewall utilities such as fail2ban)
+location ~ /\. {
+    deny all;
+}
+ 
+##################################################
+# Deny access to any files with a .php extension in the uploads directory
+# Works in sub-directory installs and also in multisite network
+# Keep logging the requests to parse later (or to pass to firewall utilities such as fail2ban)
+location ~* /(?:uploads|files)/.*\.php$ {
+    deny all;
+}
+
+
+location / {
+                # This is cool because no php is touched for static content.
+                # include the "?$args" part so non-default permalinks doesn't break when using query string
+ try_files $uri $uri/ /index.php?$args;
+}
+ 
+location ~ \.php$ {
+    #NOTE: You should have "cgi.fix_pathinfo = 0;" in php.ini
+    fastcgi_intercept_errors on;
+    fastcgi_pass unix:/var/run/php/php7.4-fpm.sock;
+ }
+
+
+
+
+
+
+#HEADER CONFIGURATON!!!
+
+ server {
+    if ($host = vm1615856.2ssd.had.wf) {
+        return 301 https://$host$request_uri;
+    }
+
+
+	server_name vm1615856.2ssd.had.wf;
+    listen 80;
+    return 404; # managed by Certbot
+
+
+}
+
+
+------------------------------------------------
+
+Airsonic
+
+https://hub.docker.com/r/linuxserver/airsonic
+
+Architecture	Tag
+x86-64	amd64-latest
+arm64	arm64v8-latest
+armhf	arm32v7-latest
+
+Application Setup
+Access WebUI at <your-ip>:4040.
+
+Default user/pass is admin/admin
+
+Extra java options can be passed with the JAVA_OPTS environment variable, eg -e JAVA_OPTS="-Xmx256m -Xms256m". For some reverse proxies, you may need to pass JAVA_OPTS=-Dserver.use-forward-headers=true for airsonic to generate the proper URL schemes.
+
+Note that if you want to use Airsonic's Java jukebox player, then PGID will need to match the group of your sound device (e.g. /dev/snd).
+
+docker-compose (recommended)
+Compatible with docker-compose v2 schemas.
+
+---
+version: "2.1"
+services:
+  airsonic:
+    image: ghcr.io/linuxserver/airsonic
+    container_name: airsonic
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+      - CONTEXT_PATH=<URL_BASE> #optional
+      - JAVA_OPTS=<options> #optional
+    volumes:
+      - </path/to/config>:/config
+      - </path/to/music>:/music
+      - </path/to/playlists>:/playlists
+      - </path/to/podcasts>:/podcasts
+      - </path/to/other media>:/media #optional
+    ports:
+      - 4040:4040
+    devices:
+      - /dev/snd:/dev/snd #optional
+    restart: unless-stopped
+docker cli
+docker run -d \
+  --name=airsonic \
+  -e PUID=1000 \
+  -e PGID=1000 \
+  -e TZ=Europe/London \
+  -e CONTEXT_PATH=<URL_BASE> `#optional` \
+  -e JAVA_OPTS=<options> `#optional` \
+  -p 4040:4040 \
+  -v </path/to/config>:/config \
+  -v </path/to/music>:/music \
+  -v </path/to/playlists>:/playlists \
+  -v </path/to/podcasts>:/podcasts \
+  -v </path/to/other media>:/media `#optional` \
+  --device /dev/snd:/dev/snd `#optional` \
+  --restart unless-stopped \
+  ghcr.io/linuxserver/airsonic
+  
+  
+
+Parameters
+Container images are configured using parameters passed at runtime (such as those above). These parameters are separated by a colon and indicate <external>:<internal> respectively. For example, -p 8080:80 would expose port 80 from inside the container to be accessible from the host's IP on port 8080 outside the container.
+
+Parameter	Function
+-p 4040	WebUI
+-e PUID=1000	for UserID - see below for explanation
+-e PGID=1000	for GroupID - see below for explanation
+-e TZ=Europe/London	Specify a timezone to use EG Europe/London.
+-e CONTEXT_PATH=<URL_BASE>	For setting url-base in reverse proxy setups.
+-e JAVA_OPTS=<options>	For passing additional java options.
+-v /config	Configuration file location.
+-v /music	Location of music.
+-v /playlists	Location for playlists to be saved to.
+-v /podcasts	Location of podcasts.
+-v /media	Location of other media.
+--device /dev/snd	Only needed to pass your host sound device to Airsonic's Java jukebox player.
+
+
+Environment variables from files (Docker secrets)
+You can set any environment variable from a file by using a special prepend FILE__.
+
+As an example:
+
+-e FILE__PASSWORD=/run/secrets/mysecretpassword
+Will set the environment variable PASSWORD based on the contents of the /run/secrets/mysecretpassword file.
+
+Umask for running applications
+For all of our images we provide the ability to override the default umask settings for services started within the containers using the optional -e UMASK=022 setting. Keep in mind umask is not chmod it subtracts from permissions based on it's value it does not add. Please read up here before asking for support.
+
+User / Group Identifiers
+When using volumes (-v flags) permissions issues can arise between the host OS and the container, we avoid this issue by allowing you to specify the user PUID and group PGID.
+
+Ensure any volume directories on the host are owned by the same user you specify and any permissions issues will vanish like magic.
+
+In this instance PUID=1000 and PGID=1000, to find yours use id user as below:
+
+  $ id username
+    uid=1000(dockeruser) gid=1000(dockergroup) groups=1000(dockergroup)
+    
+    
+
+Docker Mods
+Docker Mods Docker Universal Mods
+
+We publish various Docker Mods to enable additional functionality within the containers. The list of Mods available for this image (if any) as well as universal mods that can be applied to any one of our images can be accessed via the dynamic badges above.
+
+Support Info
+Shell access whilst the container is running: docker exec -it airsonic /bin/bash
+To monitor the logs of the container in realtime: docker logs -f airsonic
+container version number
+docker inspect -f '{{ index .Config.Labels "build_version" }}' airsonic
+image version number
+docker inspect -f '{{ index .Config.Labels "build_version" }}' ghcr.io/linuxserver/airsonic
+Updating Info
+Most of our images are static, versioned, and require an image update and container recreation to update the app inside. With some exceptions (ie. nextcloud, plex), we do not recommend or support updating apps inside the container. Please consult the Application Setup section above to see if it is recommended for the image.
+
+Below are the instructions for updating containers:
+
+Via Docker Compose
+Update all images: docker-compose pull
+or update a single image: docker-compose pull airsonic
+Let compose update all containers as necessary: docker-compose up -d
+or update a single container: docker-compose up -d airsonic
+You can also remove the old dangling images: docker image prune
+Via Docker Run
+Update the image: docker pull ghcr.io/linuxserver/airsonic
+Stop the running container: docker stop airsonic
+Delete the container: docker rm airsonic
+Recreate a new container with the same docker run parameters as instructed above (if mapped correctly to a host folder, your /config folder and settings will be preserved)
+You can also remove the old dangling images: docker image prune
+Via Watchtower auto-updater (only use if you don't remember the original parameters)
+Pull the latest image at its tag and replace it with the same env variables in one run:
+
+docker run --rm \
+-v /var/run/docker.sock:/var/run/docker.sock \
+containrrr/watchtower \
+--run-once airsonic
+You can also remove the old dangling images: docker image prune
+
+Note: We do not endorse the use of Watchtower as a solution to automated updates of existing Docker containers. In fact we generally discourage automated updates. However, this is a useful tool for one-time manual updates of containers where you have forgotten the original parameters. In the long term, we highly recommend using Docker Compose.
+
+Image Update Notifications - Diun (Docker Image Update Notifier)
+We recommend Diun for update notifications. Other tools that automatically update containers unattended are not recommended or supported.
+Building locally
+If you want to make local modifications to these images for development purposes or just to customize the logic:
+
+git clone https://github.com/linuxserver/docker-airsonic.git
+cd docker-airsonic
+docker build \
+  --no-cache \
+  --pull \
+  -t ghcr.io/linuxserver/airsonic:latest .
+The ARM variants can be built on x86_64 hardware using multiarch/qemu-user-static
+
+docker run --rm --privileged multiarch/qemu-user-static:register --reset
+Once registered you can define the dockerfile to use with -f Dockerfile.aarch64.
+
+
+-------------------------------------------------
+
+Resources:
+ 1. git-ftp command's repository: https://github.com/git-ftp/git-ftp
+ 2. git-ftp workflow:
+     - git ftp init: upload your website the first time
+     - git ftp catchup: sync your server with your local project for start use git + ftp
+     - git ftp push: upload new changes
+     
+
+
+
