@@ -856,5 +856,69 @@ Resources:
      - git ftp push: upload new changes
      
 
+--------------------------------------------------
+
+Docker Link Shortener
+
+https://github.com/ajanvier/docker-polr.git
+
+Examples at github:
+
+docker run -p 8080:8080 \
+    -e "DB_HOST=localhost" \
+    -e "DB_DATABASE=polr" \
+    -e "DB_USERNAME=polr" \
+    -e "DB_PASSWORD=password" \
+    -e "APP_ADDRESS=example.com" \
+    -e "ADMIN_USERNAME=admin" \
+    -e "ADMIN_PASSWORD=admin" \
+    ajanvier/polr
+
+please move to file .env.example on .env:
+$ mv .env.example .env
+
+Please to change on .env files:
+# ADMIN_USERNAME, ADMIN_PASSWORD, ADMIN_EMAIL, APP_NAME, APP_PROTOCOL, APP_ADDRESS
+$ nano .env
+
+### Example:
+# ADMIN_USERNAME=admin
+# ADMIN_PASSWORD=password
+# ADMIN_EMAIL=david@dbtechreviews.com
+# APP_NAME=DBTech
+# APP_PROTOCOL=https://
+# APP_ADDRESS=dbtech.link
+# POLR_ALLOW_ACCT_CREATION=false
+# POLR_ACCT_ACTIVATION=false
+# POLR_ACCT_CREATION_RECAPTCHA=false
+# POLR_RECAPTCHA_SITE_KEY=
+# POLR_RECAPTCHA_SECRET_KEY=
+# POLR_BASE=62
+#
+# SETTING_PUBLIC_INTERFACE=false
+# SETTING_SHORTEN_PERMISSION=false
+# SETTING_INDEX_REDIRECT=
+# SETTING_REDIRECT_404=
+# SETTING_PASSWORD_RECOV=
+# SETTING_AUTO_API=false
+# SETTING_ANON_API=
+# SETTING_ANON_API_QUOTA=
+# SETTING_PSEUDORANDOM_ENDING=false
+# SETTING_ADV_ANALYTICS=true
+# SETTING_RESTRICT_EMAIL_DOMAIN=
+# SETTING_ALLOWED_EMAIL_DOMAINS=
+#
+# POLR_ACCT_ACTIVATION=true
+# Set to true to require activation by email (default: false)
+
+
+Please to change docker-compose.yml files:
+$ nano docker-compose.yml
+
+version: 3.3
+ports:
+	- "9987:8080"
+
+
 
 
