@@ -1,0 +1,60 @@
+---
+version: 2
+services:
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    ports:
+      - 53:53/tcp #DNS Port
+      - 53:53/udp #DNS Port
+      #- 67:67/udp #DHCP Port
+      - 83:80/tcp #Dashboard Port
+      #- 443:443/tcp #Port 443 is to provide a sinkhole for ads that use SSL.
+    environment:
+      TZ: America/Denver
+      WEBPASSWORD: password
+      DNS1: 1.1.1.1
+      DNS2: 1.0.0.1
+      DNSSEC: 'true'
+    volumes:
+      - /srv/dev-disk-by-label-Files/Config/Pihole/etc-pihole/:/etc/pihole/
+      - /srv/dev-disk-by-label-Files/Config/Pihole/etc-dnsmasq.d/:/etc/dnsmasq.d/
+    cap_add:
+      - NET_ADMIN
+    restart: unless-stopped
+    
+    
+    This won't work out of the box as Raspbian has port 53 being used. We need to stop and reconfigure the service using it.
+    
+    To stop systemd-resolved, run this command:
+    sudo systemctl stop systemd-resolved
+    
+    To edit systemd-resolved, run this command:
+    sudo nano /etc/systemd/resolved.conf
+    
+    Edit the file so it looks like this:
+    [Resolve]
+    DNS=1.1.1.1
+    FallbackDNS=1.0.0.1
+    #Domains=
+    #LLMNR=yes
+    #MulticastDNS=yes
+    #DNSSEC=allow-downgrade
+    #DNSOverTLS=no
+    #Cache=yes
+    #DNSStubListener=yes
+    #ReadEtcHosts=yes
+    DNSStubListener=no
+    
+    Save and exit.
+    
+    To create a symlink of the changes you made, run this command:
+    
+    sudo ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
+
+    
+    
+
+    
+    
+    
