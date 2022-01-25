@@ -1,0 +1,53 @@
+
+
+apt install docker.io
+apt install docker-compose
+
+mkdir -p ./wireguard/config
+
+nano ./wireguard/docker-compose.yml
+
+version: "2.1"
+services:
+  wireguard:
+    image: ghcr.io/linuxserver/wireguard
+    container_name: wireguard
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+      - SERVERURL=wireguard.domain.com #optional
+      - SERVERPORT=51820 #optional
+      - PEERS=1 #optional
+      - PEERDNS=auto #optional
+      - INTERNAL_SUBNET=10.13.13.0 #optional
+      - ALLOWEDIPS=0.0.0.0/0 #optional
+    volumes:
+      - ./wireguard/config:/config
+      - /lib/modules:/lib/modules
+    ports:
+      - 51820:51820/udp
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    restart: unless-stopped
+
+Переменной окружения PEERS нужно присвоить достаточное количество клиентов, 
+которыми вы планируете пользоваться VPN. К примеру, если мы планируем подключаться с ноутбука, 
+2-х смартфонов и роутера (4 устройства), то установим PEERS=4
+
+Монтируемый каталог /path/to/appdata/config из секции volume необходимо заменить 
+на ранее созданную директорию ~/wireguard/config
+
+cd ./wireguard
+docker-compose up -d
+
+docker exec -it wireguard /app/show-peer 1
+
+
+
+
+
+
