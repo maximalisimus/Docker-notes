@@ -571,31 +571,26 @@ services:
     network_mode: "bridge"
 
 
-Change port 3000 to whatever port you’d like to use to access the admin interface.
+Deactivate DNSStubListener and update the DNS server address. Create a new file, 
+/etc/systemd/resolved.conf.d/adguardhome.conf (creating the /etc/systemd/resolved.conf.d 
+directory if needed) and add the following content to it:
 
-Change the volumes to match wherever you like to put your configuration files.
+# /etc/systemd/resolved.conf.d/adguardhome.conf
+[Resolve]
+DNS=127.0.0.1
+DNSStubListener=no
 
-Click “Deploy Container” and wait a minute for it to deploy.
+Specifying 127.0.0.1 as the DNS server address is necessary because otherwise 
+the nameserver will be 127.0.0.53 which doesn't work without DNSStubListener.
 
-Open a new browser tab and go to http://your-server-address:3000. Make sure to change port 80 on the first page to whatever port you designated in your Stack. Complete the rest of the pages of installation by just filling in the blanks with basic information.
+Activate a new resolv.conf file:
 
-Now you can point individual devices’ DNS to your server’s IP address and things should work from there.
+mv /etc/resolv.conf /etc/resolv.conf.backup
+ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf
 
-Method 2: SSH
+Stop DNSStubListener:
 
-docker run --name adguardhome -v /srv/dev-disk-by-label-Files/config/AdGuard/workdir:/opt/adguardhome/work -v /srv/dev-disk-by-label-Files/config/AdGuard/confdir:/opt/adguardhome/conf -p 53:53/tcp -p 53:53/udp -p 67:67/udp -p 68:68/tcp -p 68:68/udp -p 853:853/tcp -p 3000:3000/tcp -d adguard/adguardhome
-
-
-Change port 3000 to whatever port you’d like to use to access the admin interface.
-
-Change the volumes to match wherever you like to put your configuration files.
-
-Click “Deploy Container” and wait a minute for it to deploy.
-
-Open a new browser tab and go to http://your-server-address:3000. Make sure to change port 80 on the first page to whatever port you designated in your Stack. Complete the rest of the pages of installation by just filling in the blanks with basic information.
-
-Now you can point individual devices’ DNS to your server’s IP address and things should work from there.
-
+systemctl reload-or-restart systemd-resolved
 
 ---------------------------------------
 
