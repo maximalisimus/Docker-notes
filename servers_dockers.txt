@@ -1,5 +1,19 @@
 
 
+/etc/network/interfaces
+
+allow-hotplug eth0
+auto eth0
+# iface eth0 inet dhcp
+iface eth1 inet static
+	address 192.168.0.120
+	netmask 255.255.255.0
+	gateway 192.168.0.254
+	dns-nameservers 192.168.0.254 8.8.8.8
+# pre-up ifconfig eth0 hw ether xx:xx:xx:xx:xx:xx
+
+
+
 sudo sysctl -w net.ipv4.ip_forward=1
 
 nano /etc/sysctl.conf
