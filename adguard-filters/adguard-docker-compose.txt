@@ -1,0 +1,22 @@
+
+
+---
+version: "2"
+services:
+  adguardhome:
+    image: adguard/adguardhome
+    container_name: adguardhome
+    ports:
+      - 53:53/tcp # DNS
+      - 53:53/udp # DNS
+      - 853:853/tcp # DNS
+      - 3123:3000/tcp # DashBoard Setup, do not change 80
+      - 5449:5443/tcp
+      - 3080:80/tcp
+      - 3443:443/tcp
+    volumes:
+      - ./workdir:/opt/adguardhome/work
+      - ./confdir:/opt/adguardhome/conf
+    restart: unless-stopped
+    network_mode: "bridge" # Access network virtual adapter
+

@@ -1,5 +1,35 @@
 
 
+ArchLinux:
+
+To stop NetworkManager from touching
+/etc/resolv.conf
+set main.dns=none with a configuration file in
+/etc/NetworkManager/conf.d/:
+
+/etc/NetworkManager/conf.d/dns.conf
+[main]
+dns=none
+
+
+Debian to DNS uses on AdGuard or Pihole - please desable systemd-resolved.service:
+sudo systemctl stop systemd-resolved.service
+sudo systemctl deisable systemd-resolved.service
+
+And edit file /etc/systemd/resolved.conf to Google DNS
+
+DNS=8.8.8.8
+FallbackDNS=8.8.4.4
+
+
+AND ONE DNS SERVER (local stub):
+# ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
+
+
+
+
+Next Debian.
+
 su
 apt update
 apt upgrade
