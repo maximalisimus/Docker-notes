@@ -498,27 +498,26 @@ services:
 
 
 ---
-version: '3'
+version: "3"
 services:
-	adguard-home:
-		container-name: adguard-home
-		image: adguard/adguardhome
-		restart: unless-stopped
-		volumes:
-			- /app/adguard-home/work:/opt/adguardhome/work
-			- /app/adguard-home/conf:/opt/adguardhome/conf
-		ports:
-			- 10.66.66.1:53:53/tcp
-			- 10.66.66.1:53:53/udp
-			#- 67:67/udp
-			#- 68:68/tcp
-			#- 68:68/udp
-			- 3080:80/tcp
-			- 3443:443/tcp
-			- 853:853/tcp
-			- 3123:3000/tcp
-			- 5449:5443/tcp
-		network_mode: "bridge"
+  adguardhome:
+    image: adguard/adguardhome
+    restart: unless-stopped
+    volumes:
+      - ./work:/opt/adguardhome/work
+      - ./conf:/opt/adguardhome/conf
+    ports:
+      - 10.66.66.1:53:53/tcp
+      - 10.66.66.1:53:53/udp
+      #- 67:67/udp
+      #- 68:68/tcp
+      #- 68:68/udp
+      - 3080:80/tcp
+      - 3443:443/tcp
+      - 853:853/tcp
+      - 3123:3000/tcp
+      - 5449:5443/tcp
+    network_mode: "bridge"
 
 
 Change port 3000 to whatever port you’d like to use to access the admin interface.
