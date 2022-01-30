@@ -528,11 +528,11 @@ services:
       - ./work:/opt/adguardhome/work
       - ./conf:/opt/adguardhome/conf
     ports:
-      - 10.66.66.1:53:53/tcp
-      - 10.66.66.1:53:53/udp
-      #- 67:67/udp
-      #- 68:68/tcp
-      #- 68:68/udp
+      - 53:53/tcp # 10.66.66.1:
+      - 53:53/udp # 10.66.66.1:
+      - 67:67/udp
+      - 68:68/tcp
+      - 68:68/udp
       - 3080:80/tcp
       - 3443:443/tcp
       - 853:853/tcp
