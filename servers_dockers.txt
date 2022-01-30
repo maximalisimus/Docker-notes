@@ -56,7 +56,7 @@ echo \
 
 sudo apt-get update
 
-sudo apt-get install docker-ce docker-ce-cli containerd.io
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker.io runc
 
 # https://github.com/docker/compose/releases/download/1.29.1/docker-compose-Darwin-x86_64
 # https://github.com/docker/compose/releases/download/1.29.1/docker-compose-Darwin-x86_64.sha256
