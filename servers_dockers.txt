@@ -1,5 +1,19 @@
 
 
+su
+apt update
+apt upgrade
+apt install sudo
+nano /etc/sudoers
+
+%sudo ALL=(ALL:ALL) ALL
+
+# /usr/sbin/groupadd wheel
+gpasswd -a ${USER} sudo
+# id ${USER}
+/sbin/reboot
+
+
 /etc/network/interfaces
 
 allow-hotplug eth0
