@@ -1,30 +1,144 @@
 
-
+EasyList
 https://easylist-downloads.adblockplus.org/easylist.txt
 
+Пользовательские фильтры AdBlock
 https://cdn.adblockcdn.com/filters/adblock_custom.txt
 
+Приемлемая реклама
 https://easylist-downloads.adblockplus.org/exceptionrules.txt
 
+Не показывать рекламу, передающую информацию третьим лицам
+Off
 https://easylist-downloads.adblockplus.org/exceptionrules-privacy-friendly.txt
 
+Противообходные фильтры
 https://easylist-downloads.adblockplus.org/abp-filters-anti-cv.txt
 
-https://easylist-downloads.adblockplus.org/ruadlist+easylist.txt
-
+Защита от майнинга криптовалюты (биткоинов)
 https://raw.githubusercontent.com/hoshsadiq/adblock-nocoin-list/master/nocoin.txt
 
+EasyPrivacy (защита приватности)
+Off
 https://easylist-downloads.adblockplus.org/easyprivacy.txt
 
+Не спрашивать о файлах cookie
+Блокирует уведомления о файлах cookie. Вы отказываетесь от своего права узнавать, используются ли на сайте файлы cookie.
+Off
 https://easylist-downloads.adblockplus.org/i_dont_care_about_cookies.txt
 
+Список антиантиблокировщиков рекламы
+убирает предупреждения об использовании блокировщика рекламы
+Off
 https://easylist-downloads.adblockplus.org/antiadblockfilters.txt
 
+Список антисоциальных фильтров
+убирает кнопки социальных сетей
+Off
 https://easylist-downloads.adblockplus.org/fanboy-social.txt
 
+Услада фаната
+скрывает всплывающие окна, виджеты социальных сетей и прочую рекламу
+Off
 https://fanboy.co.nz/fanboy-annoyance.txt
 
+Услада фаната (скрывает всплывающие окна, виджеты социальных сетей и прочую рекламу)
+Off
 https://easylist-downloads.adblockplus.org/fanboy-notifications.txt
+
+
+
+
+
+
+
+Русский & Украинский + EasyList
+https://easylist-downloads.adblockplus.org/ruadlist+easylist.txt
+
+Language:
+
+
+
+
+
+
+IndianList + EasyList
+https://easylist-downloads.adblockplus.org/indianlist+easylist.txt
+
+NordicFilter + EasyList
+https://easylist-downloads.adblockplus.org/dandelion_sprouts_nordic_filters+easylist.txt
+
+Арабский + французский + EasyList
+https://easylist-downloads.adblockplus.org/liste_ar+liste_fr+easylist.txt
+
+Болгарский + EasyList
+https://easylist-downloads.adblockplus.org/bulgarian_list+easylist.txt
+
+Венгерский
+https://raw.githubusercontent.com/hufilter/hufilter/master/hufilter-abp.txt
+
+Вьетнамский + EasyList
+https://easylist-downloads.adblockplus.org/abpvn+easylist.txt
+
+Греческий
+https://www.void.gr/kargig/void-gr-filters.txt
+
+Иврит + EasyList
+https://easylist-downloads.adblockplus.org/israellist+easylist.txt
+
+Индонезийский + EasyList
+https://easylist-downloads.adblockplus.org/abpindo+easylist.txt
+
+Испанский
+https://easylist-downloads.adblockplus.org/easylistspanish+easylist.txt
+
+Итальянский
+https://easylist-downloads.adblockplus.org/easylistitaly+easylist.txt
+
+Китайский + EasyList
+https://easylist-downloads.adblockplus.org/easylistchina+easylist.txt
+
+Корейский
+https://easylist-downloads.adblockplus.org/koreanlist+easylist.txt
+
+Латышский + EasyList
+https://easylist-downloads.adblockplus.org/latvianlist+easylist.txt
+
+Литовский + EasyList
+https://easylist-downloads.adblockplus.org/easylistlithuania+easylist.txt
+
+Немецкий + EasyList
+https://easylist-downloads.adblockplus.org/easylistgermany+easylist.txt
+
+Нидерландский + EasyList
+https://easylist-downloads.adblockplus.org/easylistdutch+easylist.txt
+
+Польский
+https://easylist-downloads.adblockplus.org/easylistpolish+easylist.txt
+
+Португальский + EasyList
+https://easylist-downloads.adblockplus.org/easylistportuguese+easylist.txt
+
+Румынский + EasyList
+https://easylist-downloads.adblockplus.org/rolist+easylist.txt
+
+Турецкий
+https://fanboy.co.nz/fanboy-turkish.txt
+
+Французский + EasyList
+https://easylist-downloads.adblockplus.org/liste_fr+easylist.txt
+
+Чешский и словацкий + EasyList
+https://easylist-downloads.adblockplus.org/easylistczechslovak+easylist.txt
+
+Японский
+https://raw.githubusercontent.com/k2jp/abp-japanese-filters/master/abpjf.txt
+
+
+
+
+
+
 
 
 
