@@ -1,0 +1,251 @@
+
+
+docker-compose.yml file (extract):
+
+version: '2.1'
+  services:
+    nexus:
+    image: sonatype/nexus3:$NEXUS_VERSION
+    container_name: nexus
+    restart: always
+    hostname: nexus.$URL
+    ports:
+      - "$NEXUS_81:8081"
+      - "$NEXUS_443:8443"
+    extra_hosts:
+      - "repos.private.network:192.168.200.200"
+    dns:
+      - 192.168.3.7
+      - 192.168.111.1
+      - 192.168.10.5
+      - 192.168.10.15
+    volumes_from:
+      - nexus-data
+    networks:
+      - pic
+
+  networks:
+    pic:
+      driver: bridge
+      ipam:
+        driver: default
+        config:
+          - subnet: 172.18.0.0/16
+            gateway: 172.18.0.1
+
+
+
+
+
+docker-compose.yml
+
+version: '2.3'
+#network_mode: "bridge"
+services:
+  nginx:
+    image: nginx
+    ports:
+      - "80:80"
+    networks:
+      back:
+        ipv4_address: 172.16.238.2
+        ipv6_address: 2001:3984:3989::2
+      default:
+
+  wetty:
+    build: 
+      context: ./wetty
+      dockerfile: Dockerfilealt
+    image: wetty:latest
+    ports:
+      - "3000:3000"
+    networks:
+      back:
+        ipv4_address: 172.16.238.3 
+        ipv6_address: 2001:3984:3989::3 
+
+  codiad:
+    build: ./docker-codiad
+    image: docker-codiad:latest
+    volumes:
+       - ./code:/code
+       - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "5000:5000"
+      - "8080:8080"
+    networks:
+      back:
+        ipv4_address: 172.16.238.4
+        ipv6_address: 2001:3984:3989::4
+      default:
+
+networks:
+#Internal-only network for proper nginx proxying and ssh
+  back:
+    driver: bridge
+    enable_ipv6: true
+    internal: true
+    ipam:
+     driver: default
+     config:
+       - subnet: 172.16.238.0/24
+       - subnet: 2001:3984:3989::/64 
+#External network actually
+  default:
+    driver: bridge
+
+
+
+
+
+
+
+
+
+
+networks:
+  # Имя default для реконфигурации стандартной сети для Compose
+  имясети:
+    # Типы драйверов: bridge, overlay  
+    driver: overlay
+    # attachable работает только в Compose 3.2+
+    attachable: true
+    # параметры драйвера (см. документацию драйвера)
+    driver_opts:
+      foo: "bar"
+      baz: 1
+    # Поддержка IPv6 не доступна в Compose 3, только 2.
+    enable_ipv6: true
+    # Настройка IPAM конфигурации
+    ipam:
+      # драйвер IPAM заместо default если нужно
+      driver: default
+      # Конфигурация с 0 и больше блоков, содержащая ключ subnet:
+      config:
+        - subnet: 172.28.0.0/16
+        - subnet: 192.168.10.0/24
+
+    # Делает сеть изолированной
+    internal: true
+
+    # Использование сети, созданной вне Compose.
+    # Если параметр external имеет флаг true, то это указывает Compose, что сеть была создана извне. 
+    docker-compose up ее не создаст и если не найдет, то выкинет ошибку.
+    # external не может быть использован с другими ключами конфигурации (driver, driver_opts, ipam, internal)
+    external: true
+
+    # Для external можно задать имя для использования в Compose файле начиная с версии 3.5:
+    external:
+      name: actual-name-of-network
+
+    # Так же с версии 3.5 можно задать имя сети даже с спецсимволами:
+  network1:
+    # Использование файла external так же работает в купе с заданным именем сети
+    external: true
+    name: my-app-net
+
+    # Метаданные для контейнера могут быть созданы с помощью Docker labels: это массив или словарь.
+    labels:
+      com.example.description: "Financial transaction network"
+      com.example.department: "Finance"
+      com.example.label-with-empty-value: ""
+
+
+
+
+
+
+docker-compose.yml
+
+version: '2'
+services:
+    nginx:
+        image: nginx:latest
+        ports:
+            - "80:80"
+        volumes:
+            - xxx
+        networks:
+            default:
+                ipv4_address: 192.168.0.7
+networks:
+    default:
+        ipam:
+            driver: default
+            config:
+                - subnet: 192.168.0.0/24
+                  gateway: 192.168.0.1
+                  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+version: '2'
+
+services:
+  mysql:
+    container_name: mysql
+    image: mysql:latest
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    ports:
+     - "3306:3306"
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.5
+
+  apigw-tomcat:
+    container_name: apigw-tomcat
+    build: tomcat/.
+    ports:
+     - "8080:8080"
+     - "8009:8009"
+    networks:
+      vpcbr:
+        ipv4_address: 10.5.0.6
+    depends_on:
+     - mysql
+
+networks:
+  vpcbr:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 10.5.0.0/16
+         gateway: 10.5.0.1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
