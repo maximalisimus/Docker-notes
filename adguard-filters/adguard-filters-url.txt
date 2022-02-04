@@ -1,0 +1,119 @@
+
+
+https://kb.adguard.com/ru/general/adguard-ad-filters
+
+Базовый фильтр AdGuard
+убирает рекламу с сайтов на английском языке. 
+Изначально основан на фильтре EasyList и доработан нами исходя из жалоб и пожеланий пользователей.
+https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_2_English/filter.txt
+
+Фильтр счетчиков и системы аналитики
+содержит наиболее полный список различных интернет-счётчиков и систем интернет-аналитики. 
+Используйте его, чтобы избежать слежки за вашими действиями онлайн. 
+https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_3_Spyware/filter.txt
+
+Фильтр параметров отслеживания
+повышает приватность путём удаления параметров отслеживания из адресов страниц и их ресурсов. 
+Когда пользователь включает блокировку параметров отслеживания в модуле Антитрекинга, автоматически включается этот фильтр.
+https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_17_TrackParam/filter.txt
+
+Фильтр виджетов социальных сетей
+скрывает многочисленные кнопки «Мне нравится», 
+«Поделиться» и подобные им интеграции с социальными сетями на популярных сайтах.
+https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_4_Social/filter.txt
+
+Фильтр раздражителей
+блокирует раздражающие элементы веб-сайтов, включая уведомления об использовании cookies, 
+всплывающие сообщения внутри страниц и сторонние виджеты, не имеющие отношения к функциональности сайтов 
+(но исключая виджеты и кнопки социальных сетей. Основан на фильтре Fanboy Annoyances List, но не дублирует его.
+https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_14_Annoyances/filter.txt
+
+Фильтр полезной рекламы
+разблокирует рекламу, которая может быть полезна пользователям. 
+https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_10_Useful/filter.txt
+
+
+Экспериментальный фильтр — предназначен для проверки некоторых новых правил фильтрации, 
+которые потенциально могут вызывать конфликты или ломать работу сайтов. В случае успешной проверки правила из 
+Экспериментального фильтра добавляются в основные фильтры.
+https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_5_Experimental/filter.txt
+
+Фильтр мобильной рекламы
+блокирует рекламу на мобильных устройствах.
+Содержит все известные нам рекламные сети. 
+https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_11_Mobile/filter.txt
+
+DNS фильтр — составлен из нескольких фильтров (Базовый фильтр AdGuard, Фильтр социальных сетей, 
+Фильтр счетчиков и систем аналитики, Фильтр мобильной рекламы, EasyList и EasyPrivacy), и 
+специально упрощён для лучшей совместимости с блокировкой рекламы на уровне DNS. 
+Этот фильтр используется серверами AdGuard DNS для блокировки рекламы и трекинга.
+https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_15_DnsFilter/filter.txt
+
+
+
+
+
+
+Русский фильтр
+убирает рекламу с сайтов на русском языке. Изначально за основу был взят фильтр RU AdList. 
+В дальнейшем фильтр развивался самостоятельно, и на данный момент пересечений с RU AdList практически не осталось.
+https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_1_Russian/filter.txt
+
+
+
+Language:
+
+
+
+
+Немецкий фильтр
+убирает рекламу с сайтов на немецком языке. 
+Изначально основан на фильтре EasyList Germany и доработан нами исходя из жалоб и сообщений пользователей.
+https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_6_German/filter.txt
+
+Французский фильтр
+убирает рекламу с сайтов на французском языке. 
+Изначально основан на фильтре Liste FR и доработан нами исходя из жалоб и сообщений пользователей.
+https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_16_French/filter.txt
+
+Японский фильтр
+убирает рекламу с сайтов на японском языке.
+Изначально основан на фильтре Fanboy’s Japanese и доработан нами исходя из жалоб и сообщений пользователей.
+https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_7_Japanese/filter.txt
+
+Голландский фильтр
+убирает рекламу с сайтов на голландском языке.
+Изначально основан на фильтре EasyList Dutch и доработан нами исходя из жалоб и сообщений пользователей.
+https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_8_Dutch/filter.txt
+
+Испано-португальский фильтр
+убирает рекламу с сайтов на испанском и португальском языках.
+Изначально основан на фильтре Fanboy’s Spanish/Portuguese и доработан нами исходя из жалоб и сообщений пользователей.
+https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_9_Spanish/filter.txt
+
+Турецкий фильтр
+убирает рекламу с сайтов на турецком языке.
+Разрабатывается нами исходя из жалоб и сообщений пользователей.
+https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_13_Turkish/filter.txt
+
+Китайский фильтр
+убирает рекламу с сайтов на китайском языке. 
+Изначально основан на фильтре EasyList China и доработан нами исходя из жалоб и сообщений пользователей. 
+https://raw.githubusercontent.com/AdguardTeam/FiltersRegistry/master/filters/filter_224_Chinese/filter.txt
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
