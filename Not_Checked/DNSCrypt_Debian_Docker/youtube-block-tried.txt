@@ -21,3 +21,6 @@
 ^r(?:100|[1-9]\d|\d)---sn-vgqs(?:rne(?:s|z)|kne(?:s|z)|knlz|kn7e|7ney|kne6|kn76|7ns7|ener|kn7z|knek|7nly)\.googlevideo\.com$
 
 
+
+"*://*.youtube.com/*"
+
