@@ -3,7 +3,7 @@ AdBlock Chromium extensions GitHub.
 https://github.com/adblockplus/adblockpluschrome/blob/master/qunit/subscriptions.json
 https://raw.githubusercontent.com/adblockplus/adblockpluschrome/master/qunit/subscriptions.json
 
-AdBlock Chromium extensions GitLab.
+AdBlock Chromium extensions GitLab Mirror.
 https://gitlab.com/eyeo/adblockplus/abpui/adblockplusui/-/blob/master/mocks/data/subscriptions.json
 https://gitlab.com/eyeo/adblockplus/abpui/adblockplusui/-/raw/master/mocks/data/subscriptions.json
 https://gitlab.com/eyeo/adblockplus/abpui/adblockplusui/-/raw/master/mocks/data/subscriptions.json?inline=false
