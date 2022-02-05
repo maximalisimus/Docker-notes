@@ -73,3 +73,218 @@ docker run -d \
   linuxserver/wireguard
 
 
+
+
+
+
+
+
+
+weejewel/wg-easy
+
+
+$ docker run -d \
+  --name=wg-easy \
+  -e WG_HOST=YOUR_SERVER_IP \
+  -e PASSWORD=YOUR_ADMIN_PASSWORD \
+  -v ~/.wg-easy:/etc/wireguard \
+  -p 51820:51820/udp \
+  -p 51821:51821/tcp \
+  --cap-add=NET_ADMIN \
+  --cap-add=SYS_MODULE \
+  --sysctl="net.ipv4.conf.all.src_valid_mark=1" \
+  --sysctl="net.ipv4.ip_forward=1" \
+  --restart unless-stopped \
+  weejewel/wg-easy
+
+
+Replace YOUR_SERVER_IP with your WAN IP, or a Dynamic DNS hostname.
+
+Replace YOUR_ADMIN_PASSWORD with a password to log in on the Web UI.
+
+The Web UI will now be available on http://0.0.0.0:51821.
+
+Your configuration files will be saved in ~/.wg-easy
+
+
+Env							Default			Example					Description
+PASSWORD					-				foobar123				When set, requires a password when logging in to the Web UI.
+WG_HOST						-				vpn.myserver.com		The public hostname of your VPN server.
+WG_PORT						51820			12345					The public UDP port of your VPN server. 
+																	WireGuard will always listen on 51820 inside the Docker container.
+WG_MTU						null			1420					The MTU the clients will use. Server uses default WG MTU.
+WG_PERSISTENT_KEEPALIVE		0				25						Value in seconds to keep the "connection" open.
+WG_DEFAULT_ADDRESS			10.8.0.x		10.6.0.x				Clients IP address range.
+WG_DEFAULT_DNS				1.1.1.1			8.8.8.8, 8.8.4.4		DNS server clients will use.
+WG_ALLOWED_IPS				0.0.0.0/0, 		192.168.15.0/24,		Allowed IPs clients will use.
+							::/0			10.0.1.0/24
+WG_POST_UP					...				iptables ...			See config.js for the default value.
+WG_POST_DOWN				...				iptables ...			See config.js for the default value.
+
+
+
+docker stop wg-easy
+docker rm wg-easy
+docker pull weejewel/wg-easy
+And then run the docker run -d \ ... command above again.
+
+
+
+docker-compose.yml
+
+https://github.com/WeeJeWel/wg-easy/blob/master/docker-compose.yml
+
+version: "3.8"
+services:
+  wg-easy:
+    environment:
+      # ⚠️ Required:
+      # Change this to your host's public address
+      - WG_HOST=raspberrypi.local
+
+      # Optional:
+      # - PASSWORD=foobar123
+      # - WG_PORT=51820
+      # - WG_DEFAULT_ADDRESS=10.8.0.x
+      # - WG_DEFAULT_DNS=1.1.1.1
+      # - WG_MTU=1420
+      # - WG_ALLOWED_IPS=192.168.15.0/24, 10.0.1.0/24
+      
+    image: weejewel/wg-easy
+    container_name: wg-easy
+    volumes:
+      - .:/etc/wireguard
+    ports:
+      - "51820:51820/udp"
+      - "51821:51821/tcp"
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    sysctls:
+      - net.ipv4.ip_forward=1
+      - net.ipv4.conf.all.src_valid_mark=1
+
+
+
+
+h44z/wg-portal
+
+docker-compose.yml
+
+version: '3.6'
+services:
+  wg-portal:
+    image: h44z/wg-portal:latest
+    container_name: wg-portal
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    network_mode: "host"
+    volumes:
+      - /etc/wireguard:/etc/wireguard
+      - ./data:/app/data
+    ports:
+      - '8123:8123'
+    environment:
+      # WireGuard Settings
+      - WG_DEVICES=wg0
+      - WG_DEFAULT_DEVICE=wg0
+      - WG_CONFIG_PATH=/etc/wireguard
+      # MANAGE_IPS=true # Handle IP address setup of interface, only available on linux.
+      # Core Settings
+      - EXTERNAL_URL=https://vpn.company.com
+      - WEBSITE_TITLE=WireGuard VPN
+      - COMPANY_NAME=Your Company Name
+      - ADMIN_USER=admin@domain.com
+      - ADMIN_PASS=supersecret
+      # DATABASE Settings
+      # DATABASE_TYPE=sqlite # Either mysql or sqlite.
+      # DATABASE_HOST=
+      # DATABASE_PORT=
+      # DATABASE_NAME= # data/wg_portal.db
+      # DATABASE_USERNAME=
+      # DATABASE_PASSWORD=
+      # Mail Settings
+      - MAIL_FROM=WireGuard VPN <noreply+wireguard@company.com>
+      - EMAIL_HOST=127.0.0.1
+      - EMAIL_PORT=25
+      # EMAIL_USERNAME=
+      # EMAIL_PASSWORD=
+      # EMAIL_AUTHTYPE=plain # Either plain, login or crammd5. If username and password are empty, this value is ignored.
+      # LDAP Settings
+      - LDAP_ENABLED=true
+      - LDAP_URL=ldap://srv-ad01.company.local:389
+      - LDAP_BASEDN=DC=COMPANY,DC=LOCAL
+      - LDAP_USER=ldap_wireguard@company.local
+      - LDAP_PASSWORD=supersecretldappassword
+      - LDAP_ADMIN_GROUP=CN=WireGuardAdmins,OU=Users,DC=COMPANY,DC=LOCAL
+      # CONFIGURATION File
+      # CONFIG_FILE=config.yml
+
+
+
+Please note that mapping /etc/wireguard to /etc/wireguard inside the docker, 
+will erase your host's current configuration. 
+If needed, please make sure to back up your files from /etc/wireguard. 
+For a full list of configuration options take a look at the source file internal/server/configuration.go.
+
+config.yml:
+
+core:
+  listeningAddress: :8123
+  externalUrl: https://wg-test.test.com
+  adminUser: test@test.com
+  adminPass: test
+  editableKeys: true
+  createDefaultPeer: false
+  ldapEnabled: true
+  mailFrom: WireGuard VPN <noreply@test.com>
+ldap:
+  url: ldap://10.10.10.10:389
+  dn: DC=test,DC=test
+  startTLS: false
+  user: wireguard@test.test
+  pass: test
+  adminGroup: CN=WireGuardAdmins,CN=Users,DC=test,DC=test
+database:
+  typ: sqlite
+  database: data/wg_portal.db
+email:
+  host: smtp.gmail.com
+  port: 587
+  tls: true
+  user: test@gmail.com
+  pass: topsecret
+wg:
+  devices: 
+    - wg0
+    - wg1
+  defaultDevice: wg0
+  configDirectory: /etc/wireguard
+  manageIPAddresses: true
+
+
+
+RESTful API
+
+WireGuard Portal offers a RESTful API to interact with. 
+The API is documented using OpenAPI 2.0, the Swagger UI can be found under the URL 
+http://<your wg-portal ip/domain>/swagger/index.html.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
