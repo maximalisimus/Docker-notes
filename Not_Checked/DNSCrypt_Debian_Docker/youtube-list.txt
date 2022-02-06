@@ -1,5 +1,6 @@
 
-
+^r(?:100|[1-9]\d|\d)---sn-vgqs(?:rne(?:s|z)|kne(?:s|z)|knlz|kn7e|7ney|kne6|kn76|7ns7|ener|kn7z|knek|7nly)\.googlevideo\.com$
+^r(?:100|[1-9]\d|\d)---sn-vgqs[a-z0-9]{4}\.googlevideo\.com$
 r1---sn-n4v7knlz.googlevideo.com
 r2---sn-n4v7knlz.googlevideo.com
 r3---sn-n4v7knlz.googlevideo.com
