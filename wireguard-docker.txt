@@ -78,6 +78,77 @@ docker run -d \
 
 
 
+linuxserver/wireguard
+
+docker run -d \
+  --name=wireguard \
+  --cap-add=NET_ADMIN \
+  --cap-add=SYS_MODULE \
+  -e PUID=1000 \
+  -e PGID=1000 \
+  -e TZ=Europe/London \
+  -e SERVERURL=wireguard.domain.com `#optional` \
+  -e SERVERPORT=51820 `#optional` \
+  -e PEERS=1 `#optional` \
+  -e PEERDNS=auto `#optional` \
+  -e INTERNAL_SUBNET=10.13.13.0 `#optional` \
+  -e ALLOWEDIPS=0.0.0.0/0 `#optional` \
+  -p 51820:51820/udp \
+  -v /path/to/appdata/config:/config \
+  -v /lib/modules:/lib/modules \
+  --sysctl="net.ipv4.conf.all.src_valid_mark=1" \
+  --restart unless-stopped \
+  linuxserver/wireguard
+
+
+
+sudo mkdir /opt/wireguard-server
+
+sudo chown christian:christian /opt/wireguard-server
+
+nano /opt/wireguard-server/docker-compose.yaml
+
+
+
+version: "2.1"
+services:
+  wireguard:
+    image: linuxserver/wireguard
+    container_name: wireguard
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+      - SERVERURL=wireguard.domain.com #optional
+      - SERVERPORT=51820 #optional
+      - PEERS=1 #optional
+      - PEERDNS=auto #optional
+      - INTERNAL_SUBNET=10.13.13.0 #optional
+    volumes:
+      - /opt/wireguard-server/config:/config # /etc/wireguard
+      - /lib/modules:/lib/modules
+    ports:
+      - 51820:51820/udp
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    restart: unless-stopped
+
+
+
+cd /opt/wireguard-server
+
+docker-compose up -d
+
+docker exec -it wireguard /app/show-peer <peer-number>
+
+docker-compose up -d --force-recreate
+
+
+
+
 
 
 weejewel/wg-easy
@@ -271,6 +342,22 @@ RESTful API
 WireGuard Portal offers a RESTful API to interact with. 
 The API is documented using OpenAPI 2.0, the Swagger UI can be found under the URL 
 http://<your wg-portal ip/domain>/swagger/index.html.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
