@@ -344,6 +344,22 @@ services:
       - nclouddb
 
 
+sudo docker-compose up -d
+sudo su
+cd ./nextcloud/config/
+nano config.php
+
+'onlyoffice' => array ( 'verify_peer_off' => true,),
+'allow_local_remote_servers' => true,
+
+CTRL + O
+CTRL + X
+cd ../../
+sudo docker-compose up -d --force-recreate
+
+
+
+
 OnlyOffice.
 
 nano docker-compose.yml
@@ -361,6 +377,21 @@ services:
       - ./DocumentServer/data:/var/www/onlyoffice/Data
       - ./DocumentServer/lib:/var/lib/onlyoffice
       - ./DocumentServer/db:/var/lib/postgresql
+
+
+
+
+If SSL Certificate to Self-Signed - then 
+edit file container:
+$ nano /etc/onlyoffice/documentserver/default.json
+
+search string and edit:
+
+	"rejectUnauthorized": false
+
+And docker-container restart
+
+
 
 
 
