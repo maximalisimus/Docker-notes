@@ -313,7 +313,7 @@ services:
 
 
 
-Nextcloud + OnlyOffice
+Nextcloud.
 
 nano docker-compose.yml
 
@@ -332,6 +332,24 @@ services:
       - MYSQL_DATABASE=nextcloud
       - MYSQL_USER=nextcloud
 
+  ncloud:
+    image: nextcloud
+    container_name: ncloud
+    restart: always
+    ports:
+      - 1080:80
+    volumes:
+      - ./nextcloud:/var/www/html
+    links:
+      - nclouddb
+
+
+OnlyOffice.
+
+nano docker-compose.yml
+
+version: "3"
+services:
   onlyoffice:
     image: onlyoffice/documentserver
     container_name: onlyoffice
@@ -343,19 +361,6 @@ services:
       - ./DocumentServer/data:/var/www/onlyoffice/Data
       - ./DocumentServer/lib:/var/lib/onlyoffice
       - ./DocumentServer/db:/var/lib/postgresql
-
-  ncloud:
-    image: nextcloud
-    container_name: ncloud
-    restart: always
-    ports:
-      - 1180:80
-    volumes:
-      - ./nextcloud:/var/www/html
-    links:
-      - nclouddb
-      - onlyoffice
-
 
 
 
