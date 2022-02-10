@@ -67,6 +67,15 @@ sudo sysctl -p
 nano /etc/sysctl.conf
 
 
+
+
+
+sudo systemctl stop apparmor && sudo systemctl disable apparmor && sudo systemctl mask apparmor
+sudo systemctl unmask apparmor && sudo systemctl enable apparmor && sudo systemctl start apparmor
+
+
+
+
 sudo apt-get install apt-transport-https ca-certificates curl gnupg lsb-release wget curl bash-completion net-tools
 
 
@@ -299,6 +308,53 @@ services:
     ports:
       - 8100:80
     restart: unless-stopped
+
+
+
+
+
+Nextcloud + OnlyOffice
+
+nano docker-compose.yml
+
+version: "3"
+services:
+  nclouddb:
+    image: yobasystems/alpine-mariadb:latest
+    container_name: nclouddb
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    restart: always
+    volumes:
+      - ./db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=nextcloud #Change This
+      - MYSQL_PASSWORD=nextcloud #Change This
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+
+  onlyoffice:
+    image: onlyoffice/documentserver
+    container_name: onlyoffice
+    restart: always
+    ports:
+      - 1080:80
+    volumes:
+      - ./DocumentServer/logs:/var/log/onlyoffice
+      - ./DocumentServer/data:/var/www/onlyoffice/Data
+      - ./DocumentServer/lib:/var/lib/onlyoffice
+      - ./DocumentServer/db:/var/lib/postgresql
+
+  ncloud:
+    image: nextcloud
+    container_name: ncloud
+    restart: always
+    ports:
+      - 1180:80
+    volumes:
+      - ./nextcloud:/var/www/html
+    links:
+      - nclouddb
+      - onlyoffice
 
 
 
