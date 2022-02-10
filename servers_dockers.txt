@@ -355,7 +355,7 @@ services:
     container_name: onlyoffice
     restart: always
     ports:
-      - 1080:80
+      - 1180:80
     volumes:
       - ./DocumentServer/logs:/var/log/onlyoffice
       - ./DocumentServer/data:/var/www/onlyoffice/Data
