@@ -47,7 +47,7 @@ services:
     container_name: mariadb
     restart: unless-stopped
     # hostname: mariadb
-    ports:
+    ports: # expose
       - 3306:3306
     environment:
       MYSQL_ROOT_PASSWORD: 'powerdns'
