@@ -11,6 +11,10 @@ set main.dns=none with a configuration file in
 [main]
 dns=none
 
+# systemctl stop resolvconf.service
+# systemctl disable resolvconf.service
+
+
 
 Debian to DNS uses on AdGuard or Pihole - please desable systemd-resolved.service:
 sudo systemctl stop systemd-resolved.service
@@ -24,6 +28,21 @@ FallbackDNS=8.8.4.4
 
 AND ONE DNS SERVER (local stub):
 # ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
+
+
+
+/etc/systemd/resolved.conf.d/dns_servers.conf
+
+[Resolve]
+DNS=192.168.35.1 fd7b:d0bd:7a6e::1
+Domains=~.
+
+or
+
+# сервера DNS от OpenDNS
+nameserver 208.67.222.222
+nameserver 208.67.220.220
+
 
 
 
