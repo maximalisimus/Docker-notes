@@ -152,7 +152,7 @@ services:
       - 53:53/udp
     link: 
       - mariadb:mysql
-    environment
+    environment:
       - PDNS_gmysql_host=mariadb
       - PDNS_gmysql_port=3306
       - PDNS_gmysql_user=powerdnsslave
@@ -167,6 +167,27 @@ services:
 
 
 
+
+
+
+pdns-recursor:
+docker-compose.yml
+
+version: '3.1'
+services:
+  
+  pdns-recursor:
+    image: pschiffe/pdns-recursor
+    container_name: dns-recursor
+    restart: unless-stopped
+    ports:
+      - 53:53
+      - 53:53/udp
+    environment:
+      - PDNS_api_key=secret
+      - PDNS_webserver=yes
+      - PDNS_webserver_address=0.0.0.0
+      - PDNS_webserver_password=secret2
 
 
 
