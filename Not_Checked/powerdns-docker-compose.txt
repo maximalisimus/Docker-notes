@@ -6,6 +6,18 @@ white-ip  ns1.debian.local
 
 
 
+/etc/sysctl.conf:
+
+net.ipv6.conf.all.disable_ipv6=0
+net.ipv6.conf.all.autoconf=1
+net.ipv6.conf.all.accept_ra=1
+net.ipv6.conf.all.accept_ra_defrtr=1
+net.ipv6.conf.all.forwarding=1
+
+
+
+
+
 
 pdns-master:
 docker-compose.yml
@@ -59,13 +71,17 @@ services:
       - PDNS_default_soa_mail=hostmaster.debian.local
       # PDNS_allow_axfr_ips=192.168.100.45
       # PDNS_only_notify=192.168.100.45
-      # webserver-allow-from=172.5.0.0/16
+      # webserver-allow-from=172.5.0.0/16 # example configuration for PowerDNS 4.x
+      # PowerDNS server, for example 4.0.1
+      # PDNS_API_URL="http://pdns:8081/"
+      # PDNS_API_KEY="secret"
+      # PDNS_VERSION=""
       - PDNS_gmysql_host=mariadb
       - PDNS_gmysql_port=3306
       - PDNS_gmysql_user='powerdns'
       - PDNS_gmysql_password='powerdns'
       - PDNS_gmysql_dbname='powerdns'
-  
+
   pdnsuwsgi:
     image: pschiffe/pdns-admin-uwsgi:ngoduykhanh
     container_name: pdnsuwsgi
@@ -76,6 +92,8 @@ services:
       - PDNS_ADMIN_SQLA_DB_USER='powerdns'
       - PDNS_ADMIN_SQLA_DB_PASSWORD='powerdns'
       - PDNS_ADMIN_SQLA_DB_NAME='powerdns'
+    volumes:
+      - ./pdns-admin-upload:/opt/powerdns-admin/upload
     link:
       - mariadb:mysql
       - pdnsmaster:pdns

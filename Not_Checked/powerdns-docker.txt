@@ -50,4 +50,17 @@ docker run -d -p 53:53 -p 53:53/udp --name pdns-slave \
 
 
 
+docker run -d -p 53:53 -p 53:53/udp --name pdns-recursor \
+  -e PDNS_api_key=secret \
+  -e PDNS_webserver=yes \
+  -e PDNS_webserver_address=0.0.0.0 \
+  -e PDNS_webserver_password=secret2 \
+  pschiffe/pdns-recursor
+
+
+
+
+
+
+
 
