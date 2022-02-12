@@ -1,4 +1,11 @@
 
+domain edit:
+$ nano /etc/hosts
+
+white-ip  ns1.debian.local
+
+
+
 
 pdns-master:
 docker-compose.yml
