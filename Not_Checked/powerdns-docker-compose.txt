@@ -1,19 +1,15 @@
 
 
-pdns-master:
-docker-compose.yml
-
-version: '3.1'
+version: '3'
 services:
-
+  
   mariadb:
     image: mariadb:latest
     container_name: mariadb
     restart: unless-stopped
     # hostname: mariadb
-    # ports:
-      # 3306:3306
-    expose: '3306'
+    ports:
+      - 3306:3306
     environment:
       MYSQL_ROOT_PASSWORD: 'powerdns'
       MYSQL_DATABASE: 'powerdns'
@@ -21,6 +17,19 @@ services:
       MYSQL_PASSWORD: 'powerdns'
     volumes:
       - ./mysql-master:/var/lib/mysql
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+
+pdns-master:
+docker-compose.yml
+
+version: '3.1'
+services:
 
   pdnsmaster:
     image: pschiffe/pdns-mysql
@@ -54,32 +63,16 @@ services:
       - PDNS_gmysql_password='powerdns'
       - PDNS_gmysql_dbname='powerdns'
   
-  mdbuwsgi:
-    image: mariadb:latest
-    container_name: mdbuwsgi
-    restart: unless-stopped
-    # hostname: mdbuwsgi
-    # ports:
-      # 3310:3310
-    expose: '3310'
-    environment:
-      MYSQL_ROOT_PASSWORD: 'root'
-      MYSQL_DATABASE: 'powerdnsadmin'
-      MYSQL_USER: 'root'
-      MYSQL_PASSWORD: 'powerdnsadmin'
-    volumes:
-      - ./mysql-uwsgi:/var/lib/mysql
-
   pdnsuwsgi:
     image: pschiffe/pdns-admin-uwsgi:ngoduykhanh
     container_name: pdnsuwsgi
     restart: unless-stopped
     environment:
-      - PDNS_ADMIN_SQLA_DB_HOST='mdbuwsgi'
+      - PDNS_ADMIN_SQLA_DB_HOST='mariadb'
       - PDNS_ADMIN_SQLA_DB_PORT='3310'
-      - PDNS_ADMIN_SQLA_DB_USER='root'
-      - PDNS_ADMIN_SQLA_DB_PASSWORD='powerdnsadmin'
-      - PDNS_ADMIN_SQLA_DB_NAME='powerdnsadmin'     
+      - PDNS_ADMIN_SQLA_DB_USER='powerdns'
+      - PDNS_ADMIN_SQLA_DB_PASSWORD='powerdns'
+      - PDNS_ADMIN_SQLA_DB_NAME='powerdns'
     link:
       - mariadb:mysql
       - pdnsmaster:pdns
@@ -117,10 +110,16 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: 'powerdnsslave'
       MYSQL_DATABASE: 'powerdnsslave'
-      MYSQL_USER: 'powerdns'
-      MYSQL_PASSWORD: 'powerdns'
+      MYSQL_USER: 'powerdnsslave'
+      MYSQL_PASSWORD: 'powerdnsslave'
     volumes:
       - ./mysql:/var/lib/mysql
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
 
   pdnsslave:
     image: pschiffe/pdns-mysql
@@ -143,17 +142,13 @@ services:
       - PDNS_disable_axfr=yes
       # PDNS_allow_notify_from=192.168.100.160
       # SUPERMASTER_IPS=192.168.100.160
-    
 
 
 
 
-#  adminer:
-#    image: adminer
-#    container_name: adminer
-#    restart: unless-stopped
-#    ports:
-#      - 8080:8080
+
+
+
 
 
 
