@@ -1,0 +1,137 @@
+
+
+docker run \
+--name=my-unbound \
+--detach=true \
+--publish=53:53/tcp \
+--publish=53:53/udp \
+--restart=unless-stopped \
+mvance/unbound:latest
+
+
+
+Override default forward
+By default, forwarders are configured to use Cloudflare DNS. You can retrieve the configuration in the forward-records.conf file.
+
+You can create your own configuration file and override the one placed in /opt/unbound/etc/unbound/forward-records.conf in the container.
+
+Example forward-records.conf:
+
+forward-zone:
+  # Forward all queries (except those in cache and local zone) to
+  # upstream recursive servers
+  name: "."
+
+  # my DNS
+  forward-addr: 192.168.0.1@53#home.local
+Another example forward-records.conf:
+
+forward-zone:
+    # Forward all queries (except those in cache and local zone) to
+    # upstream recursive servers
+    name: "."
+    # Queries to this forward zone use TLS
+    forward-tls-upstream: yes
+
+    ## CleanBrowsing Family Filter
+    forward-addr: 185.228.168.168@853#family-filter-dns.cleanbrowsing.org
+    forward-addr: 185.228.169.168@853#family-filter-dns.cleanbrowsing.org
+Once the file has your entries in it, mount your version of the file as a volume when starting the container:
+
+docker run \
+--name my-unbound \
+--detach=true \
+--publish=53:53/tcp \
+--publish=53:53/udp \
+--restart=unless-stopped \
+---volume $(pwd)/forward-records.conf:/opt/unbound/etc/unbound/forward-records.conf:ro \
+mvance/unbound:latest
+Serve Custom DNS Records for Local Network
+While Unbound is not a full authoritative name server, it supports resolving custom entries on a small, private LAN. In other words, you can use Unbound to resolve fake names such as your-computer.local within your LAN.
+
+To support such custom entries using this image, you need to provide an a-records.conf or srv-records.conf file. This conf file is where you will define your custom entries for forward and reverse resolution.
+
+A records
+The a-records.conf file should use the following format:
+
+# A Record
+  #local-data: "somecomputer.local. A 192.168.1.1"
+  local-data: "laptop.local. A 192.168.1.2"
+
+# PTR Record
+  #local-data-ptr: "192.168.1.1 somecomputer.local."
+  local-data-ptr: "192.168.1.2 laptop.local."
+Once the file has your entries in it, mount your version of the file as a volume when starting the container:
+
+docker run \
+--name my-unbound \
+--detach=true \
+--publish=53:53/tcp \
+--publish=53:53/udp \
+--restart=unless-stopped \
+--volume $(pwd)/a-records.conf:/opt/unbound/etc/unbound/a-records.conf:ro \
+mvance/unbound:latest
+SRV records
+The srv-records.conf file should use the following format:
+
+# SRV records
+# _service._proto.name. | TTL | class | SRV | priority | weight | port | target.
+_etcd-server-ssl._tcp.domain.local.  86400 IN    SRV 0        10     2380 etcd-0.domain.local.
+_etcd-server-ssl._tcp.domain.local.  86400 IN    SRV 0        10     2380 etcd-1.domain.local.
+_etcd-server-ssl._tcp.domain.local.  86400 IN    SRV 0        10     2380 etcd-2.domain.local.
+Run a container that use this SRV config file:
+
+docker run \
+--name my-unbound \
+--detach=true \
+--publish=53:53/tcp \
+--publish=53:53/udp \
+--restart=unless-stopped \
+--volume $(pwd)/srv-records.conf:/opt/unbound/etc/unbound/srv-records.conf:ro \
+mvance/unbound:latest
+Use a customized Unbound configuration
+Instead of using this image's default configuration for Unbound, you may supply your own configuration. If your customized configuration is located at /my-directory/unbound/unbound.conf, pass /my-directory/unbound as a volume when creating your container:
+
+docker run --name=my-unbound \
+--detach=true \
+--publish=53:53/tcp \
+--publish=53:53/udp \
+--restart=unless-stopped \
+--volume=/my-directory/unbound:/opt/unbound/etc/unbound/ \
+mvance/unbound:latest
+This will expose all files in /my-directory/unbound/ to the container. As an alternate way to serve custom DNS records for any local zones, either place them directly in your unbound.conf, or place the local zones in a separate file and use Unbound's include directive within your unbound.conf:
+
+include: /opt/unbound/etc/unbound/local-zone-unbound.conf
+Your volume's contents might eventually look something like this:
+
+/my-directory/unbound/
+-- unbound.conf
+-- local-zone-unbound.conf
+-- secret-zone.conf
+-- some-other.conf
+Overall, this approach is very similar to the a-records.conf approach described above. However, by passing your unbound directory rather than a single file, you have more options for customizing and segmenting your Unbound configuration.
+
+Note: Care has been taken in the image's default configuration to enable security options so it is recommended to use it as a guide.
+
+Run on different port
+If you want to run Unbound on a different such as 5353, modify the publish flags:
+
+sudo docker run \
+--name=my-unbound \
+--publish=5353:53/tcp \
+--publish=5353:53/udp \
+--detach=true \
+--restart=unless-stopped \
+--volume=$(pwd)/my-directory/forward-records.conf:/opt/unbound/etc/unbound/forward-records.conf:ro \
+--volume=$(pwd)/my-directory/a-records.conf:/opt/unbound/etc/unbound/a-records.conf:ro \
+mvance/unbound:latest
+
+
+
+
+
+
+
+
+
+
