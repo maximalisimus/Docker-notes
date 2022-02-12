@@ -107,7 +107,7 @@ services:
     image: mariadb:latest
     container_name: mariadb
     restart: unless-stopped
-    hostname: mariadb
+    # hostname: mariadb
     # ports:
       # 3306:3306
     expose: '3306'
