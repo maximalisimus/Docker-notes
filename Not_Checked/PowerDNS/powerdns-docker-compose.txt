@@ -105,7 +105,7 @@ services:
     restart: unless-stopped
     environment:
       - PDNS_ADMIN_SQLA_DB_HOST='mariadb'
-      - PDNS_ADMIN_SQLA_DB_PORT='3310'
+      - PDNS_ADMIN_SQLA_DB_PORT='3306'
       - PDNS_ADMIN_SQLA_DB_USER='powerdns'
       - PDNS_ADMIN_SQLA_DB_PASSWORD='powerdns'
       - PDNS_ADMIN_SQLA_DB_NAME='powerdns'
