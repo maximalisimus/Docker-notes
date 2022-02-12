@@ -1,8 +1,11 @@
 
 
-version: '3'
+pdns-master:
+docker-compose.yml
+
+version: '3.1'
 services:
-  
+
   mariadb:
     image: mariadb:latest
     container_name: mariadb
@@ -23,13 +26,6 @@ services:
     restart: always
     ports:
       - 8080:8080
-
-
-pdns-master:
-docker-compose.yml
-
-version: '3.1'
-services:
 
   pdnsmaster:
     image: pschiffe/pdns-mysql
