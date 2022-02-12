@@ -114,7 +114,7 @@ services:
     link:
       - mariadb:mysql
       - pdnsmaster:pdns
-  
+
   pdnsstatic:
     image: pschiffe/pdns-admin-static:ngoduykhanh
     container_name: pdnsstatic
@@ -192,7 +192,7 @@ docker-compose.yml
 
 version: '3.1'
 services:
-  
+
   pdns-recursor:
     image: pschiffe/pdns-recursor
     container_name: dns-recursor
