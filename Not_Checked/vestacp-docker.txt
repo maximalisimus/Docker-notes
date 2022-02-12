@@ -1,0 +1,36 @@
+
+
+version: "3"
+
+services:
+  vesta:
+    image: niiknow/vestacp
+    container_name: vesta
+    cap_add: ['NET_RAW', 'NET_ADMIN']
+    hostname: yourcpanelhostname.com
+    volumes:
+      -./vestacp/backup:/backup
+      - ./vestacp/vesta:/vesta
+      - ./vestacp/home:/home
+    ports:
+      - "3322:22"
+      - "80:80"
+      - "443:443"
+      - "9088:8083"
+    ulimits:
+      nproc: 65535
+      nofile:
+        soft: 20000
+        hard: 40000
+    sysctls:
+      net.core.somaxconn: '511'
+    labels:
+      - "Vesta Control Panel"
+    restart: always
+    
+
+
+sudo docker exec vesta /usr/local/vesta/bin/v-change-user-password admin YOURNEWPASSWORD
+
+
+
