@@ -26,6 +26,14 @@ interface-automatic: yes
 
 
 
+# mysqldump --skip-extended-insert
+# upload other BD
+# RENAME TABLE
+# git commit && git push
+
+
+
+
 
 
 pdns-master:
