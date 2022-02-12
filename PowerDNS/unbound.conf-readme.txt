@@ -1,0 +1,96 @@
+
+
+apt-get install unbound
+
+/etc/unbound/unbound.conf
+
+# эта строчка есть в дефолтном конфиге, оставляем её.
+include: "/etc/unbound/unbound.conf.d/*.conf"
+
+# открываем секцию server
+server:
+    # разрешаем подключения только с localhost-а
+    access-control: 127.0.0.0/8 allow
+    # слушать внешние интерфейсы смысла тоже нет.
+    interface: 127.0.0.1
+    # запись с ttl больше 14400 секунд в кеш записываем с ttl равным 14400
+    cache-max-ttl: 14400
+    # запись с ttl меньше 60 секунд записываем в кэш с ttl равным 60 секунду
+    cache-min-ttl: 60
+    # Скрываем то, что у нас unbound и его версию.
+    hide-identity: yes
+    hide-version: yes
+    # если в них нет необходимости, то unbound убирает из своего ответа информацию о NS-серверах домена. Чуть увеличивает скорость и уменьшает трафик (если в unbound ходим по сети).
+    minimal-responses: yes
+    # Эта опция включает обновление записей в кэше в фоне, ради неё мы всё и затеяли.
+    prefetch: yes
+    # снижаем количество информации, которую unbound отправляет на чужие NS в своих исходящих запросах.
+    qname-minimisation: yes
+    # unbound будет отдавать записи одного типа (если их несколько, т.н. round-robin) в случайном порядке.
+    rrset-roundrobin: yes
+    # приводит все ответы сервера (и записи в кэше) к нижнему регистру
+    use-caps-for-id: yes
+    # включает хождение наружу по tcp. Я пытался использовать её совместно с "do-udp no", но без форварда вместе они работать не будут. Но для примера пусть полежит.
+    do-tcp: yes
+    # включаем эту опцию, если собираемся форвардить dns через TLS (см.
+список серверов ниже)
+    ssl-upstream: yes
+
+forward-zone:
+    name: "."
+    forward-addr: 8.8.4.4
+    forward-addr: 8.8.8.8
+    
+
+
+
+forward-zone:
+    name: "."
+    forward-addr: 1.1.1.1@853 # CloudFlare
+    forward-addr: 9.9.9.9@853 # quad9.net primary
+    forward-addr: 149.112.112.112@853 # quad9.net secondary
+    forward-addr: 145.100.185.15@853 # dnsovertls.sinodun.com US
+    forward-addr: 145.100.185.16@853 # dnsovertls1.sinodun.com US
+    forward-addr: 184.105.193.78@853 # tls-dns-u.odvr.dns-oarc.net US
+    forward-addr: 185.49.141.37@853 # getdnsapi.net US
+    forward-addr: 199.58.81.218@853 # dns.cmrg.net US
+    forward-addr: 146.185.167.43@853 # securedns.eu Europe
+    forward-addr: 89.233.43.71@853 # unicast.censurfridns.dk Europe
+
+
+
+
+
+
+
+
+/etc/init.d/unbound restart
+time host debian.pro 127.0.0.1
+time host debian.pro 8.8.8.8
+file /etc/resolv.conf
+/etc/resolv.conf: symbolic link to ..
+Если видим такую надпись — делаем так:
+unlink /etc/resolv.conf
+Тем самым мы запрещаем всяким NetworkManager-ам менять этот файл. Ну а сам файл создаём и приводим к такому виду:
+nameserver 127.0.0.1
+Если беспокоимся о том, что unbound упадёт и резолв сломается, то оставляем резервом другие резолверы:
+nameserver 127.0.0.1
+nameserver 8.8.8.8
+nameserver 8.8.4.4
+Если у вас systemd (ubuntu 16+, debian 8+), то resolv.conf нужно «применять» перезапуском сервиса resolvconf:
+service resolvconf restart
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
