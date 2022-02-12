@@ -27,6 +27,9 @@ services:
     container_name: pdnsmaster
     restart: unless-stopped
     hostname ns1.debian.local
+    ports:
+      - 53:53
+      - 53:53/udp
     link:
       - mariadb:mysql
     environment:
