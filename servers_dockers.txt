@@ -46,6 +46,11 @@ nameserver 208.67.220.220
 
 
 
+/etc/nsswitch.conf
+
+
+
+
 
 Next Debian.
 
