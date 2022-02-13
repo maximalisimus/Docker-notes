@@ -18,7 +18,7 @@ dns=none
 
 Debian to DNS uses on AdGuard or Pihole - please desable systemd-resolved.service:
 sudo systemctl stop systemd-resolved.service
-sudo systemctl deisable systemd-resolved.service
+sudo systemctl disable systemd-resolved.service
 
 And edit file /etc/systemd/resolved.conf to Google DNS
 
