@@ -96,7 +96,7 @@ services:
           - mysql
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - mariadb:/var/lib/mysql:z
+      - ./mariadb:/var/lib/mysql:z
     environment:
       - MYSQL_ROOT_PASSWORD=my-secret-pw
     healthcheck:
@@ -126,7 +126,7 @@ services:
         aliases:
           - unbound
 
-  pdnsmaster:
+  pdns-master:
     image: pschiffe/pdns-mysql
     container_name: pdnsmaster
     restart: unless-stopped
@@ -149,8 +149,6 @@ services:
       - 172.6.0.22
       - 8.8.8.8
       - 8.8.4.4
-    link:
-      - mariadb:mysql
     environment:
       - PDNS_gmysql_password=my-secret-pw
       - PDNS_master=yes
@@ -163,6 +161,8 @@ services:
       - PDNS_default_ttl=1500
       - PDNS_allow_axfr_ips=172.6.0.21
       - PDNS_only_notify=172.6.0.21
+    depends_on:
+      - mariadb
 
   pdns-slave:
     image: pschiffe/pdns-mysql
@@ -188,43 +188,39 @@ services:
       - PDNS_disable_axfr=yes
       - PDNS_allow_notify_from=172.6.0.20
       - SUPERMASTER_IPS=172.6.0.20
-    link: 
-      - mariadb:mysql
+    depends_on:
+      - mariadb
+      - pdns-master
 
-  pdnsuwsgi:
+  pdns-admin-uwsgi:
     image: pschiffe/pdns-admin-uwsgi
-    container_name: pdnsuwsgi
+    container_name: pdns-admin-uwsgi
     restart: unless-stopped
     environment:
       - PDNS_ADMIN_SQLA_DB_PASSWORD='my-secret-pw'
       - PDNS_VERSION=4.5
       - PDNS_API_KEY=secret
-      #- PDNS_ADMIN_SQLA_DB_HOST='mariadb'
-      #- PDNS_ADMIN_SQLA_DB_PORT='3306'
-      #- PDNS_ADMIN_SQLA_DB_USER='powerdns'
-      #- PDNS_ADMIN_SQLA_DB_PASSWORD='powerdns'
-      #- PDNS_ADMIN_SQLA_DB_NAME='powerdns'
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./pdns-admin-upload:/opt/powerdns-admin/upload
-    link:
-      - mariadb:mysql
-      - pdnsmaster:pdns
     networks:
       pdns:
         aliases:
-          - pdnsuwsgi
+          - pdns-admin-uwsgi
+    depends_on:
+      - mariadb
+      - pdns-master
 
-  pdnsstatic:
+  pdns-admin-static:
     image: pschiffe/pdns-admin-static
-    container_name: pdnsstatic
+    container_name: pdns-admin-static
     restart: unless-stopped
     ports:
       - '8989:80'
     volumes:
       - /etc/localtime:/etc/localtime:ro
-    link:
-      - pdnsuwsgi:pdns-admin-uwsgi
+    depends_on:
+      - pdns-admin-uwsgi
     networks:
       - pdns
 
