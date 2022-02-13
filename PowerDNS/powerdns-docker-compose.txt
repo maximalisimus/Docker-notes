@@ -113,18 +113,18 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
 
-  unbound:
-    image: "mvance/unbound:latest"
-    container_name: unbound
-    restart: unless-stopped
-    hostname: "unbound"
-    volumes:
-      - "./unbound:/opt/unbound/etc/unbound/"
-    networks:
-      pdns:
-        ipv4_address: 172.6.0.22
-        aliases:
-          - unbound
+  #unbound:
+  #  image: "mvance/unbound:latest"
+  #  container_name: unbound
+  #  restart: unless-stopped
+  #  hostname: "unbound"
+  #  volumes:
+  #    - "./unbound:/opt/unbound/etc/unbound/"
+  #  networks:
+  #    pdns:
+  #      ipv4_address: 172.6.0.22
+  #      aliases:
+  #        - unbound
 
   pdns-master:
     image: pschiffe/pdns-mysql
@@ -136,7 +136,7 @@ services:
         ipv4_address: 172.6.0.20
         aliases:
           - pdns
-          - unbound
+          # unbound
     extra_hosts:
       - 'ns1.example.com:172.6.0.20'
       - 'ns2.example.com:172.6.0.21'
@@ -146,10 +146,10 @@ services:
       - 53:53
       - 53:53/udp
       - 8081:8081
-    dns:
-      - 172.6.0.22
-      - 8.8.8.8
-      - 8.8.4.4
+    #dns:
+    #  - 172.6.0.22
+    #  - 8.8.8.8
+    #  - 8.8.4.4
     environment:
       - PDNS_gmysql_password=my-secret-pw
       - PDNS_master=yes
