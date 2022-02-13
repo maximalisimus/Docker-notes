@@ -1,0 +1,280 @@
+
+
+wget https://raw.githubusercontent.com/hestiacp/hestiacp/release/install/hst-install.sh
+
+bash hst-install.sh
+
+bash hst-install.sh --interactive no --email email@domain.tld --password p4ssw0rd --hostname hostname.domain.tld -f
+
+bash hst-install.sh --apache no --postgresql yes --clamav no --spamassassin no
+
+
+
+
+
+3.1) sudo docker network create `#Docker network for made static ip of container` \
+  --driver=bridge \
+  --subnet 10.1.0.0/16 \
+  --ip-range 10.1.1.0/24 \
+  --gateway=10.1.0.1 \
+  Docker_Network
+or in one line
+
+3.1) sudo docker network create --driver=bridge --subnet 10.1.0.0/16 --ip-range 10.1.1.0/24 --gateway=10.1.0.1 Docker_Network
+
+3.2) sudo docker run -d \
+--privileged                                                                                                    `#(For iptables work)` \
+--name=Hestia-CP -e TZ=Europe/Moscow --restart=always                                                           `#Set your time zone` \
+--hostname cp.yourdomain.com                                                                                    `#Set your hostname` \
+--network Docker_Network --ip=10.1.1.30                                                                                              \
+-p 8083:8083/tcp -p 23:23/tcp -p 80:80/tcp -p 443:443/tcp -p 20:20/tcp -p 21:21/tcp -p 12000-12100:12000-12100/tcp -p 25:25/tcp -p 53:53/udp -p 53:53/tcp -p 465:465/tcp -p 587:587/tcp -p 110:110/tcp -p 993:993/tcp -p 995:995/tcp -p 143:143/tcp -p 3306:3306 \
+--volume Hestia-home:/home -v Hestia-usr:/usr -v Hestia-backup:/backup -v Hestia-etc:/etc -v Hestia-var:/var    `#(For backup work)` \
+--tmpfs /tmp --tmpfs /run --tmpfs /run/lock                                                                     `#(For systemd work)` \
+-v /sys/fs/cgroup:/sys/fs/cgroup:ro                                                                             `#(For systemd work)` \
+smied/hestia-cp:latest
+
+
+or in one line
+
+3.2) sudo docker run -d --privileged --name=Hestia-CP -e TZ=Europe/Moscow --restart=always --hostname cp.yourdomain.com --net Docker_Network --ip=10.1.1.30 -p 8083:8083/tcp -p 23:23/tcp -p 80:80/tcp -p 443:443/tcp -p 20:20/tcp -p 21:21/tcp -p 12000-12100:12000-12100/tcp -p 25:25/tcp -p 53:53/udp -p 53:53/tcp -p 465:465/tcp -p 587:587/tcp -p 110:110/tcp -p 993:993/tcp -p 995:995/tcp -p 143:143/tcp -p 3306:3306 --volume Hestia-home:/home -v Hestia-usr:/usr -v Hestia-backup:/backup -v Hestia-etc:/etc -v Hestia-var:/var --tmpfs /tmp --tmpfs /run --tmpfs /run/lock -v /sys/fs/cgroup:/sys/fs/cgroup:ro smied/hestia-cp:latest
+Using the host network (you will see the real ip of users, but you can't conveniently reassign ports)
+3.1) sudo echo -e "net.ipv4.ip_nonlocal_bind = 1" >> /etc/sysctl.conf && sysctl -p /etc/sysctl.conf
+3.2) sudo docker run -d \
+--privileged                                                                                                    `#(For iptables work)` \
+--name=Hestia-CP -e TZ=Europe/Moscow --restart=always                                                           `#Set your time zone` \
+--hostname cp.yourdomain.com                                                                                    `#Set your hostname` \
+--network host                                                                                                                       \
+--volume Hestia-home:/home -v Hestia-usr:/usr -v Hestia-backup:/backup -v Hestia-etc:/etc -v Hestia-var:/var    `#(For backup work)` \
+--tmpfs /tmp --tmpfs /run --tmpfs /run/lock                                                                     `#(For systemd work)` \
+-v /sys/fs/cgroup:/sys/fs/cgroup:ro                                                                             `#(For systemd work)` \
+smied/hestia-cp:latest
+or in one line
+
+3.2) sudo docker run -d --privileged --name=Hestia-CP -e TZ=Europe/Moscow --restart=always --hostname cp.yourdomain.com --network host --volume Hestia-home:/home -v Hestia-usr:/usr -v Hestia-backup:/backup -v Hestia-etc:/etc -v Hestia-var:/var --tmpfs /tmp --tmpfs /run --tmpfs /run/lock -v /sys/fs/cgroup:/sys/fs/cgroup:ro smied/hestia-cp:latest
+Cron
+4) `# Add admin default cron to your system`
+(crontab -l 2>/dev/null; echo '00 6 * * * sudo -u root docker exec Hestia-CP su - admin -c "sudo /usr/local/hestia/bin/v-update-sys-hestia-all"') | crontab -
+(crontab -l 2>/dev/null; echo '*/5 * * * * sudo -u root docker exec Hestia-CP su - admin -c "sudo /usr/local/hestia/bin/v-update-sys-rrd"') | crontab -
+(crontab -l 2>/dev/null; echo '20 00 * * * sudo -u root docker exec Hestia-CP su - admin -c "sudo /usr/local/hestia/bin/v-update-user-stats"') | crontab -
+(crontab -l 2>/dev/null; echo '10 05 * * * sudo -u root docker exec Hestia-CP su - admin -c "sudo /usr/local/hestia/bin/v-backup-users"') | crontab -
+(crontab -l 2>/dev/null; echo '*/5 * * * * sudo -u root docker exec Hestia-CP su - admin -c "sudo /usr/local/hestia/bin/v-update-sys-queue backup"') | crontab -
+(crontab -l 2>/dev/null; echo '30 03 * * * sudo -u root docker exec Hestia-CP su - admin -c "sudo /usr/local/hestia/bin/v-update-sys-queue webstats"') | crontab -
+(crontab -l 2>/dev/null; echo '10 00 * * * sudo -u root docker exec Hestia-CP su - admin -c "sudo /usr/local/hestia/bin/v-update-sys-queue traffic"') | crontab -
+(crontab -l 2>/dev/null; echo '15 02 * * * sudo -u root docker exec Hestia-CP su - admin -c "sudo /usr/local/hestia/bin/v-update-sys-queue disk"') | crontab -
+(crontab -l 2>/dev/null; echo '10 00 * * * sudo -u root docker exec Hestia-CP su - admin -c "sudo /usr/local/hestia/bin/v-update-sys-queue daily"') | crontab -
+(crontab -l 2>/dev/null; echo '*/2 * * * * sudo -u root docker exec Hestia-CP su - admin -c "sudo /usr/local/hestia/bin/v-update-sys-queue restart"') | crontab -
+Usage
+5) Open in browser - https://<yourip>:8083/
+Control Panel
+login: admin
+
+mail: change@this.mail
+
+password: changethispassword
+
+host: localhost.localdomain
+SSH
+ssh root@<yourip> -p 23
+root password: changethispassword
+Hestia CP
+Quick acces:
+Data base web access:
+https://<YourSite>/phpmyadmin/
+(Opens for any your site/Access for all databases):
+
+Web Mail:
+https://webmail.<YourSite>/ or alias https://mail.<YourSite>/
+(Opens for any your site where enabled mail authorization works for all mail accounts added in Control Panel)
+
+Stats:
+https://<YourSite>/vstats/
+(Opens for any your site where enabled stats/Stats for only this site)
+(You must enable the password so that no one else can access the statistics)
+Mail:
+Username: Email address - <Yourmail> / Email address and Site - <<Yourmail>.<Yoursite>>
+
+IMAP/POP3, SMTP Hostname: mail.<YourSite> (not imap.<YourSite>/pop.<YourSite>, smtp.<YourSite>)
+
+IMAP - Incoming mail server
+
+143 - No secure
+143 - STARTTLS
+993 - SSL
+
+POP3 - Incoming mail
+
+110 - No secure
+110 - STARTTLS
+995 - SSL
+
+SMTP - Outgoing mail server
+
+25/587 - No secure
+Auto - STARTTLS
+465 - SSL/TLS
+FTP:
+ftp.<YourSite>:21
+
+or
+
+<YourIp>:21
+MySQL
+see root password:
+
+cat /usr/local/hestia/conf/mysql.conf
+Settings:
+1 Site on multiple domains or subdomains:
+1) Add site test1.com 2) Add aliases sub.test2.com
+
+And the site test1.com will be available at sub.test2.com
+
+Catch all email:
+MAIL - [domain] - Edit domain mail - Catch-All Email
+
+Subdomain:
+Just add site like subdomain.mysite.com
+
+Control panel as a subdomain and use in subdomains other services like gitlab:
+Use Nginx proxy manager or Traefik
+
+Nginx proxy manager
+1) docker run -d \
+ --name=Proxy-Manager  \
+ --network host -e TZ=Europe/Moscow --restart=always \
+ -e DB_MYSQL_HOST=IP -e DB_MYSQL_NAME=Proxy-Manager -e DB_MYSQL_USER=DataBaseUser -e DB_MYSQL_PASSWORD=Password -e DB_MYSQL_PORT=3307 \
+ --volume /Docker/Proxy-Manager/data:/data --volume /Docker/Proxy-Manager/letsencrypt:/etc/letsencrypt \
+jc21/nginx-proxy-manager:github-real_ip
+docker cp Proxy-Manager:/app/config/default.json /root/default.json
+cp default.json production.json
+rm default.json
+Change base in production.json
+docker cp production.json Proxy-Manager:/app/config/production.json
+Info
+Used ports:
+
+81, 80, 443
+
+http://IP:81
+
+Email: admin@example.com
+
+Password: changeme
+
+Clean logs
+0 * * * * rm -rf /Docker/Proxy-Manager/data/logs/*
+Config
+HTTPS
+
+proxy_set_header Accept-Encoding ""; # no compression allowed
+sub_filter "http://" "https://";
+sub_filter_once off;
+Real IP
+
+proxy_set_header X-Real-IP $remote_addr;
+Other
+Change default passwords
+root:
+echo 'root:yournewpassword' | chpasswd
+
+admin:
+echo 'admin:yournewpassword' | chpasswd
+Cron
+View CRON tasks for different users:
+crontab -u root -l #standard system user
+crontab -u admin -l #standard control panel user
+crontab -u hosting -l #example user of control panel
+Rights:
+
+root	sudo	without sudo
+command	+	+
+command run script	+	+
+cron run script	-	-
+admin	sudo	without sudo
+command	+	+
+command run script	+	-
+cron run script	-	-
+hosting	sudo	without sudo
+command	-	+
+command run script	-	+
+cron run script	-	-
+System to Docker	sudo	without sudo
+command	+	-
+command run script	+	-
+cron run script	+	-
+Example
+System to Docker:
+0 * * * * * sudo -u root docker exec Hestia-CP su - hosting -c "/bin/bash /home/hosting/web/Script.sh |& tee -a /home/hosting/web/Script.log"
+Also:
+
+* Get access to the terminal as user of Control Panel
+Edit user in Control Panel settings (system /etc/passwd)
+
+* Should always specify the full path (Home folder for terminal commands /usr/local/hestia/bin/)
+Example:
+hosting example user: /bin/bash /home/hosting/web/Script.sh |& tee -a /home/hosting/web/Script.log
+Logs
+See system logs inside the container:
+cat /var/log/syslog
+
+See the CRON logs:
+grep CRON /var/log/syslog
+Backup Docker
+/var/lib/docker/volumes/Hestia-home       #/home   - Websites
+/var/lib/docker/volumes/Hestia-usr        #/usr    - Control panel (/usr/local/hestia)
+/var/lib/docker/volumes/Hestia-backup     #/backup - Backups
+/var/lib/docker/volumes/Hestia-etc        #/etc    - Configs
+/var/lib/docker/volumes/Hestia-var        #/var    - Logs: system (/var/log/syslog), control panel (/var/log/hestia/)
+
+After restore:
+
+1) Update password
+
+admin:
+echo 'admin:yournewpassword' | chpasswd
+
+2) Update access to the terminal as user of Control Panel if this was used
+Hestia CP Backups
+v-restore-user USER BACKUP [WEB] [DNS] [MAIL] [DB] [CRON] [UDIR] [NOTIFY]
+
+Examples:
+
+Restore WEB every 15 minutes (For demo site)
+*/15 * * * * sudo -u root docker exec Hestia-CP su - root -c "/usr/local/hestia/bin/v-restore-user hosting hosting.xxxx-xx-xx_xx-xx-xx.tar 'site.com' no no no no no no"
+
+Restore WEB for site1.com,site2.com, DNS for all sites
+/usr/local/hestia/bin/v-restore-user hosting hosting.xxxx-xx-xx_xx-xx-xx.tar 'site1.com,site2.com' '*' no no no no no
+
+
+
+Uninstall
+1) docker exec Hestia-CP bash -c 'userdel -rfRZ admin' && docker container rm --force Hestia-CP
+2) mv /var/lib/docker/volumes/Hestia-home/ /tmp && docker volume rm --force Hestia-usr && docker volume rm --force Hestia-backup && docker volume rm --force Hestia-etc && docker volume rm --force Hestia-var && reboot
+
+
+
+Issues
+Issue	Solution
+502	Reboot container
+When control panel updated, admin password is reset to default	Don't use cron "/usr/local/hestia/bin/v-update-sys-hestia-all"
+Can't delete volume Hestia-home	mv /var/lib/docker/volumes/Hestia-home/_data /tmp && reboot
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
