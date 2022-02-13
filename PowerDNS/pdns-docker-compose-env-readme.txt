@@ -54,9 +54,8 @@ services:
       # PDNS_only_notify=192.168.100.45
       # PDNS_webserver_allow_from=172.5.0.0/16 # example configuration for PowerDNS 4.x
       # PowerDNS server, for example 4.0.1
-      # PDNS_API_URL="http://pdns:8081/"
-      # PDNS_API_KEY="secret"
-      # PDNS_VERSION=""
+      - PDNS_API_URL="http://192.168.0.120:8081/"
+      - PDNS_VERSION="4.1.1"
       - PDNS_gmysql_host=mariadb
       - PDNS_gmysql_port=3306
       - PDNS_gmysql_user='powerdns'
