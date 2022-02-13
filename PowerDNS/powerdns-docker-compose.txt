@@ -82,6 +82,12 @@ services:
 
   pdns-recursor:
     image: pschiffe/pdns-recursor
+    container_name: pdns-recursor
+    environment:
+      - PDNS_api_key=secret
+      - PDNS_webserver=yes
+      - PDNS_webserver_address=172.6.0.20
+      - PDNS_webserver_password=secret2
     networks:
       - pdns
     volumes:
@@ -89,6 +95,7 @@ services:
 
   mariadb:
     image: mariadb:10.6
+    container_name: mariadb
     networks:
       pdns:
         aliases:
@@ -106,6 +113,7 @@ services:
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:5
+    container_name: phpmyadmin
     networks:
       - pdns
     ports:
@@ -113,18 +121,18 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
 
-  #unbound:
-  #  image: "mvance/unbound:latest"
-  #  container_name: unbound
-  #  restart: unless-stopped
-  #  hostname: "unbound"
-  #  volumes:
-  #    - "./unbound:/opt/unbound/etc/unbound/"
-  #  networks:
-  #    pdns:
-  #      ipv4_address: 172.6.0.22
-  #      aliases:
-  #        - unbound
+  unbound:
+    image: "mvance/unbound:latest"
+    container_name: unbound
+    restart: unless-stopped
+    hostname: "unbound"
+    volumes:
+      - "./unbound:/opt/unbound/etc/unbound/"
+    networks:
+      pdns:
+        ipv4_address: 172.6.0.22
+        aliases:
+          - unbound
 
   pdns-master:
     image: pschiffe/pdns-mysql
@@ -136,7 +144,7 @@ services:
         ipv4_address: 172.6.0.20
         aliases:
           - pdns
-          # unbound
+          - unbound
     extra_hosts:
       - 'ns1.example.com:172.6.0.20'
       - 'ns2.example.com:172.6.0.21'
@@ -146,10 +154,10 @@ services:
       - 53:53
       - 53:53/udp
       - 8081:8081
-    #dns:
-    #  - 172.6.0.22
-    #  - 8.8.8.8
-    #  - 8.8.4.4
+    dns:
+      - 172.6.0.22
+      - 8.8.8.8
+      - 8.8.4.4
     environment:
       - PDNS_gmysql_password=my-secret-pw
       - PDNS_master=yes
