@@ -79,6 +79,11 @@ curl -v -H 'X-API-Key: secret' http://127.0.0.1:8081/api/v1/servers/localhost
 curl -v -H 'X-API-Key: secret' http://127.0.0.1:8081/api/v1/servers/localhost/example.com
 
 
+
+sudo systemctl set-environment MYSQLD_OPTS="--skip-grant-tables —skip-networking"
+
+
+
 pdns-master:
 docker-compose.yml
 
