@@ -193,16 +193,29 @@ systemctl restart pdns;
 
 
 
+mysql -e "CREATE USER IF NOT EXISTS 'root'@'localhost' IDENTIFIED WITH auth_socket;"
+mysql -e "CREATE USER 'root'@'127.0.0.1' IDENTIFIED WITH mysql_native_password BY '@DB_PASSWORD_ROOT';"
+mysql -e "CREATE USER 'root'@'::1' IDENTIFIED WITH mysql_native_password BY '@DB_PASSWORD_ROOT';"
+
+To ensure auth_socket is persistent add lines to your my.cnf:
+
+plugin-load-add = auth_socket.so
+auth_socket = FORCE_PLUS_PERMANENT
+
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' IDENTIFIED WITH unix_socket WITH GRANT OPTION;
 
 
+/etc/mysql/my.cnf
+
+bind-address = 0.0.0.0
 
 
+mysql -e "select User, host from mysql.user;"
+mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'powerdns' WITH GRANT OPTION; FLUSH PRIVILEGES;"
 
-
-
-
-
-
+mysql -e "use mysql; GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'powerdns' WITH GRANT OPTION; FLUSH PRIVILEGES;"
+or
+mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'172.6.0.%' IDENTIFIED BY 'powerdns' WITH GRANT OPTION; FLUSH PRIVILEGES;"
 
 
 

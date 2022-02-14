@@ -146,6 +146,7 @@ services:
 
   pdns-master:
     image: pschiffe/pdns-mysql
+    container_name: pdns-master
     restart: unless-stopped
     hostname: ns1.example.com
     networks:
@@ -156,6 +157,10 @@ services:
       - 'ns2.example.com:172.6.0.21'
     volumes:
       - /etc/localtime:/etc/localtime:ro
+    ports:
+      - 5300:53/tcp
+      - 5300:53/udp
+      - 8081:8081
     environment:
       - PDNS_master=yes
       - PDNS_api=yes
@@ -170,17 +175,17 @@ services:
       - PDNS_only_notify=172.6.0.21
       # PDNS_API_URL="http://192.168.0.120:8081/"
       # PDNS_VERSION="4.1.1"
-      # PDNS_gmysql_host=db
-      # PDNS_gmysql_port=3306
-      # PDNS_gmysql_user='root'
+      - PDNS_gmysql_host=db
+      - PDNS_gmysql_port=3306
+      - PDNS_gmysql_user='root'
       - PDNS_gmysql_password='powerdns'
-      # PDNS_gmysql_dbname='pdnsmaster'
+      - PDNS_gmysql_dbname='pdnsmaster'
     links:
-      - unbound
-      - mariadb:mysql
+      - mariadb
 
   pdns-slave:
     image: pschiffe/pdns-mysql
+    container_name: pdns-slave
     hostname: ns2.example.com
     networks:
       mysql_pdns:
@@ -200,15 +205,14 @@ services:
       - PDNS_disable_axfr=yes
       - PDNS_allow_notify_from=172.6.0.20
       - SUPERMASTER_IPS=172.6.0.20
-      # PDNS_gmysql_host=db
-      # PDNS_gmysql_port=3306
-      # PDNS_gmysql_user='root'
+      - PDNS_gmysql_host=db
+      - PDNS_gmysql_port=3306
+      - PDNS_gmysql_user='root'
       - PDNS_gmysql_password='powerdns'
-      # PDNS_gmysql_dbname='pdnsslave'
+      - PDNS_gmysql_dbname='pdnsslave'
     links:
       - pdns-master:pdns
-      - unbound
-      - mariadb:mysql
+      - mariadb
 
 networks:
   mysql_pdns:
