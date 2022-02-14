@@ -1,0 +1,94 @@
+
+
+FROM — задаёт базовый (родительский) образ.
+LABEL — описывает метаданные. Например — сведения о том, кто создал и поддерживает образ.
+ENV — устанавливает постоянные переменные среды.
+RUN — выполняет команду и создаёт слой образа. Используется для установки в контейнер пакетов.
+COPY — копирует в контейнер файлы и папки.
+ADD — копирует файлы и папки в контейнер, может распаковывать локальные .tar-файлы.
+CMD — описывает команду с аргументами, которую нужно выполнить когда контейнер будет запущен. 
+		Аргументы могут быть переопределены при запуске контейнера. 
+		В файле может присутствовать лишь одна инструкция CMD.
+WORKDIR — задаёт рабочую директорию для следующей инструкции.
+ARG — задаёт переменные для передачи Docker во время сборки образа.
+ENTRYPOINT — предоставляет команду с аргументами для вызова во время выполнения контейнера. 
+			Аргументы не переопределяются.
+EXPOSE — указывает на необходимость открыть порт.
+VOLUME — создаёт точку монтирования для работы с постоянным хранилищем.
+
+
+
+
+
+
+
+
+
+
+
+FROM python:3.7.2-alpine3.8
+LABEL maintainer="jeffmshale@gmail.com"
+ENV ADMIN="jeff"
+RUN apk update && apk upgrade && apk add bash
+COPY . ./app
+ADD https://raw.githubusercontent.com/discdiver/pachy-vid/master/sample_vids/vid1.mp4 \
+/my_app_directory
+RUN ["mkdir", "/a_directory"]
+CMD ["python", "./my_script.py"]
+
+
+
+
+
+
+
+
+
+
+
+
+FROM ubuntu:latest
+
+ENV MYSQL_HOST localhost
+ENV MYSQL_PORT 3306
+ENV MYSQL_DBNAME pdns
+ENV MYSQL_DBUSER pdns
+ENV MYSQL_DBPASS pdns
+ENV RECURSOR1 8.8.8.8
+ENV RECURSOR2 8.8.4.4
+ENV ALLOW_RECURSION_MASK 0.0.0.0\/0
+
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt-get -q update && apt-get -q install pdns-backend-mysql -y
+RUN apt-get clean && rm -rf /tmp/* /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+COPY entrypoint.sh /entrypoint.sh
+
+CMD ["/etc/init.d/pdns", "monitor"]
+ENTRYPOINT ["/entrypoint.sh"]
+
+EXPOSE 53/udp
+EXPOSE 53/tcp
+
+
+
+#!/bin/bash 
+    set -e 
+    mv /etc/powerdns/pdns.d/pdns.local.gmysql.conf{,_old} 
+    echo launch=gmysql >> /etc/powerdns/pdns.d/pdns.local.gmysql.conf 
+    echo gmysql-host=$MYSQL_HOST >> /etc/powerdns/pdns.d/pdns.local.gmysql.conf 
+    echo gmysql-port=$MYSQL_PORT >> /etc/powerdns/pdns.d/pdns.local.gmysql.conf 
+    echo gmysql-dbname=$MYSQL_DBNAME >> /etc/powerdns/pdns.d/pdns.local.gmysql.conf 
+    echo gmysql-user=$MYSQL_DBUSER >> /etc/powerdns/pdns.d/pdns.local.gmysql.conf 
+    echo gmysql-password=$MYSQL_DBPASS >> /etc/powerdns/pdns.d/pdns.local.gmysql.conf 
+    sed -i s/..recursor=/recursor=$RECURSOR1\ $RECURSOR2/g /etc/powerdns/pdns.conf 
+    sed -i s/allow-recursion=127.0.0.1/allow-recursion=$ALLOW_RECURSION_MASK/g /etc/powerdns/pdns.conf 
+if [ -f /mnt/recursors.conf ]; then
+    echo forward-zones-file=/mnt/recursors.conf >> /etc/powerdns/pdns.conf
+fi
+    cat /etc/powerdns/pdns.d/pdns.local.gmysql.conf 
+    rm -f /etc/powerdns/pdns.d/pdns.simplebind.conf 
+    exec "$@"
+
+
