@@ -230,7 +230,8 @@ iptables -I FORWARD 1 -i $EXT_IF -o $INT_IF -d $LAN_IP -p tcp -m tcp --dport $SR
 
 
 
-
+iptables -t nat -A OUTPUT -d 127.0.0.1 -p udp -m udp --dport 53 -j REDIRECT --to-ports 5353
+iptables -t nat -A OUTPUT -d 127.0.0.1 -p tcp -m tcp --dport 53 -j REDIRECT --to-ports 5353
 
 
 
