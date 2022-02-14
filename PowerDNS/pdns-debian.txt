@@ -1,0 +1,219 @@
+
+
+apt update;
+apt install php7.4-json php7.4-apcu -y;
+
+After that, we configure an Apache VHost with a config like the following:
+
+<VirtualHost *:80>
+ServerAdmin webmaster@localhost
+ServerName ns20.bob.com
+DocumentRoot /var/www/html/frontend
+RewriteEngine On
+RewriteRule ^index\.html$ - [L]
+RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-f
+RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-d
+RewriteRule !^/api/\.* /index.html [L]
+Alias /api /var/www/html/backend/public
+<Directory /var/www/html/backend/public>
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [QSA,L]
+</Directory>
+</VirtualHost>
+
+ere, we assume that the hostname is “https://pdns.example.com”.
+
+To start the installation, we open a browser and navigate to “https://pdns.example.com/setup”.
+
+Now, we have to supply the database credentials.
+
+Once we complete all necessary steps, we press Setup. After the installation, it will redirect to the login page.
+
+vim /etc/apt/sources.list.d/pdns.list
+
+deb [arch=amd64] http://repo.powerdns.com/ubuntu focal-auth-45 main
+
+vim /etc/apt/preferences.d/pdns
+
+Package: pdns-*
+Pin: origin repo.powerdns.com
+Pin-Priority: 600
+
+curl https://repo.powerdns.com/FD380FBB-pub.asc | sudo apt-key add -
+apt-get update
+apt-get install pdns-server
+
+Eventually, we enable and start the service:
+
+systemctl enable pdns.service;
+systemctl restart pdns.service;
+systemctl status pdns.service;
+
+Install and Configure MariaDB Server
+
+apt-get install software-properties-common gnupg2 -y
+
+apt-key adv --fetch-keys 'https://mariadb.org/mariadb_release_signing_key.asc'
+
+dd-apt-repository 'deb [arch=amd64,arm64,ppc64el] http://mirrors.ukfast.co.uk/sites/mariadb/repo/10.5/ubuntu focal main'
+
+apt-get install mariadb-server -y
+
+mysql_secure_installation
+
+/root/.my.cnf:
+
+vi /root/.my.cnf
+
+[client]
+user=root
+password=password_here
+
+chmod 400 /root/.my.cnf;
+
+To do so, we log in to MariaDB:
+
+login
+Then we create a database and user:
+
+create database pdns;
+grant all on pdns.* to pdnsadmin@localhost identified by 'password_here';
+flush privileges;
+exit;
+
+apt-get install pdns-server pdns-backend-mysql
+
+Once done, we open /etc/powerdns/pdns.conf with an editor and enter the following:
+
+allow-axfr-ips=127.0.0.1 <ip of your secondary nameserver>
+config-dir=/etc/powerdns
+daemon=yes
+disable-axfr=no
+guardian=yes
+local-address=0.0.0.0
+local-port=53
+master=yes
+slave=yes
+module-dir=/usr/lib/x86_64-linux-gnu/pdns
+setgid=pdns
+setuid=pdns
+#socket-dir=/var/run
+version-string=powerdns
+include-dir=/etc/powerdns/pdns.d
+
+Now we have to supply the configuration for the MySQL backend.
+
+To do so, we open /etc/powerdns/pdns.d/pdns.local.gmysql.conf with an editor and configure it as follows:
+
+launch=gmysql
+gmysql-host=localhost
+gmysql-port=3306
+gmysql-dbname=pdns
+gmysql-user=pdns
+gmysql-password=pdns
+gmysql-dnssec=no
+
+We need to replace the parameters according to our setup.
+
+Then we go ahead and remove the bind-config:
+
+cp -pvr /etc/pdns.d /etc/pdns.d-backup-21;
+rm -vf /etc/pdns.d/bind.conf;
+
+Eventually, we can restart PowerDNS and it will be up and running.
+
+systemctl enable pdns;
+systemctl restart pdns;
+Now, we will configure master config: /etc/powerdns/pdns.conf as below:
+
+launch=
+allow-axfr-ips=127.0.0.1 135.181.95.52
+config-dir=/etc/powerdns
+daemon=yes
+disable-axfr=no
+guardian=yes
+local-address=0.0.0.0
+local-port=53
+master=yes
+slave=yes
+module-dir=/usr/lib/x86_64-linux-gnu/pdns
+setgid=pdns
+setuid=pdns
+#socket-dir=/var/run
+version-string=powerdns
+api=yes
+api-key=key_here
+log-dns-queries=yes
+log-timestamp=yes
+loglevel=5
+master=yes
+primary=yes
+query-logging=yes
+include-dir=/etc/powerdns/pdns.d
+And then configure slave config: /etc/powerdns/pdns.conf as below:
+
+launch=
+allow-axfr-ips=127.0.0.1
+config-dir=/etc/powerdns
+daemon=yes
+disable-axfr=no
+guardian=yes
+local-address=0.0.0.0
+local-port=53
+module-dir=/usr/lib/x86_64-linux-gnu/pdns
+setgid=pdns
+setuid=pdns
+#socket-dir=/var/run
+version-string=powerdns
+api=yes
+api-key=key_here
+log-dns-queries=yes
+log-timestamp=yes
+query-logging=yes
+slave=yes
+slave-cycle-interval=60
+superslave=yes
+include-dir=/etc/powerdns/pdns.d
+Once we perform this change, we restart the service:
+
+systemctl restart pdns;
+Then we update the database in slave as below:
+
+use pdns;
+insert into pdns.supermasters values ('master_ip', 'slave_hostname', 'admin');
+
+Finally, after the config change, we restart service:
+
+systemctl restart pdns;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
