@@ -16,6 +16,7 @@ net.ipv4.conf.default.proxy_arp = 0
 net.ipv4.conf.default.send_redirects = 1
 net.ipv4.conf.all.send_redirects = 0
 
+sudo sysctl -p
 
 
 /etc/sysconfig/iptables
@@ -46,7 +47,7 @@ interface-automatic: yes
 
 
 
-
+sudo systemctl restart systemd-resolved.service
 sudo systemctl stop systemd-resolved.service
 sudo systemctl disable systemd-resolved.service
 
@@ -79,13 +80,150 @@ curl -v -H 'X-API-Key: secret' http://127.0.0.1:8081/api/v1/servers/localhost
 curl -v -H 'X-API-Key: secret' http://127.0.0.1:8081/api/v1/servers/localhost/example.com
 
 
+/etc/network/interfaces
 
-sudo systemctl set-environment MYSQLD_OPTS="--skip-grant-tables —skip-networking"
+/etc/sysconfig/iptables
+sudo iptables -t nat -A OUTPUT -d 172.6.0.20 -p udp -m udp --dport 53 -j REDIRECT --to-ports 5300
+sudo iptables -t nat -A OUTPUT -d 172.6.0.20 -p tcp -m tcp --dport 53 -j REDIRECT --to-ports 5300
 
 
 
-pdns-master:
-docker-compose.yml
+docker network create --driver bridge pdns
+
+
+
+version: '3.1'
+services:
+
+  mariadb:
+    image: mariadb:10.1
+    container_name: mariadb
+    networks:
+      pdns:
+        aliases:
+          - db
+          - mysql
+    ports:
+      - '3306:3306'
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./mariadb:/var/lib/mysql
+    environment:
+       MYSQL_ROOT_PASSWORD: 'powerdns'
+       # MYSQL_USER: 'admin'
+       # MYSQL_PASSWORD: 'powerdns'
+       # MYSQL_DATABASE: 'powerdns'
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    ports:
+      - '8988:80'
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    #environment:
+    #   - PMA_ARBITRARY=1
+    #   - PMA_HOST='mariadb'
+    #   - PMA_PORT='3306'
+    #   - PMA_USER=powerdns
+    #   - PMA_PASSWORD=powerdns
+    networks:
+      - pdns
+
+networks:
+  pdns:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.6.0.0/16
+          gateway: 172.6.0.1
+
+
+version: '3.1'
+services:
+
+  pdns-master:
+    image: pschiffe/pdns-mysql
+    restart: unless-stopped
+    hostname: ns1.example.com
+    networks:
+      mysql_pdns:
+        ipv4_address: 172.6.0.20
+    extra_hosts:
+      - 'ns1.example.com:172.6.0.20'
+      - 'ns2.example.com:172.6.0.21'
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PDNS_master=yes
+      - PDNS_api=yes
+      - PDNS_api_key=secret
+      - PDNS_webserver=yes
+      - PDNS_webserver_address=127.0.0.1
+      - PDNS_webserver_port=8081
+      - PDNS_webserver_allow_from=0.0.0.0/0,::/0
+      - PDNS_version_string=anonymous
+      - PDNS_default_ttl=1500
+      - PDNS_allow_axfr_ips=172.6.0.21
+      - PDNS_only_notify=172.6.0.21
+      # PDNS_API_URL="http://192.168.0.120:8081/"
+      # PDNS_VERSION="4.1.1"
+      # PDNS_gmysql_host=db
+      # PDNS_gmysql_port=3306
+      # PDNS_gmysql_user='root'
+      - PDNS_gmysql_password='powerdns'
+      # PDNS_gmysql_dbname='pdnsmaster'
+    links:
+      - unbound
+      - mariadb:mysql
+
+  pdns-slave:
+    image: pschiffe/pdns-mysql
+    hostname: ns2.example.com
+    networks:
+      mysql_pdns:
+        ipv4_address: 172.6.0.21
+    extra_hosts:
+      - 'ns1.example.com:172.6.0.20'
+      - 'ns2.example.com:172.6.0.21'
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - PDNS_slave=yes
+      - PDNS_superslave=yes
+      - PDNS_webserver=yes
+      - PDNS_webserver_address=0.0.0.0
+      - PDNS_webserver_allow_from=172.6.0.0/16
+      - PDNS_version_string=anonymous
+      - PDNS_disable_axfr=yes
+      - PDNS_allow_notify_from=172.6.0.20
+      - SUPERMASTER_IPS=172.6.0.20
+      # PDNS_gmysql_host=db
+      # PDNS_gmysql_port=3306
+      # PDNS_gmysql_user='root'
+      - PDNS_gmysql_password='powerdns'
+      # PDNS_gmysql_dbname='pdnsslave'
+    links:
+      - pdns-master:pdns
+      - unbound
+      - mariadb:mysql
+
+networks:
+  mysql_pdns:
+    external: true
+
+unbound:
+    image: "mvance/unbound:latest"
+    container_name: unbound
+    restart: unless-stopped
+    hostname: "unbound"
+    volumes:
+      - "./unbound:/opt/unbound/etc/unbound/"
+    networks:
+      mysql_pdns:
+        ipv4_address: 172.6.0.22
 
 version: '3.1'
 services:
@@ -103,151 +241,31 @@ services:
       - pdns
     volumes:
       - /etc/localtime:/etc/localtime:ro
-
-  mariadb:
-    image: mariadb:10.6
-    container_name: mariadb
-    networks:
-      - pdns
-    ports:
-      - '3306:3306'
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - ./mariadb:/var/lib/mysql:z
-    environment:
-       MYSQL_ROOT_PASSWORD: 'powerdns'
-       MYSQL_DATABASE: 'powerdns'
-       MYSQL_USER: 'powerdns'
-       MYSQL_PASSWORD: 'powerdns'
-    #healthcheck:
-    #  test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
-    #  timeout: 10s
-    #  retries: 5
-
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin:5
-    container_name: phpmyadmin
-    networks:
-      - pdns
-    links:
-      - mariadb
-    ports:
-      - '8988:80'
-    environment:
-       - PMA_ARBITRARY=1
-    #  - PMA_HOST='mariadb'
-    #  - PMA_PORT='3306'
-    #  - PMA_USER=powerdns
-    #  - PMA_PASSWORD=powerdns
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-
-  unbound:
-    image: "mvance/unbound:latest"
-    container_name: unbound
-    restart: unless-stopped
-    hostname: "unbound"
-    volumes:
-      - "./unbound:/opt/unbound/etc/unbound/"
-    networks:
-      pdns:
-        ipv4_address: 172.6.0.22
-
-  pdns-master:
-    image: pschiffe/pdns-mysql
-    container_name: pdns-master
-    restart: unless-stopped
-    hostname: ns1.example.com
-    networks:
-      pdns:
-        ipv4_address: 172.6.0.20
-    extra_hosts:
-      - 'ns1.example.com:172.6.0.20'
-      - 'ns2.example.com:172.6.0.21'
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-    ports:
-      - 53:53/tcp
-      - 53:53/udp
-      - 8081:8081
-    dns:
-      - 172.6.0.22
-      - 8.8.8.8
-      - 8.8.4.4
-    environment:
-      - PDNS_master=yes
-      - PDNS_api=yes
-      - PDNS_api_key=secret
-      - PDNS_webserver=yes
-      - PDNS_webserver_address=127.0.0.1
-      - PDNS_webserver_port=8081
-      - PDNS_webserver_allow_from=0.0.0.0/0,::/0
-      - PDNS_version_string=anonymous
-      - PDNS_default_ttl=1500
-      - PDNS_allow_axfr_ips=172.6.0.21
-      - PDNS_only_notify=172.6.0.21
-      - PDNS_API_URL="http://192.168.0.120:8081/"
-      - PDNS_VERSION="4.1.1"
-      - PDNS_gmysql_password=powerdns
-      - PDNS_gmysql_host=mariadb
-      - PDNS_gmysql_port=3306
-      - PDNS_gmysql_user='powerdns'
-      - PDNS_gmysql_password='powerdns'
-      - PDNS_gmysql_dbname='powerdns'
-    links:
-      - mariadb
-
-  pdns-slave:
-    image: pschiffe/pdns-mysql
-    hostname: ns2.example.com
-    container_name: pdns-slave
-    networks:
-      pdns:
-        ipv4_address: 172.6.0.21
-    extra_hosts:
-      - 'ns1.example.com:172.6.0.20'
-      - 'ns2.example.com:172.6.0.21'
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-    environment:
-      - PDNS_slave=yes
-      - PDNS_superslave=yes
-      - PDNS_webserver=yes
-      - PDNS_webserver_address=0.0.0.0
-      - PDNS_webserver_allow_from=172.6.0.0/16
-      - PDNS_version_string=anonymous
-      - PDNS_disable_axfr=yes
-      - PDNS_allow_notify_from=172.6.0.20
-      - SUPERMASTER_IPS=172.6.0.20
-      - PDNS_gmysql_host=mariadb
-      - PDNS_gmysql_port=3306
-      - PDNS_gmysql_user='powerdns'
-      - PDNS_gmysql_password='powerdns'
-      - PDNS_gmysql_dbname='powerdns'
-    links:
-      - mariadb
-      - pdns-master:pdns-mysql
+    depends_on:
+      - pdns-master
 
   pdns-admin-uwsgi:
     image: pschiffe/pdns-admin-uwsgi
     container_name: pdns-admin-uwsgi
     restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
     environment:
-      # PDNS_VERSION=4.5
+      - PDNS_VERSION=4.5
       - PDNS_API_KEY=secret
-      - PDNS_ADMIN_SQLA_DB_HOST='mariadb'
+      - PDNS_ADMIN_SQLA_DB_HOST='db'
       - PDNS_ADMIN_SQLA_DB_PORT='3306'
-      - PDNS_ADMIN_SQLA_DB_USER='powerdns'
-      - PDNS_ADMIN_SQLA_DB_PASSWORD='powerdns'
-      - PDNS_ADMIN_SQLA_DB_NAME='powerdns'
+      - PDNS_ADMIN_SQLA_DB_USER='pdnsuwsgi'
+      - PDNS_ADMIN_SQLA_DB_PASSWORD='pdnsuwsgi'
+      - PDNS_ADMIN_SQLA_DB_NAME='pdnsuwsgi'
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./pdns-admin-upload:/opt/powerdns-admin/upload
     networks:
       - pdns
-    links:
-      - mariadb
-      - pdns-master:pdns-mysql
+    depends_on:
+      - pdns-master
 
   pdns-admin-static:
     image: pschiffe/pdns-admin-static
@@ -257,8 +275,8 @@ services:
       - '8989:80'
     volumes:
       - /etc/localtime:/etc/localtime:ro
-    links:
-      - pdns-admin-uwsgi:pdns-admin-uwsgi
+    depends_on:
+      - pdns-admin-uwsgi
     networks:
       - pdns
 

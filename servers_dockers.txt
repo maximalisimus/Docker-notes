@@ -82,7 +82,7 @@ iface eth1 inet static
 # pre-up ifconfig eth0 hw ether xx:xx:xx:xx:xx:xx
 # pre-up ip link set eth0 address xx:xx:xx:xx:xx:xx
 
-
+/etc/init.d/networking restart
 
 sudo sysctl -w net.ipv4.ip_forward=1
 
