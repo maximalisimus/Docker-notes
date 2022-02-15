@@ -1,0 +1,272 @@
+
+
+podman
+podman-compose
+podman-docker
+podman-dnsname
+buildah
+cockpit
+cockpit-podman
+
+
+Example.
+
+[user@rhel8~]$ podman search ssh
+
+[user@rhel8~]$ grep registries /etc/containers/registries.conf
+
+[user@rhel8~]$ podman search registry
+
+[user@rhel8~]$ podman pull docker.io/library/regisrty
+
+[user@rhel8~]$ podman images
+
+[user@rhel8~]$ mkdir registry
+
+[user@rhel8~]$ podman run --name myregistry -p 5000:5000 -v /home/mikl/registry:/var/lib/registry:Z -d registry
+
+[user@rhel8~]$ podman ps
+
+[user@rhel8~]$ podman logs myregistry
+
+[user@rhel8~]$ podman -it myregistry sh
+
+[user@rhel8~]$ podman -exec -d myregistry touch /var/lib/registry/file
+[user@rhel8~]$ ls registry/
+[user@rhel8~]$ rm -rf registry/file
+
+[user@rhel8~]$ podman images
+
+[user@rhel8~]$ podman tag docker.io/library/regisrty:latest rhel8:5000/registry
+
+[user@rhel8~]$ podman images
+
+[user@rhel8~]$ podman push rhel8:5000/registry
+
+...Error...HTTPS...
+
+[user@rhel8~]$ sudo nano /etc/containers/registries.conf
+
+[[registry]]
+location = "rhel8:5000"
+insecure=true
+
+[user@rhel8~]$ podman push rhel8:5000/registry
+
+OK
+
+[user@rhel8~]$ ls registry/docker/registry/v2/
+
+[user@rhel8~]$ podman images
+
+[user@rhel8~]$ podman images rm docker.io/library/regisrty
+
+Untagged:...
+
+[user@rhel8~]$ podman search httpd | head 3
+
+...
+fedoraproject.org registry.fedoraproject.org/f29/httpd ...
+
+[user@rhel8~]$ skopeo copy docker://egistry.fedoraproject.org/f29/httpd docker://rhel8:5000/httpd
+
+[user@rhel8~]$ podman search rhel8:5000/httpd
+
+[user@rhel8~]$ podman pull rhel8:5000/httpd
+
+[user@rhel8~]$ podman images
+
+
+
+[user@rhel8~]$ podman generate systemd --restart-policy=always -t 1 --files --name myregistry
+
+/home/user/container-myregistry.service
+
+[user@rhel8~]$ mkdir -p ~/.config/systemd/user/
+
+[user@rhel8~]$ cp container-myregistry.service ~/.config/systemd/user/
+
+[user@rhel8~]$ systemctl --user enable container-myregistry.service
+
+[user@rhel8~]$ loginctl enable-linger user
+
+[user@rhel8~]$ sudo reboot
+
+mikl@mikl -> ssh root@rhel
+
+[user@rhel8~]$  nc -zv localhost 5000
+...
+Ncat: Connected to ::1:5000
+...
+[user@rhel8~]$ podman ps
+...
+[user@rhel8~]$ su - user
+
+[user@rhel8~]$ podman ps
+
+
+
+IF NEED 80 PORT.
+
+[user@rhel8~]$ sudo firewall-cmd --add-forward-port=port=80:proto=tcp:toport=5000 --permanent
+
+[user@rhel8~]$ sudo firewall-cmd --reload
+
+
+coockpit: https:ip:9090/podman
+
+
+
+
+
+The Digital Life.
+
+root: useradd xcad -m -s /bin/bash -c "admin user"
+root: usermod -aG sudo xcad
+root: passwd xcad
+root: mkdir -p /home/xcad/.ssh/
+
+paste the ssh public.key to /home/xcad/.ssh/autorized_keys 
+
+root: chown xcad:xcad /home/xcad/.ssh/authorized_keys
+root: exit
+
+ssh xcad@ip
+
+
+sudo apt install podman cockpit cockpit-podman -y
+sudo systemctl status cockpit
+
+Browser
+https://ip:9090
+The SSL certificate to self signed is CORRECT.
+
+$ pip3 install podman-compose
+$ nano ~/.bashrc
+export PATH=$PATH:/$HOME/.local/bin/
+
+$ cd opt
+$ sudo mkdir npm
+$ sudo chown xcad:xcad npm
+
+$ nano docker-compose.yml
+
+version: '3'
+services:
+  app:
+    image: 'docker.io/jc21/nginx-proxy-manager:latest'
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '81:81'
+      - '443:443'
+    environment:
+      DB_MYSQL_HOST: "db"
+      DB_MYSQL_PORT: 3306
+      DB_MYSQL_USER: "npm"
+      DB_MYSQL_PASSWORD: "npm"
+      DB_MYSQL_NAME: "npm"
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+  db:
+    image: 'docker.io/jc21/mariadb-aria:latest'
+    environment:
+      MYSQL_ROOT_PASSWORD: 'npm'
+      MYSQL_DATABASE: 'npm'
+      MYSQL_USER: 'npm'
+      MYSQL_PASSWORD: 'npm'
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+    restart: unless-stopped
+
+
+
+mkdir -p data/mysql letsecrypt
+
+podman-compose up -d
+
+Error to PORT 80 and 443.
+
+nano /etc/sysctl.conf
+
+net.ipv4.ip_unprivileged_port_start=80
+
+sudo sysctl -p
+
+podman-compose up -d
+
+podman ps --all
+
+SSL to cockpit.
+Nginx Proxy Manager - generate SSL certificate and Proxy Host to domain.
+
+$ ip a
+1. lo: ...
+...
+2: eht0
+inet 104.248.38.139/20 brd 104.248.47.255 scrope global eth0
+inet 10.19.0.8/16 brd 10.19.255.255 scope global eth0
+...
+
+
+Nginx Proxy Manager - Proxy Host.
+Details:
+my.example.com
+https 10.19.0.8 9090
+Block Common Exploits
+Websockets Support
+
+SSL:
+Force SSL
+HTTP/2 Support
+HSTS Enabled
+
+Domain active and STOP 10.19.0.8 public ip address = access denied.
+
+sudo mkdir -p /etc/systemd/system/cockpit.socket.d
+sudo nano /etc/systemd/system/cockpit.socket.d/listen.conf
+
+[Socket]
+ListenStream=
+ListenStream=10.19.0.8:9090
+FreeBind=yes
+
+sudo systemctl daemon-reload
+sudo systemctl restart cockpit
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
