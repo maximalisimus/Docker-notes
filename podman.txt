@@ -243,6 +243,78 @@ sudo systemctl restart cockpit
 
 
 
+podman login docker.io
+
+
+
+
+ln -sf /var/run/podman.sock /var/run/docker.sock
+sudo systemctl enable --now podman.socket
+systemctl --user enable --now podman.socket
+
+podman run -d -p 9000:9000 --privileged --name=portainer --restart=always -v /run/user/$(id -u)/podman/podman.sock:/var/run/docker.sock:Z -v portainer_data:/data portainer/portainer-ce
+
+
+podman pod list
+
+$ podman ps -a
+CONTAINER ID  IMAGE                      COMMAND               CREATED         STATUS             PORTS                   NAMES
+3636bbe05344  localhost/ol8_ords:latest  /bin/sh -c exec $...  17 minutes ago  Up 17 minutes ago  0.0.0.0:1521->1521/tcp  ol8_ords_con
+3dfe524b96dc  localhost/ol8_19:latest    /bin/sh -c exec $...  17 minutes ago  Up 17 minutes ago  0.0.0.0:1521->1521/tcp  ol8_19_con
+74a62f158f25  k8s.gcr.io/pause:3.1                             17 minutes ago  Up 17 minutes ago  0.0.0.0:1521->1521/tcp  9a42ad992aa6-infra
+$
+
+$ podman generate kube my_pod -f /tmp/my_pod_kube.yaml
+
+Play a Kubernetes YAML File
+
+podman rm -vf ol8_ords_con
+podman rm -vf ol8_19_con
+podman pod rm my_pod
+
+$ podman ps -a
+CONTAINER ID  IMAGE  COMMAND  CREATED  STATUS  PORTS  NAMES
+$
+
+$ podman play kube /tmp/my_pod_kube_compact.yaml
+Pod:
+ca53a71fecd8aa19a868739695624b4682fc3818e4889dff331284ec824afd15
+Containers:
+e8b5f9da27a9ee8b9c77cc0c799cf2e197bbb44df5b5aecc78b09ffabd52dcc0
+b1944c9bf62e9947b073ecc9ac2420741a05bdb191c4b4f39c3f843b8e54a519
+$
+
+$ podman pod list
+POD ID         NAME     STATUS    CREATED          # OF CONTAINERS   INFRA ID
+ca53a71fecd8   my_pod   Running   24 seconds ago   3                 9df5f3af12f1
+$
+
+$ podman ps -a
+CONTAINER ID  IMAGE                      COMMAND               CREATED         STATUS             PORTS                   NAMES
+b1944c9bf62e  localhost/ol8_ords:latest  /bin/sh -c exec $...  41 seconds ago  Up 40 seconds ago  0.0.0.0:1521->1521/tcp  ol8_ords_con
+e8b5f9da27a9  localhost/ol8_19:latest    /bin/sh -c exec $...  41 seconds ago  Up 40 seconds ago  0.0.0.0:1521->1521/tcp  ol8_19_con
+9df5f3af12f1  k8s.gcr.io/pause:3.1                             41 seconds ago  Up 41 seconds ago  0.0.0.0:1521->1521/tcp  ca53a71fecd8-infra
+$
+
+
+
+podman generate kube webserver
+
+podman generate kube webserver >> webserver.yaml
+
+
+
+
+
+
+
+podman build -t scriptcamp/nginx .
+
+podman push scriptcamp/nginx
+
+
+
+
 
 
 
