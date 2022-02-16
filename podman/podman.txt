@@ -1,5 +1,73 @@
 
 
+Установка Подмана
+Выполните указанные шаги для установки Podman в Debian 10/9:
+
+Обновление системы: Введите данную команду для обновления вашей системы
+
+sudo apt -y update && sudo apt -y upgrade
+
+Установка предварительных требований: Установите все предварительные требования, выполнив команды:
+
+sudo apt -y install \
+  gcc \
+  make \
+  cmake \
+  git \
+  btrfs-progs \
+  golang-go \
+  go-md2man \
+  iptables \
+  libassuan-dev \
+  libc6-dev \
+  libdevmapper-dev \
+  libglib2.0-dev \
+  libgpgme-dev \
+  libgpg-error-dev \
+  libostree-dev \
+  libprotobuf-dev \
+  libprotobuf-c-dev \
+  libseccomp-dev \
+  libselinux1-dev \
+  libsystemd-dev \
+  pkg-config \
+  runc \
+  uidmap \
+  libapparmor-dev
+Установка conmon: вам нужно установить последнюю версию conmon в вашей системе. Введите данную команду для установки conmon:
+
+git clone https://github.com/containers/conmon
+cd conmon
+make
+sudo make podman
+sudo cp /usr/local/libexec/podman/conmon  /usr/local/bin/
+Установка плагинов CNI
+
+git clone https://github.com/containernetworking/plugins.git $GOPATH/src/github.com/containernetworking/plugins
+cd $GOPATH/src/github.com/containernetworking/plugins
+./build_linux.sh
+sudo mkdir -p /usr/libexec/cni
+sudo cp bin/* /usr/libexec/cni
+Настройка сети CNI:
+
+sudo mkdir -p /etc/cni/net.d
+curl -qsSL https://raw.githubusercontent.com/containers/libpod/master/cni/87-podman-bridge.conflist | sudo tee /etc/cni/net.d/99-loopback.conf
+Добавить файлы конфигурации: вам нужно вручную добавить файлы конфигурации, набрав этот код:
+
+sudo mkdir -p /etc/containers
+sudo curl https://raw.githubusercontent.com/projectatomic/registries/master/registries.fedora -o /etc/containers/registries.conf
+sudo curl https://raw.githubusercontent.com/containers/skopeo/master/default-policy.json -o /etc/containers/policy.json
+Установка Подмана:
+
+git clone https://github.com/containers/libpod/ $GOPATH/src/github.com/containers/libpod
+cd $GOPATH/src/github.com/containers/libpod
+make
+sudo make install
+
+
+
+------------------------------------------------------------------------
+
 podman
 podman-compose
 podman-docker
