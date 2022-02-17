@@ -168,6 +168,11 @@ sudo systemctl start cockpit.socket
 # sudo firewall-cmd --add-service=cockpit
 # sudo firewall-cmd --add-service=cockpit --permanent
 
+sudo apt install cockpit-podman -y
+sudo systemctl restart cockpit
+sudo systemctl restart cockpit.socket
+
+
 
 10) 
 
