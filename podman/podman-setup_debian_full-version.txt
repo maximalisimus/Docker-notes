@@ -62,7 +62,6 @@ cd $GOPATH
 git checkout tags/go1.10.8  # optional
 cd src
 ./all.bash
-export PATH=$GOPATH/bin:$PATH
 
 5) conmon is used to monitor OCI Runtimes. To build from source, use the following:
 
@@ -163,8 +162,8 @@ sudo usermod -aG adm,users USERNAME
 
 # sudo systemctl enable cockpit
 # sudo systemctl start cockpit
-# sudo systemctl enable --now cockpit.socket
-# sudo systemctl start cockpit.socket
+sudo systemctl enable --now cockpit.socket
+sudo systemctl start cockpit.socket
 
 # sudo firewall-cmd --add-service=cockpit
 # sudo firewall-cmd --add-service=cockpit --permanent
