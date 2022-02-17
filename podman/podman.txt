@@ -60,9 +60,11 @@ sudo curl https://raw.githubusercontent.com/containers/skopeo/master/default-pol
 Установка Подмана:
 
 git clone https://github.com/containers/libpod/ $GOPATH/src/github.com/containers/libpod
+(personal mirror: https://drive.google.com/file/d/1WlR3S9ANAYX0t8WVEdF_S78m6m_t30lG/view?usp=sharing)
 cd $GOPATH/src/github.com/containers/libpod
 make
 sudo make install
+
 
 
 
