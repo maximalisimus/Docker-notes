@@ -1,0 +1,123 @@
+
+
+podman is a tool for managing (Kubernetes) pods, containers and container images, available from https://github.com/containers/libpod
+
+To install podman from scratch in Debian/ubuntu we need to have the below requirement met
+
+golang >= 1.8 (stretch+)
+docker-runc
+conmon
+CNI networking
+ostree (Packaged)
+libapparmor-dev
+
+1) $ apt -y update
+
+2) $ apt -y install \
+  vim \
+  curl \
+  gcc \
+  make \
+  cmake \
+  git \
+  btrfs-progs \
+  golang-go \
+  go-md2man \
+  iptables \
+  libassuan-dev \
+  libc6-dev \
+  libdevmapper-dev \
+  libglib2.0-dev \
+  libgpgme-dev \
+  libgpg-error-dev \
+  libostree-dev \
+  libprotobuf-dev \
+  libprotobuf-c-dev \
+  libseccomp-dev \
+  libselinux1-dev \
+  libsystemd-dev \
+  pkg-config \
+  runc \
+  uidmap \
+  libapparmor-dev
+
+3) check the runc version
+
+root@test:~# runc -version
+runc version spec: 1.0.1-dev
+
+4) install GOLANG
+
+export GOPATH=~/go
+git clone https://go.googlesource.com/go $GOPATH
+cd $GOPATH
+git checkout tags/go1.10.8  # optional
+cd src
+./all.bash
+export PATH=$GOPATH/bin:$PATH
+
+5) conmon is used to monitor OCI Runtimes. To build from source, use the following:
+
+cd ~
+git clone https://github.com/containers/conmon
+cd conmon
+export GOCACHE="$(mktemp -d)"
+make
+sudo make podman
+sudo cp /usr/local/libexec/podman/conmon  /usr/local/bin/
+
+6) Configure CNI
+
+A basic network configuration can be achieved with:
+
+sudo mkdir -p /etc/cni/net.d
+curl -qsSL https://raw.githubusercontent.com/containers/libpod/master/cni/87-podman-bridge.conflist | sudo tee /etc/cni/net.d/87-podman-bridge.conf
+
+7) Install CNI Plugins
+
+cd ~
+git clone https://github.com/containernetworking/plugins.git $GOPATH/src/github.com/containernetworking/plugins
+cd $GOPATH/src/github.com/containernetworking/plugins
+./build_linux.sh
+sudo mkdir -p /usr/libexec/cni
+sudo cp bin/* /usr/libexec/cni
+
+Others Directories where the CNI plugin binaries may be located
+
+cni_plugin_dir = [
+"/usr/libexec/cni",
+"/usr/lib/cni",
+"/usr/local/lib/cni",
+"/opt/cni/bin"
+]
+
+8) Add Podman configuration registries,policy
+
+cd ~
+sudo mkdir -p /etc/containers
+sudo curl https://raw.githubusercontent.com/projectatomic/registries/master/registries.fedora -o /etc/containers/registries.conf
+sudo curl https://raw.githubusercontent.com/containers/skopeo/master/default-policy.json -o /etc/containers/policy.json
+
+9) Install PODMAN
+
+cd ~
+git clone https://github.com/containers/libpod/ $GOPATH/src/github.com/containers/libpod
+cd $GOPATH/src/github.com/containers/libpod
+make BUILDTAGS="selinux seccomp"
+sudo make install PREFIX=/usr
+
+10) Test Podman
+
+podman help
+
+
+
+
+
+
+
+
+
+
+
+
