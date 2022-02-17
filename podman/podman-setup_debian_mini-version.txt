@@ -57,6 +57,7 @@ curl -qsSL https://raw.githubusercontent.com/containers/libpod/master/cni/87-pod
 sudo mkdir -p /etc/containers
 sudo curl https://raw.githubusercontent.com/projectatomic/registries/master/registries.fedora -o /etc/containers/registries.conf
 sudo curl https://raw.githubusercontent.com/containers/skopeo/master/default-policy.json -o /etc/containers/policy.json
+
 Установка Подмана:
 
 git clone https://github.com/containers/libpod/ $GOPATH/src/github.com/containers/libpod
@@ -65,8 +66,27 @@ cd $GOPATH/src/github.com/containers/libpod
 make
 sudo make install
 
+pip3 install podman-compose
 
+FEDORA:
 
+sudo dnf install podman-compose
+
+COCKPIT-PODMAN:
+
+sudo apt install cockpit cockpit-podman -y
+
+Test Podman
+
+podman help
+
+Запуск и проверка cockpit
+
+sudo systemctl status cockpit
+
+Browser
+https://ip:9090
+The SSL certificate to self signed is CORRECT.
 
 
 

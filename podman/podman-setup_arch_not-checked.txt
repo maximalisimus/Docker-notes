@@ -105,10 +105,15 @@ sudo mkdir -p /etc/containers
 sudo curl https://raw.githubusercontent.com/projectatomic/registries/master/registries.fedora -o /etc/containers/registries.conf
 sudo curl https://raw.githubusercontent.com/containers/skopeo/master/default-policy.json -o /etc/containers/policy.json
 
-8) Install podman
+8) Install cockpit
+Установка cockpit
+
+sudo pacman -S cockpit cockpit-podman --noconfirm
+
+Install podman
 Установка podman
 
-sudo pacman -S podman buildah --noconfirm
+sudo pacman -S podman podman podman-compose podman-docker buildah --noconfirm
 
 or
 
@@ -210,6 +215,13 @@ $ loginctl enable-linger USERNAME
 
 podman help
 
+Запуск и проверка cockpit
+
+sudo systemctl status cockpit
+
+Browser
+https://ip:9090
+The SSL certificate to self signed is CORRECT.
 
 
 

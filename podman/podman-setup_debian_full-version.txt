@@ -100,18 +100,50 @@ sudo curl https://raw.githubusercontent.com/containers/skopeo/master/default-pol
 
 9) Install PODMAN
 
+PODMAN: 
+
+sudo apt install podman cockpit cockpit-podman -y
+
+or
+
 cd ~
 git clone https://github.com/containers/libpod/ $GOPATH/src/github.com/containers/libpod
 cd $GOPATH/src/github.com/containers/libpod
 make BUILDTAGS="selinux seccomp"
 sudo make install PREFIX=/usr
 
+PODMAN-COMPOSE:
+
+pip3 install podman-compose
+
+or
+
+pip3 install https://github.com/containers/podman-compose/archive/devel.tar.gz
+
+or
+
+curl -o /usr/local/bin/podman-compose https://raw.githubusercontent.com/containers/podman-compose/devel/podman_compose.py
+chmod +x /usr/local/bin/podman-compose
+
+FEDORA:
+
+sudo dnf install podman-compose
+
+COCKPIT-PODMAN:
+
+sudo apt install cockpit cockpit-podman -y
+
 10) Test Podman
 
 podman help
 
+Запуск и проверка cockpit
 
+sudo systemctl status cockpit
 
+Browser
+https://ip:9090
+The SSL certificate to self signed is CORRECT.
 
 
 
