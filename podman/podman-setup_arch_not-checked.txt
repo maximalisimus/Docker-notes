@@ -63,6 +63,12 @@ export PATH=$GOPATH/bin:$PATH:/$HOME/.local/bin/
 source ~/.bashrc
 mkdir -p ~/.config/systemd/user/
 
+git clone https://go.googlesource.com/go $GOPATH
+cd $GOPATH
+git checkout tags/go1.10.8  # optional
+cd src
+./all.bash
+
 5) install conmon
 установка conmon
 
