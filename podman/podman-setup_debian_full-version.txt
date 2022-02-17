@@ -155,12 +155,12 @@ COCKPIT-PODMAN:
 sudo apt install cockpit -y
 
 sudo systemctl enable cockpit
-
 sudo systemctl start cockpit
-
 sudo systemctl enable --now cockpit.socket
-
 sudo systemctl start cockpit.socket
+
+sudo firewall-cmd --add-service=cockpit
+sudo firewall-cmd --add-service=cockpit --permanent
 
 10) 
 

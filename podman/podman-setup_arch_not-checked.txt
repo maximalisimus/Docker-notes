@@ -116,6 +116,14 @@ sudo curl https://raw.githubusercontent.com/containers/skopeo/master/default-pol
 
 sudo pacman -S cockpit cockpit-podman --noconfirm
 
+sudo systemctl enable cockpit
+sudo systemctl start cockpit
+sudo systemctl enable --now cockpit.socket
+sudo systemctl start cockpit.socket
+
+# Debian firewall: sudo firewall-cmd --add-service=cockpit
+# Debian firewall: sudo firewall-cmd --add-service=cockpit --permanent
+
 Install podman
 Установка podman
 
