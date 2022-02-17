@@ -93,6 +93,30 @@ COCKPIT-PODMAN:
 
 sudo apt install cockpit cockpit-podman -y
 
+
+
+
+$ sudo usermod --add-subuids 10000-75535 USERNAME
+$ sudo usermod --add-subgids 10000-75535 USERNAME
+
+$ sudo nano /etc/sysctl.conf
+
+kernel.unprivileged_userns_clone=1
+
+$ sudo sysctl -p
+
+$ sudo loginctl enable-linger USERNAME
+
+
+
+
+Docker Compose.
+
+$ sudo ln -sf /var/run/podman.sock /var/run/docker.sock
+$ sudo systemctl enable --now podman.socket
+$ systemctl --user enable --now podman.socket
+
+
 Test Podman
 
 podman help

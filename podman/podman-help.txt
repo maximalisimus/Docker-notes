@@ -250,7 +250,7 @@ podman login docker.io
 
 
 
-ln -sf /var/run/podman.sock /var/run/docker.sock
+sudo ln -sf /var/run/podman.sock /var/run/docker.sock
 sudo systemctl enable --now podman.socket
 systemctl --user enable --now podman.socket
 
