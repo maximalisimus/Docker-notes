@@ -60,7 +60,7 @@ nano ~/.bashrc
 
 export GOPATH=~/go
 export PATH=$GOPATH/bin:$PATH:/$HOME/.local/bin/
-
+source ~/.bashrc
 mkdir -p ~/.config/systemd/user/
 
 5) install conmon
