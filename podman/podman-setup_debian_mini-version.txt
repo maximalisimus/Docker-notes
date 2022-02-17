@@ -81,6 +81,8 @@ cd $GOPATH/src/github.com/containers/libpod
 make
 sudo make install
 
+sudo apt install python3-pip
+
 pip3 install podman-compose
 
 FEDORA:

@@ -133,6 +133,8 @@ sudo make install PREFIX=/usr
 
 PODMAN-COMPOSE:
 
+sudo apt install python3-pip
+
 pip3 install podman-compose
 
 or
