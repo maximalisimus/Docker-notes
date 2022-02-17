@@ -1,0 +1,244 @@
+
+
+podman is a tool for managing (Kubernetes) pods, containers and container images, available from https://github.com/containers/libpod
+podman - это инструмент для управления (Kubernetes) модулями, контейнерами и изображениями контейнеров, доступный из https://github.com/containers/libpod
+
+To install podman from scratch in Archlinux we need to have the below requirement met
+Чтобы установить pod man с нуля в Archlinux, нам необходимо выполнить следующие требования
+
+golang
+runc
+conmon
+cni-plugins (https://github.com/containernetworking/plugins)
+ostree
+apparmor
+
+1) sudo pacman -Syy
+
+2) sudo pacman -S vim \
+  curl \
+  gcc \
+  make \
+  cmake \
+  git \
+  btrfs-progs \
+  go \
+  go-md2man \
+  iptables \
+  libassuan \
+  glibc \
+  lib32-glibc \
+  device-mapper \
+  glib2 \
+  lib32-glib2 \
+  gpgme \
+  lib32-libgpg-error \
+  libgpg-error \
+  ostree \
+  protobuf \
+  protobuf-c \
+  libseccomp \
+  systemd-libs \
+  pkgconf \
+  runc \
+  shadow \
+  apparmor \
+  --noconfirm
+
+libselinux aur: https://aur.archlinux.org/packages/libselinux
+
+3) check the runc version
+проверьте версию runc
+
+root@test:~# runc -version
+
+4) config GOLANG and user-systemd
+конфигурация GOLANG и пользовательских systemd
+
+mkdir ~/go
+nano ~/.bashrc
+
+export GOPATH=~/go
+export PATH=$GOPATH/bin:$PATH:/$HOME/.local/bin/
+
+mkdir -p ~/.config/systemd/user/
+
+5) install conmon
+установка conmon
+
+sudo pacman -S conmon --noconfirm
+
+or
+
+cd ~
+git clone https://github.com/containers/conmon
+cd conmon
+export GOCACHE="$(mktemp -d)"
+make
+sudo make podman
+sudo cp /usr/local/libexec/podman/conmon  /usr/local/bin/
+
+6) Install and Configure CNI
+Установка и настройка CNI
+
+sudo pacman -S cni-plugins --noconfirm
+
+or
+
+cd ~
+git clone https://github.com/containernetworking/plugins.git $GOPATH/src/github.com/containernetworking/plugins
+cd $GOPATH/src/github.com/containernetworking/plugins
+./build_linux.sh
+sudo mkdir -p /usr/libexec/cni
+sudo cp bin/* /usr/libexec/cni
+
+A basic network configuration can be achieved with:
+Базовая конфигурация сети может быть достигнута с помощью:
+
+sudo curl -qsSL https://raw.githubusercontent.com/containers/libpod/master/cni/87-podman-bridge.conflist | sudo tee /etc/cni/net.d/87-podman-bridge.conf
+
+7) Add Podman configuration registries,policy
+Добавить реестры конфигурации Podman,политику
+
+cd ~
+sudo mkdir -p /etc/containers
+sudo curl https://raw.githubusercontent.com/projectatomic/registries/master/registries.fedora -o /etc/containers/registries.conf
+sudo curl https://raw.githubusercontent.com/containers/skopeo/master/default-policy.json -o /etc/containers/policy.json
+
+8) Install podman
+Установка podman
+
+sudo pacman -S podman buildah --noconfirm
+
+or
+
+cd ~
+git clone https://github.com/containers/libpod/ $GOPATH/src/github.com/containers/libpod
+cd $GOPATH/src/github.com/containers/libpod
+make BUILDTAGS="selinux seccomp"
+sudo make install PREFIX=/usr
+
+9) Enable and configure podman and buildah
+Включение и настройка podman и buildah
+
+Enable support to build unprivileged containers.
+Включите поддержку для создания непривилегированных контейнеров.
+
+
+
+ROOTLESS MODE HELP.
+ПОМОЩЬ В РЕЖИМЕ БЕЗ КОРНЕЙ.
+
+$ sudo usermod --add-subuids 10000-75535 USERNAME
+$ sudo usermod --add-subgids 10000-75535 USERNAME
+# usermod --add-subuids 100000-165535 --add-subgids 100000-165535 username
+
+Or just add the content manually.
+
+$ echo USERNAME:10000:65536 >> /etc/subuid
+$ echo USERNAME:10000:65536 >> /etc/subgid
+
+
+
+REAL COMMAND.
+НАСТОЯЩАЯ КОМАНДА.
+
+$ sudo touch /etc/subgid && sudo touch /etc/subuid
+
+/etc/subuid
+buildah:100000:65536
+
+/etc/subgid
+buildah:100000:65536
+
+Включить kernel.unprivileged_userns_clone
+
+$ sysctl kernel.unprivileged_userns_clone
+kernel.unprivileged_userns_clone = 1
+$
+
+Propagate changes to subuid and subgid
+Распространять изменения на подчиненные и подсети
+
+Безродный Podman использует процесс приостановки, чтобы сохранить непривилегированные пространства имен живыми. 
+Это предотвращает распространение любых изменений в файлах /etc/subuid и /etc/subgid на контейнеры без корней 
+во время выполнения процесса приостановки. Для распространения этих изменений необходимо выполнить:
+
+$ podman system migrate
+
+
+Storage
+Место хранения
+
+The configuration for how and where container images and instances are stored takes place in /etc/containers/storage.conf.
+Настройка того, как и где хранятся изображения и экземпляры контейнеров, выполняется в /etc/containers/storage.conf.
+
+Set the driver according to the filesystem in use for the storage location (see containers-storage.conf(5) § STORAGE_TABLE).
+Установите драйвер в соответствии с файловой системой, используемой для хранилища (https://man.archlinux.org/man/containers-storage.conf.5#STORAGE_TABLE).
+
+
+
+Docker Compose.
+
+Podman 3.0.0 introduces docker-compose support. 
+This requires enabling a Podman socket which pretends to be docker; start the podman.service unit. 
+For rootless containers, this requires you to start the podman.service user unit instead and set the DOCKER_HOST variable:
+
+Pod man 3.0.0 вводит поддержку docker-compose. 
+Для этого требуется включить сокет Podman, который выдает себя за docker; запустите модуль podman.service. 
+Для контейнеров без корней это требует, чтобы вместо этого вы запустили пользовательский модуль podman.service и установили переменную DOCKER_HOST:
+
+$ sudo systemctl enable --now podman.socket
+$ systemctl --user enable --now podman.socket
+
+$ nano ~/.bashrc
+export DOCKER_HOST="unix://$XDG_RUNTIME_DIR/podman/podman.sock"
+
+To get hostname resolution between containers running install podman-dnsname.
+Чтобы получить разрешение имени хоста между запущенными контейнерами, установите podman-dnsname.
+
+$ sudo pacman -S podman-dnsname --noconfirm
+
+
+Containers terminate on shell logout
+Контейнеры завершаются при выходе из оболочки
+
+$ loginctl enable-linger USERNAME
+
+
+10) Запуск и проверка podman
+
+podman help
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
