@@ -102,7 +102,7 @@ sudo curl https://raw.githubusercontent.com/containers/skopeo/master/default-pol
 
 PODMAN: 
 
-sudo apt install podman cockpit cockpit-podman -y
+sudo apt install podman cockpit cockpit-podman buildah -y
 
 or
 
