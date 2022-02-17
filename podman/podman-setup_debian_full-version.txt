@@ -108,9 +108,20 @@ sudo curl https://raw.githubusercontent.com/containers/skopeo/master/default-pol
 
 9) Install PODMAN
 
-PODMAN: 
+PODMAN:
 
-sudo apt install podman cockpit cockpit-podman buildah -y
+sudo su
+
+echo 'deb http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/Debian_10/ /' > /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list
+wget -nv https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/Debian_10/Release.key -O- | apt-key add -
+
+echo 'deb http://deb.debian.org/debian buster-backports main' >> /etc/apt/sources.list
+echo 'deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/Debian_10/ /' > /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list
+curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/Debian_10/Release.key | sudo apt-key add -
+exit
+sudo apt-get update
+sudo apt-get -y -t buster-backports install libseccomp2
+sudo apt install podman buildah -y
 
 or
 

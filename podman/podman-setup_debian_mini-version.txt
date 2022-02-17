@@ -60,13 +60,26 @@ sudo curl https://raw.githubusercontent.com/containers/skopeo/master/default-pol
 
 Установка Подмана:
 
+sudo su
+
+echo 'deb http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/Debian_10/ /' > /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list
+wget -nv https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/Debian_10/Release.key -O- | apt-key add -
+
+echo 'deb http://deb.debian.org/debian buster-backports main' >> /etc/apt/sources.list
+echo 'deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/Debian_10/ /' > /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list
+curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/Debian_10/Release.key | sudo apt-key add -
+exit
+sudo apt-get update
+sudo apt-get -y -t buster-backports install libseccomp2
+sudo apt install podman buildah -y
+
+or
+
 git clone https://github.com/containers/libpod/ $GOPATH/src/github.com/containers/libpod
 (personal mirror: https://drive.google.com/file/d/1WlR3S9ANAYX0t8WVEdF_S78m6m_t30lG/view?usp=sharing)
 cd $GOPATH/src/github.com/containers/libpod
 make
 sudo make install
-
-sudo apt install buildah -y
 
 pip3 install podman-compose
 
