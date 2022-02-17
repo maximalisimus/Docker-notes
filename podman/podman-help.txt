@@ -254,7 +254,7 @@ sudo ln -sf /var/run/podman.sock /var/run/docker.sock
 sudo systemctl enable --now podman.socket
 systemctl --user enable --now podman.socket
 
-podman run -d -p 9000:9000 --privileged --name=portainer --restart=always -v /run/user/$(id -u)/podman/podman.sock:/var/run/docker.sock:Z -v portainer_data:/data portainer/portainer-ce
+podman run -d -p 9000:9000 --privileged --name=portainer --restart=always -v /run/user/$(id -u)/podman/podman.sock:/var/run/docker.sock:Z -v portainer_data:/data docker.io/portainer/portainer-ce
 
 
 podman pod list
