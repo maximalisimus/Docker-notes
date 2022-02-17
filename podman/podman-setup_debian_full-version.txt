@@ -152,22 +152,23 @@ sudo dnf install podman-compose
 
 COCKPIT-PODMAN:
 
-sudo apt install cockpit -y
-
-sudo systemctl enable cockpit
-sudo systemctl start cockpit
-sudo systemctl enable --now cockpit.socket
-sudo systemctl start cockpit.socket
-
-sudo firewall-cmd --add-service=cockpit
-sudo firewall-cmd --add-service=cockpit --permanent
-
-COCKPIT-PODMAN AND COCKPIT-BRIDGE:
-
 echo 'deb http://ftp.de.debian.org/debian sid main' > /etc/apt/sources.list.d/ftp.de.debian.org.list
 echo 'deb http://ftp.de.debian.org/debian buster-backports main' >> /etc/apt/sources.list.d/ftp.de.debian.org.list
 
-sudo apt install cockpit-podman cockpit-bridge
+# sudo apt install cockpit-podman cockpit-bridge
+
+sudo apt install cockpit -y
+
+sudo usermod -aG adm,users USERNAME
+
+# sudo systemctl enable cockpit
+# sudo systemctl start cockpit
+# sudo systemctl enable --now cockpit.socket
+# sudo systemctl start cockpit.socket
+
+# sudo firewall-cmd --add-service=cockpit
+# sudo firewall-cmd --add-service=cockpit --permanent
+
 
 10) 
 
