@@ -121,14 +121,6 @@ Install podman
 
 sudo pacman -S podman podman podman-compose podman-docker buildah --noconfirm
 
-or
-
-cd ~
-git clone https://github.com/containers/libpod/ $GOPATH/src/github.com/containers/libpod
-cd $GOPATH/src/github.com/containers/libpod
-make BUILDTAGS="selinux seccomp"
-sudo make install PREFIX=/usr
-
 9) Enable and configure podman and buildah
 Включение и настройка podman и buildah
 
