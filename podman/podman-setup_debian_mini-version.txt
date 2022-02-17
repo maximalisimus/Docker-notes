@@ -91,7 +91,15 @@ sudo dnf install podman-compose
 
 COCKPIT-PODMAN:
 
-sudo apt install cockpit cockpit-podman -y
+sudo apt install cockpit -y
+
+sudo systemctl enable cockpit
+
+sudo systemctl start cockpit
+
+sudo systemctl enable --now cockpit.socket
+
+sudo systemctl start cockpit.socket
 
 
 
