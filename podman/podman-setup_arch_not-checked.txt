@@ -308,6 +308,25 @@ $ systemctl --user enable --now podman.socket
 $ nano ~/.bashrc
 export DOCKER_HOST="unix:///run/user/$(id -u)/podman/podman.sock"
 
+$ sudo nano /usr/lib/systemd/user/podman.service
+
+[Install]
+WantedBy=multi-user.target
+Also=podman.socket
+
+$ systemctl --user daemon-reload
+$ systemctl --user start podman.service
+$ systemctl --user enable podman.service
+
+$ sudo nano /lib/systemd/system/podman.service
+
+[Install]
+WantedBy=multi-user.target
+Also=podman.socket
+
+$ sudo systemctl daemon-reload
+$ sudo systemctl start podman.service
+$ sudo systemctl enable podman.service
 
 Containers terminate on shell logout
 Контейнеры завершаются при выходе из оболочки
