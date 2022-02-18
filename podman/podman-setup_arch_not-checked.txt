@@ -135,7 +135,7 @@ sudo systemctl restart cockpit.socket
 Install podman
 Установка podman
 
-sudo pacman -S podman podman podman-compose podman-docker buildah --noconfirm
+sudo pacman -S podman podman podman-compose buildah --noconfirm
 
 If you want to replace Docker, one can install podman-docker to mimic the docker binary along with man pages.
 Если вы хотите заменить Docker, можно установить podman-docker, чтобы имитировать двоичный файл docker вместе со многими страницами.
