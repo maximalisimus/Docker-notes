@@ -210,6 +210,26 @@ Set the driver according to the filesystem in use for the storage location (see 
 Установите драйвер в соответствии с файловой системой, используемой для хранилища (https://man.archlinux.org/man/containers-storage.conf.5#STORAGE_TABLE).
 
 
+$ mkdir -p $HOME/.local/share/containers/storage $HOME/.config/containers/
+$ nano $HOME/.config/containers/storage.conf
+$ curl https://raw.githubusercontent.com/projectatomic/registries/master/registries.fedora -o $HOME/.local/share/containers/registries.conf
+$ curl https://raw.githubusercontent.com/containers/skopeo/master/default-policy.json -o $HOME/.local/share/containers/policy.json
+
+[storage]
+driver = "overlay"
+graphroot="$HOME/.local/share/containers/storage"
+runroot="$XDG_RUNTIME_DIR/containers"
+
+[storage.options]
+additionalimagestores = [
+]
+
+[storage.options.overlay]
+mountopt = "nodev,metacopy=on"
+
+[storage.options.thinpool]
+
+
 
 DNSNAME.
 
