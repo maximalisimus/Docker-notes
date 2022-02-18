@@ -252,6 +252,13 @@ $ sudo sysctl -p
 
 $ sudo loginctl enable-linger USERNAME
 
+$ podman system migrate
+
+$ sudo nano /etc/default/grub
+GRUB_CMDLINE_LINUX_DEFAULT=".... systemd.unified_cgroup_hierarchy=1 --or-- cgroup_no_v1="all""
+$ sudo grub-mkconfig -o /boot/grub/grub.cfg
+$ reboot
+
 Docker Compose.
 
 $ sudo apt install podman-docker -y
@@ -278,6 +285,11 @@ To allow users to bind to ports down to port 80 run the following command.
 $ nano /etc/sysctl.conf
 net.ipv4.ip_unprivileged_port_start=80
 $ sudo sysctl -p
+
+
+$ sudo ln -sf /bin/podman /bin/docker
+$ sudo ln -sf /home/mikl/.local/bin/podman-compose /bin/docker-compose
+
 
 
 11) Test Podman

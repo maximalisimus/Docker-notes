@@ -191,6 +191,12 @@ Propagate changes to subuid and subgid
 $ podman system migrate
 
 
+$ sudo nano /etc/default/grub
+GRUB_CMDLINE_LINUX_DEFAULT=".... systemd.unified_cgroup_hierarchy=1 --or-- cgroup_no_v1="all""
+$ sudo grub-mkconfig -o /boot/grub/grub.cfg
+$ reboot
+
+
 Storage
 Место хранения
 
@@ -305,6 +311,11 @@ $ nano /etc/sysctl.conf
 net.ipv4.ip_unprivileged_port_start=80
 $ sudo sysctl -p
 
+
+
+
+$ sudo ln -sf /bin/podman /bin/docker
+$ sudo ln -sf /home/mikl/.local/bin/podman-compose /bin/docker-compose
 
 
 10) Запуск и проверка podman
