@@ -177,9 +177,9 @@ buildah:100000:65536
 
 Включить kernel.unprivileged_userns_clone
 
-$ sysctl kernel.unprivileged_userns_clone
-kernel.unprivileged_userns_clone = 1
-$
+$ sudo nano /etc/sysctl.conf
+kernel.unprivileged_userns_clone=1
+$ sudo sysctl -p
 
 Propagate changes to subuid and subgid
 Распространять изменения на подчиненные и подсети
