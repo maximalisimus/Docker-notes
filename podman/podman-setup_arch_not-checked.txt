@@ -121,8 +121,12 @@ sudo pacman -S cockpit --noconfirm
 sudo systemctl enable --now cockpit.socket
 sudo systemctl start cockpit.socket
 
-# Debian firewall: sudo firewall-cmd --add-service=cockpit
-# Debian firewall: sudo firewall-cmd --add-service=cockpit --permanent
+sudo pacman -S firewalld --noconfirm
+sudo systemctl enable firewalld.service
+sudo systemctl start firewalld.service
+
+sudo firewall-cmd --add-service=cockpit
+sudo firewall-cmd --add-service=cockpit --permanent
 
 sudo pacman -S cockpit-podman --noconfirm
 sudo systemctl restart cockpit

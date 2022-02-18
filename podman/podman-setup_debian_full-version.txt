@@ -165,8 +165,13 @@ sudo usermod -aG adm,users USERNAME
 sudo systemctl enable --now cockpit.socket
 sudo systemctl start cockpit.socket
 
-# sudo firewall-cmd --add-service=cockpit
-# sudo firewall-cmd --add-service=cockpit --permanent
+# echo 'deb http://ftp.de.debian.org/debian sid main' > /etc/apt/sources.list.d/ftp.de.debian.org.list
+sudo apt install firewalld -y
+sudo systemctl enable firewalld.service
+sudo systemctl start firewalld.service
+
+sudo firewall-cmd --add-service=cockpit
+sudo firewall-cmd --add-service=cockpit --permanent
 
 sudo apt install cockpit-podman -y
 sudo systemctl restart cockpit
