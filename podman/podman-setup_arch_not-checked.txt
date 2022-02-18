@@ -267,7 +267,7 @@ Pod man 3.0.0 вводит поддержку docker-compose.
 Для этого требуется включить сокет Podman, который выдает себя за docker; запустите модуль podman.service. 
 Для контейнеров без корней это требует, чтобы вместо этого вы запустили пользовательский модуль podman.service и установили переменную DOCKER_HOST:
 
-$ sudo ln -sf /var/run/podman.sock /var/run/docker.sock
+$ sudo ln -sf /var/run/podman/podman.sock /var/run/docker.sock
 $ sudo systemctl enable --now podman.socket
 $ systemctl --user enable --now podman.socket
 

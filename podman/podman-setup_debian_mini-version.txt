@@ -197,7 +197,7 @@ $ sudo loginctl enable-linger USERNAME
 
 Docker Compose.
 
-$ sudo ln -sf /var/run/podman.sock /var/run/docker.sock
+$ sudo ln -sf /var/run/podman/podman.sock /var/run/docker.sock
 $ sudo systemctl enable --now podman.socket
 $ systemctl --user enable --now podman.socket
 
