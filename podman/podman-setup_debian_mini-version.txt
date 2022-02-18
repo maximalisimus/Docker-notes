@@ -155,7 +155,7 @@ To get hostname resolution between containers running install podman-dnsname.
 
 $ sudo apt install podman-dnsname -y
 
-Build and install
+OR Build and install
 
 $ git clone https://github.com/containers/dnsname.git
 $ cd dnsname
