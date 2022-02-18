@@ -119,6 +119,72 @@ sudo systemctl restart cockpit.socket
 
 
 
+If you want to replace Docker, one can install podman-docker to mimic the docker binary along with man pages.
+Если вы хотите заменить Docker, можно установить podman-docker, чтобы имитировать двоичный файл docker вместе со многими страницами.
+
+# echo 'deb http://ftp.de.debian.org/debian sid main' > /etc/apt/sources.list.d/ftp.de.debian.org.list
+sudo apt install podman-docker -y
+
+
+
+DNSNAME.
+
+If you are using AppArmor you might end up with problems when creating container using a bridge network with the dnsname plugin enabled:
+Если вы используете AppArmor, у вас могут возникнуть проблемы при создании контейнера с использованием мостовой сети с включенным подключаемым модулем dns-имен:
+
+
+This can be solved by adding the following lines to:
+$ sudo nano /etc/apparmor.d/local/usr.sbin.dnsmasq
+
+owner /run/user/[0-9]*/containers/cni/dnsname/*/dnsmasq.conf r,
+owner /run/user/[0-9]*/containers/cni/dnsname/*/addnhosts r,
+owner /run/user/[0-9]*/containers/cni/dnsname/*/pidfile rw,
+
+or
+
+/run/containers/cni/dnsname/*/dnsmasq.conf r,
+/run/containers/cni/dnsname/*/addnhosts r,
+/run/containers/cni/dnsname/*/pidfile rw,
+
+$ sudo apparmor_parser -R /etc/apparmor.d/usr.sbin.dnsmasq
+# sudo apparmor_parser /etc/apparmor.d/usr.sbin.dnsmasq
+# sudo apparmor_parser -r /etc/apparmor.d/usr.sbin.dnsmasq
+
+To get hostname resolution between containers running install podman-dnsname.
+Чтобы получить разрешение имени хоста между запущенными контейнерами, установите podman-dnsname.
+
+$ sudo apt install podman-dnsname -y
+
+Build and install
+
+$ git clone https://github.com/containers/dnsname.git
+$ cd dnsname
+$ make install PREFIX=/usr
+
+Configure a CNI network for Podman
+
+$ podman network create foobar
+$ nano /home/user/.config/cni/net.d/foobar.conflist
+or
+$ sudo nano /etc/cni/net.d/foobar.conflist
+
+{
+  "cniVersion": "0.4.0",
+  "name": "foobar",
+  "plugins": [
+     ...
+     {
+        "type": "dnsname",
+        "domainName": "dns.podman",
+        "capabilities": {
+           "aliases": true
+        }
+     }
+  ]
+}
+
+
+
 
 
 $ sudo usermod --add-subuids 10000-75535 USERNAME
@@ -154,6 +220,13 @@ Browser
 https://ip:9090
 The SSL certificate to self signed is CORRECT.
 
+DNSNAME Test
+
+$ sudo podman run -dt --name web --network foobar quay.io/libpod/alpine_nginx:latest
+5139d65d22135e9ecab511559d863754550894a32285befd94dab231017048c2
+
+$ sudo podman run -it --name client --network foobar quay.io/libpod/alpine_nginx:latest curl http://web.dns.podman/ 
+podman rulez
 
 
 

@@ -137,6 +137,11 @@ Install podman
 
 sudo pacman -S podman podman podman-compose podman-docker buildah --noconfirm
 
+If you want to replace Docker, one can install podman-docker to mimic the docker binary along with man pages.
+Если вы хотите заменить Docker, можно установить podman-docker, чтобы имитировать двоичный файл docker вместе со многими страницами.
+
+sudo pacman -S podman-docker --noconfirm
+
 9) Enable and configure podman and buildah
 Включение и настройка podman и buildah
 
@@ -197,6 +202,59 @@ Set the driver according to the filesystem in use for the storage location (see 
 
 
 
+DNSNAME.
+
+If you are using AppArmor you might end up with problems when creating container using a bridge network with the dnsname plugin enabled:
+Если вы используете AppArmor, у вас могут возникнуть проблемы при создании контейнера с использованием мостовой сети с включенным подключаемым модулем dns-имен:
+
+
+This can be solved by adding the following lines to:
+$ sudo nano /etc/apparmor.d/local/usr.sbin.dnsmasq
+
+owner /run/user/[0-9]*/containers/cni/dnsname/*/dnsmasq.conf r,
+owner /run/user/[0-9]*/containers/cni/dnsname/*/addnhosts r,
+owner /run/user/[0-9]*/containers/cni/dnsname/*/pidfile rw,
+
+or
+
+/run/containers/cni/dnsname/*/dnsmasq.conf r,
+/run/containers/cni/dnsname/*/addnhosts r,
+/run/containers/cni/dnsname/*/pidfile rw,
+
+$ sudo apparmor_parser -R /etc/apparmor.d/usr.sbin.dnsmasq
+# sudo apparmor_parser /etc/apparmor.d/usr.sbin.dnsmasq
+# sudo apparmor_parser -r /etc/apparmor.d/usr.sbin.dnsmasq
+
+To get hostname resolution between containers running install podman-dnsname.
+Чтобы получить разрешение имени хоста между запущенными контейнерами, установите podman-dnsname.
+
+$ sudo pacman -S podman-dnsname --noconfirm
+
+$ podman network create foobar
+$ nano /home/user/.config/cni/net.d/foobar.conflist
+or
+$ sudo nano /etc/cni/net.d/foobar.conflist
+
+{
+  "cniVersion": "0.4.0",
+  "name": "foobar",
+  "plugins": [
+     ...
+     {
+        "type": "dnsname",
+        "domainName": "dns.podman",
+        "capabilities": {
+           "aliases": true
+        }
+     }
+  ]
+}
+
+
+
+
+
+
 Docker Compose.
 
 Podman 3.0.0 introduces docker-compose support. 
@@ -214,10 +272,6 @@ $ systemctl --user enable --now podman.socket
 $ nano ~/.bashrc
 export DOCKER_HOST="unix://$XDG_RUNTIME_DIR/podman/podman.sock"
 
-To get hostname resolution between containers running install podman-dnsname.
-Чтобы получить разрешение имени хоста между запущенными контейнерами, установите podman-dnsname.
-
-$ sudo pacman -S podman-dnsname --noconfirm
 
 
 Containers terminate on shell logout
@@ -239,7 +293,13 @@ https://ip:9090
 The SSL certificate to self signed is CORRECT.
 
 
+DNSNAME Test
 
+$ sudo podman run -dt --name web --network foobar quay.io/libpod/alpine_nginx:latest
+5139d65d22135e9ecab511559d863754550894a32285befd94dab231017048c2
+
+$ sudo podman run -it --name client --network foobar quay.io/libpod/alpine_nginx:latest curl http://web.dns.podman/ 
+podman rulez
 
 
 
