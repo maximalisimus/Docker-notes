@@ -48,6 +48,9 @@ cd $GOPATH/src/github.com/containernetworking/plugins
 ./build_linux.sh
 sudo mkdir -p /usr/libexec/cni
 sudo cp bin/* /usr/libexec/cni
+
+sudo find "/usr/libexec/cni/" -type f -exec ln -sf {} /usr/local/bin/ \;
+
 Настройка сети CNI:
 
 sudo mkdir -p /etc/cni/net.d
@@ -119,13 +122,6 @@ sudo systemctl restart cockpit.socket
 
 
 
-If you want to replace Docker, one can install podman-docker to mimic the docker binary along with man pages.
-Если вы хотите заменить Docker, можно установить podman-docker, чтобы имитировать двоичный файл docker вместе со многими страницами.
-
-# echo 'deb http://ftp.de.debian.org/debian sid main' > /etc/apt/sources.list.d/ftp.de.debian.org.list
-sudo apt install podman-docker -y
-
-
 Storage
 Место хранения
 
@@ -137,9 +133,10 @@ Set the driver according to the filesystem in use for the storage location (see 
 
 
 $ mkdir -p $HOME/.local/share/containers/storage $HOME/.config/containers/
-$ nano $HOME/.config/containers/storage.conf
 $ curl https://raw.githubusercontent.com/projectatomic/registries/master/registries.fedora -o $HOME/.local/share/containers/registries.conf
 $ curl https://raw.githubusercontent.com/containers/skopeo/master/default-policy.json -o $HOME/.local/share/containers/policy.json
+# cat /etc/containers/storage.conf | grep -Evi "^#" | awk '!/^$/{print $0}'
+$ nano $HOME/.config/containers/storage.conf
 
 [storage]
 driver = "overlay"
@@ -258,11 +255,29 @@ $ reboot
 
 Docker Compose.
 
+Podman 3.0.0 introduces docker-compose support. 
+This requires enabling a Podman socket which pretends to be docker; start the podman.service unit. 
+For rootless containers, this requires you to start the podman.service user unit instead and set the DOCKER_HOST variable:
+
+Pod man 3.0.0 вводит поддержку docker-compose. 
+Для этого требуется включить сокет Podman, который выдает себя за docker; запустите модуль podman.service. 
+Для контейнеров без корней это требует, чтобы вместо этого вы запустили пользовательский модуль podman.service и установили переменную DOCKER_HOST:
+
 $ sudo apt install podman-docker -y
 
 $ sudo ln -sf /var/run/podman/podman.sock /var/run/docker.sock
 $ sudo systemctl enable --now podman.socket
 $ systemctl --user enable --now podman.socket
+
+$ nano ~/.bashrc
+export DOCKER_HOST="unix:///run/user/$(id -u)/podman/podman.sock"
+
+
+Containers terminate on shell logout
+Контейнеры завершаются при выходе из оболочки
+
+$ sudo loginctl enable-linger USERNAME
+
 
 The administrator of a workstation can allow users to expose services on ports numbered lower than 1024, 
 but they should understand the security implications. 
@@ -286,6 +301,8 @@ $ sudo sysctl -p
 
 $ sudo ln -sf /bin/podman /bin/docker
 $ sudo ln -sf /home/mikl/.local/bin/podman-compose /bin/docker-compose
+
+
 
 
 Test Podman

@@ -98,6 +98,8 @@ cd $GOPATH/src/github.com/containernetworking/plugins
 sudo mkdir -p /usr/libexec/cni
 sudo cp bin/* /usr/libexec/cni
 
+sudo find "/usr/libexec/cni/" -type f -exec ln -sf {} /usr/local/bin/ \;
+
 A basic network configuration can be achieved with:
 Базовая конфигурация сети может быть достигнута с помощью:
 
@@ -211,9 +213,10 @@ Set the driver according to the filesystem in use for the storage location (see 
 
 
 $ mkdir -p $HOME/.local/share/containers/storage $HOME/.config/containers/
-$ nano $HOME/.config/containers/storage.conf
 $ curl https://raw.githubusercontent.com/projectatomic/registries/master/registries.fedora -o $HOME/.local/share/containers/registries.conf
 $ curl https://raw.githubusercontent.com/containers/skopeo/master/default-policy.json -o $HOME/.local/share/containers/policy.json
+# cat /etc/containers/storage.conf | grep -Evi "^#" | awk '!/^$/{print $0}'
+$ nano $HOME/.config/containers/storage.conf
 
 [storage]
 driver = "overlay"
@@ -304,8 +307,6 @@ $ systemctl --user enable --now podman.socket
 
 $ nano ~/.bashrc
 export DOCKER_HOST="unix:///run/user/$(id -u)/podman/podman.sock"
-
-Environment=DOCKER_HOST="unix:///run/user/$(id -u)/podman/podman.sock"
 
 
 Containers terminate on shell logout
