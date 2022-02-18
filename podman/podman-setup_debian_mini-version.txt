@@ -153,14 +153,7 @@ $ sudo apparmor_parser -R /etc/apparmor.d/usr.sbin.dnsmasq
 To get hostname resolution between containers running install podman-dnsname.
 Чтобы получить разрешение имени хоста между запущенными контейнерами, установите podman-dnsname.
 
-$ sudo apt install podman-dnsname -y
-
-OR Build and install.
-ИЛИ Собрать и установить.
-
-$ git clone https://github.com/containers/dnsname.git
-$ cd dnsname
-$ make install PREFIX=/usr
+sudo find "/usr/libexec/cni/" -type f -exec ln -sf {} /usr/local/bin/ \;
 
 Configure a CNI network for Podman
 

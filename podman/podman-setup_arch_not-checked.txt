@@ -229,6 +229,8 @@ To get hostname resolution between containers running install podman-dnsname.
 Чтобы получить разрешение имени хоста между запущенными контейнерами, установите podman-dnsname.
 
 $ sudo pacman -S podman-dnsname --noconfirm
+or / and
+$ sudo find "/usr/libexec/cni/" -type f -exec ln -sf {} /usr/local/bin/ \;
 
 $ podman network create foobar
 $ nano /home/user/.config/cni/net.d/foobar.conflist
