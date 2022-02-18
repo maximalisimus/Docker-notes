@@ -267,13 +267,16 @@ Pod man 3.0.0 вводит поддержку docker-compose.
 Для этого требуется включить сокет Podman, который выдает себя за docker; запустите модуль podman.service. 
 Для контейнеров без корней это требует, чтобы вместо этого вы запустили пользовательский модуль podman.service и установили переменную DOCKER_HOST:
 
+$ sudo pacman -S podman-docker --noconfirm
+
 $ sudo ln -sf /var/run/podman/podman.sock /var/run/docker.sock
 $ sudo systemctl enable --now podman.socket
 $ systemctl --user enable --now podman.socket
 
 $ nano ~/.bashrc
-export DOCKER_HOST="unix://$XDG_RUNTIME_DIR/podman/podman.sock"
+export DOCKER_HOST="unix:///run/user/$(id -u)/podman/podman.sock"
 
+Environment=DOCKER_HOST="unix:///run/user/$(id -u)/podman/podman.sock"
 
 
 Containers terminate on shell logout
