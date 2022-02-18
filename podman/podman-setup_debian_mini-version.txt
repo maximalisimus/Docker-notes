@@ -208,6 +208,25 @@ $ sudo ln -sf /var/run/podman.sock /var/run/docker.sock
 $ sudo systemctl enable --now podman.socket
 $ systemctl --user enable --now podman.socket
 
+The administrator of a workstation can allow users to expose services on ports numbered lower than 1024, 
+but they should understand the security implications. 
+A regular user could, for example, run a web server on the official port 80 and make external users believe 
+that it was configured by the administrator. This is acceptable on a workstation for testing, 
+but might not be a good idea on a network-accessible development server, and definitely should not be done on production servers. 
+To allow users to bind to ports down to port 80 run the following command.
+
+Администратор рабочей станции может разрешить пользователям предоставлять услуги на портах с номерами ниже 1024, 
+но они должны понимать последствия для безопасности. Обычный пользователь может, например, 
+запустить веб-сервер на официальном порту 80 и заставить внешних пользователей поверить, 
+что он был настроен администратором. Это приемлемо на рабочей станции для тестирования, 
+но может оказаться не очень хорошей идеей на сервере разработки, доступном к сети, 
+и определенно не должно выполняться на производственных серверах. 
+Чтобы разрешить пользователям привязываться к портам вплоть до порта 80, выполните следующую команду.
+
+$ nano /etc/sysctl.conf
+net.ipv4.ip_unprivileged_port_start=80
+
+
 
 Test Podman
 
