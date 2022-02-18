@@ -225,7 +225,7 @@ To allow users to bind to ports down to port 80 run the following command.
 
 $ nano /etc/sysctl.conf
 net.ipv4.ip_unprivileged_port_start=80
-
+$ sudo sysctl -p
 
 
 Test Podman
