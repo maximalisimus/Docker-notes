@@ -181,8 +181,33 @@ $ sudo nano /etc/cni/net.d/foobar.conflist
 
 
 
+ROOTLESS MODE HELP.
+ПОМОЩЬ В РЕЖИМЕ БЕЗ КОРНЕЙ.
+
 $ sudo usermod --add-subuids 10000-75535 USERNAME
 $ sudo usermod --add-subgids 10000-75535 USERNAME
+# usermod --add-subuids 100000-165535 --add-subgids 100000-165535 username
+
+Or just add the content manually.
+
+$ echo USERNAME:10000:65536 >> /etc/subuid
+$ echo USERNAME:10000:65536 >> /etc/subgid
+
+
+
+REAL COMMAND.
+НАСТОЯЩАЯ КОМАНДА.
+
+$ sudo touch /etc/subgid && sudo touch /etc/subuid
+
+$ sudo usermod --add-subuids 10000-65536 USERNAME
+$ sudo usermod --add-subgids 10000-65536 USERNAME
+
+/etc/subuid
+USERNAME:100000:65536
+
+/etc/subgid
+USERNAME:100000:65536
 
 $ sudo nano /etc/sysctl.conf
 

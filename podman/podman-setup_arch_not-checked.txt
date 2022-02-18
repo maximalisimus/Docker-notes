@@ -169,11 +169,14 @@ REAL COMMAND.
 
 $ sudo touch /etc/subgid && sudo touch /etc/subuid
 
+$ sudo usermod --add-subuids 10000-65536 USERNAME
+$ sudo usermod --add-subgids 10000-65536 USERNAME
+
 /etc/subuid
-buildah:100000:65536
+USERNAME:100000:65536
 
 /etc/subgid
-buildah:100000:65536
+USERNAME:100000:65536
 
 Включить kernel.unprivileged_userns_clone
 
