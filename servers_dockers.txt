@@ -174,8 +174,7 @@ sudo docker run -d -p 9000:9000 --name=portainer --restart=always -v /var/run/do
 
 sudo docker run -d -p 9000:9000 -p 8000:8000 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce
 
-
-
+    
 
 
 Deploying Portainer CE in Docker
@@ -228,6 +227,36 @@ services:
     restart: always
 
 
+
+
+Alternatives Portainer - Yacht.
+
+docker run -d -p 8000:8000 -v /var/run/docker.sock:/var/run/docker.sock -v yacht:/config selfhostedpro/yacht
+
+Login: admin@yacht.local
+Password: pass
+
+$ mkdir yacht && cd yacht && nano docker-compose.yml
+
+version: '3'
+
+volumes:
+  yacht:
+
+services:
+
+  yacht:
+    image: selfhostedpro/yacht
+    container_name: yacht
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - yacht:/config
+    ports:
+      - 8000:8000
+    restart: always
+    
+    
+    
 
 
 
