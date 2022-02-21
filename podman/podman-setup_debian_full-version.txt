@@ -175,7 +175,7 @@ sudo systemctl restart cockpit.socket
 If you want to replace Docker, one can install podman-docker to mimic the docker binary along with man pages.
 Если вы хотите заменить Docker, можно установить podman-docker, чтобы имитировать двоичный файл docker вместе со многими страницами.
 
-# # echo 'deb http://ftp.de.debian.org/debian sid main' > /etc/apt/sources.list.d/ftp.de.debian.org.list
+# echo 'deb http://ftp.de.debian.org/debian sid main' > /etc/apt/sources.list.d/ftp.de.debian.org.list
 sudo apt install podman-docker -y
 
 
