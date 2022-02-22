@@ -324,6 +324,11 @@ podman push scriptcamp/nginx
 
 
 
+$ podman pod create --name pod_names
+$ podman ps -a --pod
+$ podman run -dt --pod web alpine:latest top
+$ podman pod create -p 8080:80 --name web1
+$ podman run -dt --pod web1 -p 8080 nginx:latest
 
 
 
