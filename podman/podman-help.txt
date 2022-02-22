@@ -344,6 +344,30 @@ podman run --pod srcview --name src-expose -v "${PWD}:/var/opt/localrepo":Z,ro s
 
 
 
+Minimal podman communication.
+
+# Simple.
+$ podman run -d -p 8585:8888 --name=web-name --restart=always -e env=env -v ./volume:/volume docker.io/images
+
+# Hard.
+$ podman pod create --name pod_names
+or
+$ podman run -dt --pod new:web alpine:latest top
+
+# Sudo. 
+# sudo podman pod create -p 8080:80 --name web1
+or
+# sudo podman run -dt --pod new:web1 -p 8080 nginx:latest
+
+$ podman pod ls
+# sudo podman pod ls
+$ podman generate kube pod_name -f ./searx.yaml
+
+$ nano podman.yaml
+
+$ podman generate systemd --restart-policy=always -t 1 --files --name pod_name
+
+
 
 
 
