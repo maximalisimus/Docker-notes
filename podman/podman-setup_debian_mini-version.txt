@@ -310,9 +310,6 @@ net.ipv4.ip_unprivileged_port_start=80
 $ sudo sysctl -p
 
 
-$ sudo ln -sf /bin/podman /bin/docker
-$ sudo ln -sf /home/mikl/.local/bin/podman-compose /bin/docker-compose
-
 
 
 

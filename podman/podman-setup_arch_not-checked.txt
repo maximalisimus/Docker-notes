@@ -350,8 +350,6 @@ $ sudo sysctl -p
 
 
 
-$ sudo ln -sf /bin/podman /bin/docker
-$ sudo ln -sf /home/mikl/.local/bin/podman-compose /bin/docker-compose
 
 
 10) Запуск и проверка podman
