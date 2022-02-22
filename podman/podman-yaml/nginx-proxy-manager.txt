@@ -1,0 +1,40 @@
+
+
+$ mkdir npm && cd npm
+
+$ sudo podman pod create --name npm -p 80:80 -p 81:81 -p 443:443
+
+$ mkdir -p ./data/mysql ./letsencrypt
+
+$ sudo podman run -d --pod npm --name=npmdb \
+-expose 3306 --restart=unless-stopped \
+-v ./data/mysql:/var/lib/mysql \
+--restart=unless-stopped \
+-e MYSQL_ROOT_PASSWORD="npm" \
+-e MYSQL_DATABASE="npm" \
+-e MYSQL_USER="npm" \
+-e MYSQL_PASSWORD="npm" \
+docker.io/jc21/mariadb-aria:latest
+
+$ sudo podman run -d --pod npm --name=npmanager \
+-p 80:80 -p 81:81 -p 443:443 \
+--restart=unless-stopped \
+-v ./data:/data \
+-v ./letsencrypt:/etc/letsencrypt \
+-e DB_MYSQL_HOST="npmdb" \
+-e DB_MYSQL_PORT="3306" \
+-e DB_MYSQL_USER="npm" \
+-e DB_MYSQL_PASSWORD="npm" \
+-e DB_MYSQL_NAME="npm" \
+docker.io/jc21/nginx-proxy-manager:latest
+
+
+
+
+
+
+
+
+
+
+

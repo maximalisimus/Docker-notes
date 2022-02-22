@@ -54,7 +54,7 @@ sudo find "/usr/libexec/cni/" -type f -exec ln -sf {} /usr/local/bin/ \;
 Настройка сети CNI:
 
 sudo mkdir -p /etc/cni/net.d
-curl -qsSL https://raw.githubusercontent.com/containers/libpod/master/cni/87-podman-bridge.conflist | sudo tee /etc/cni/net.d/99-loopback.conf
+curl -qsSL https://raw.githubusercontent.com/containers/libpod/master/cni/87-podman-bridge.conflist | sudo tee /etc/cni/net.d/87-podman-bridge.conflist
 Добавить файлы конфигурации: вам нужно вручную добавить файлы конфигурации, набрав этот код:
 
 sudo mkdir -p /etc/containers

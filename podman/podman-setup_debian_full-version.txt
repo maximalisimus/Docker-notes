@@ -78,7 +78,7 @@ sudo cp /usr/local/libexec/podman/conmon  /usr/local/bin/
 A basic network configuration can be achieved with:
 
 sudo mkdir -p /etc/cni/net.d
-curl -qsSL https://raw.githubusercontent.com/containers/libpod/master/cni/87-podman-bridge.conflist | sudo tee /etc/cni/net.d/87-podman-bridge.conf
+curl -qsSL https://raw.githubusercontent.com/containers/libpod/master/cni/87-podman-bridge.conflist | sudo tee /etc/cni/net.d/87-podman-bridge.conflist
 
 7) Install CNI Plugins
 

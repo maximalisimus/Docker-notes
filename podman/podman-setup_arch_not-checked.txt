@@ -103,7 +103,7 @@ sudo find "/usr/libexec/cni/" -type f -exec ln -sf {} /usr/local/bin/ \;
 A basic network configuration can be achieved with:
 Базовая конфигурация сети может быть достигнута с помощью:
 
-sudo curl -qsSL https://raw.githubusercontent.com/containers/libpod/master/cni/87-podman-bridge.conflist | sudo tee /etc/cni/net.d/87-podman-bridge.conf
+sudo curl -qsSL https://raw.githubusercontent.com/containers/libpod/master/cni/87-podman-bridge.conflist | sudo tee /etc/cni/net.d/87-podman-bridge.conflist
 
 7) Add Podman configuration registries,policy
 Добавить реестры конфигурации Podman,политику
