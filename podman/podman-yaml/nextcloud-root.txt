@@ -1,0 +1,36 @@
+
+
+$ mkdir -p nextcloud/{db,nextcloud} && cd nextcloud
+
+$ sudo podman pod create --name ncloud --share cgroup,ipc,uts
+
+$ sudo podman run -dt --pod ncloud --name nclouddb \
+--restart=always -p 3306 \
+-v ./db:/var/lib/mysql \
+-e MYSQL_ROOT_PASSWORD="nextcloud" \
+-e MYSQL_PASSWORD="nextcloud" \
+-e MYSQL_DATABASE="nextcloud" \
+-e MYSQL_USER=nextcloud \
+docker.io/library/mariadb:latest \
+--transaction-isolation=READ-COMMITTED --binlog-format=ROW
+
+$ podman run -dt --pod ncloud --name 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
