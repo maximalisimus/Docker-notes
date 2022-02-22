@@ -346,6 +346,47 @@ podman run --pod srcview --name src-expose -v "${PWD}:/var/opt/localrepo":Z,ro s
 
 Minimal podman communication.
 
+# Entrypoint.
+# --entrypoint=”command” | ‘[“command”, “arg1”, …]’
+$ podman run -d ... --entrypoint ...
+
+# Expose
+$ podman run -d --expose=port ...
+# Expose a port, or a range of ports (e.g. --expose=3300-3310) to set up port redirection on the host system.
+
+# --ip=ipv4 # --ip6=ipv6
+# -network=network-name
+# Specify a static IPv4 address for the container, for example 10.88.64.128. 
+# This option can only be used if the container is joined to only a single network - i.e., 
+# --network=network-name is used at most once - 
+# and if the container is not joining another container’s network namespace via --network=container:id. 
+# The address must be within the network’s IP address pool (default 10.88.0.0/16).
+
+--network=mode, --net
+# Set the network mode for the container. 
+# Invalid if using --dns, --dns-opt, or --dns-search with --network set to none or container:id. 
+# If used together with --pod, the container will not join the pod’s network namespace.
+# bridge[:OPTIONS,…]:
+# alias=name
+# ip=IPv4
+# ip=IPv6
+# mac=MAC
+# interface_name
+#
+# none # container:id # host # ns:path # private # 
+--network bridge:ip=10.88.0.10,mac=44:33:22:11:00:99
+
+--network-alias=alias
+
+--restart-policy=policy
+# Set the systemd restart policy. 
+# The restart-policy must be one of: “no”, “on-success”, “on-failure”, “on-abnormal”, “on-watchdog”, “on-abort”, or “always”. 
+# The default policy is on-failure.
+
+--dns=ipaddr
+
+--dns-search=domain
+
 # Simple.
 $ podman run -d -p 8585:8888 --name=web-name --restart=always -e env=env -v ./volume:/volume docker.io/images
 
@@ -368,6 +409,50 @@ $ nano podman.yaml
 $ podman generate systemd --restart-policy=always -t 1 --files --name pod_name
 
 
+Создание модуля, не использующего сетевое пространство имен, 
+и поэтому отображение портов будет основано на контейнерах, а не на модулях.
+
+$ podman pod create --name servers --share cgroup,ipc,uts
+$ podman run -dt --pod servers --rm --name web -p 80:80 $WEB_PATH php:7.2-apache
+$ podman run -dt --pod servers --rm --name mysql --env MYSQL_ROOT_PASSWORD=iamroot -v /var/lib/mysql:/var/lib/mysql:Z -p 8080:8080 mysql:8
+$ podman run -dt --pod servers --rm --name pma -p SOMEPORT:80 phpmyadmin/phpmyadmin:5
+
+
+
+
+Kubernetes.
+
+pods/commands.yaml
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: command-demo
+  labels:
+    purpose: demonstrate-command
+spec:
+  containers:
+  - name: command-demo-container
+    image: debian
+    command: ["printenv"]
+    args: ["HOSTNAME", "KUBERNETES_PORT"]
+  restartPolicy: OnFailure
+
+
+
+Use environment variables to define arguments.
+
+env:
+- name: MESSAGE
+  value: "hello world"
+command: ["/bin/echo"]
+args: ["$(MESSAGE)"]
+
+
+Run a command in a shell.
+
+command: ["/bin/sh"]
+args: ["-c", "while true; do echo hello; sleep 10;done"]
 
 
 
