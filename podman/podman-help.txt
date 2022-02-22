@@ -11,12 +11,6 @@ cockpit
 cockpit-podman
 
 
-curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
-chmod +x ./kubectl
-
-curl -L https://github.com/kubernetes/kompose/releases/download/v1.26.0/kompose-linux-amd64 -o kompose
-chmod +x kompose
-
 
 Example.
 
@@ -327,8 +321,23 @@ podman push scriptcamp/nginx
 $ podman pod create --name pod_names
 $ podman ps -a --pod
 $ podman run -dt --pod web alpine:latest top
-$ podman pod create -p 8080:80 --name web1
-$ podman run -dt --pod web1 -p 8080 nginx:latest
+# podman run -dt --pod new:web alpine:latest top
+
+$ sudo podman pod create -p 8080:80 --name web1
+$ sudo podman run -dt --pod web1 -p 8080 nginx:latest
+
+
+
+Сетевые стеки Pod действуют как сетевой стек на хосте - 
+у вас есть множество контейнеров в модуле и программы в контейнере, 
+и все они используют один интерфейс, IP-адрес и связанные порты. 
+Если один контейнер привязывается к порту, никакой другой контейнер не может использовать этот порт в модуле, 
+пока он используется. Контейнеры в модуле также могут взаимодействовать через localhost, 
+если один контейнер привязан к localhost в модуле, а другой - к этому порту.
+
+podman pod create --name srcview -p 127.0.0.1:3434:3434 -p 127.0.0.1:7080:7080 -p 127.0.0.1:3370:3370
+podman run --pod srcview --name src-expose -v "${PWD}:/var/opt/localrepo":Z,ro sourcegraph/src-expose:latest serve /var/opt/localrepo
+
 
 
 
