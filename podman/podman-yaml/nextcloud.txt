@@ -2,8 +2,55 @@
 
 $ mkdir -p nextcloud/{db,cloud} && cd nextcloud
 
+NOT CHECKED.
 
+podman pod create --hostname ${PODNAME} --name ${PODNAME} -p 8080:80
 
+ariaDB container
+podman run \
+-d --restart=always --pod=${PODNAME} \
+-e MYSQL_ROOT_PASSWORD="myrootpass" \
+-e MYSQL_DATABASE="nextcloud" \
+-e MYSQL_USER="nextcloud" \
+-e MYSQL_PASSWORD="mynextcloudpass" \
+-v ${HOME}/containers/nextcloud/db:/var/lib/mysql:Z \
+--name=${PODNAME}-db docker.io/library/mariadb:latest \
+--transaction-isolation=READ-COMMITTED --binlog-format=ROW
+
+Redis.
+podman run \
+-d --restart=always --pod=${PODNAME} \
+--name=${PODNAME}-redis docker.io/library/redis:alpine \
+redis-server --requirepass yourpassword
+
+Nextcloud App
+podman run \
+-d --restart=always --pod=${PODNAME} \
+-e REDIS_HOST="localhost" \
+-e REDIS_HOST_PASSWORD="yourpassword" \
+-e MYSQL_HOST="localhost" \
+-e MYSQL_USER="nextcloud" \
+-e MYSQL_PASSWORD="mynextcloudpass" \
+-e MYSQL_DATABASE="nextcloud" \
+-v ${HOME}/containers/nextcloud/html:/var/www/html:z \
+--name=${PODNAME}-app docker.io/library/nextcloud:fpm-alpine
+
+Nextcloud Cron
+podman run \
+-d --restart=always --pod=${PODNAME} \
+-v ${HOME}/containers/nextcloud/html:/var/www/html:z \
+--entrypoint=/cron.sh \
+--name=${PODNAME}-cron docker.io/library/nextcloud:fpm-alpine
+
+Nginx
+I’ve copied the ‘official’ 12 nginx.conf to the proper location:
+curl -o ~/containers/nextcloud/nginx/nginx.conf https://raw.githubusercontent.com/nextcloud/docker/master/.examples/docker-compose/with-nginx-proxy/mariadb-cron-redis/fpm/web/nginx.conf
+
+podman run \
+-d --restart=always --pod=${PODNAME} \
+-v ${HOME}/containers/nextcloud/html:/var/www/html:ro,z \
+-v ${HOME}/containers/nextcloud/nginx/nginx.conf:/etc/nginx/nginx.conf:ro,Z \
+--name=${PODNAME}-nginx docker.io/library/nginx:alpine
 
 
 
