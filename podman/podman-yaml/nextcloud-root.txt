@@ -1,6 +1,25 @@
 
 
-mkdir -p ncloud/{db,nextcloud} && cd ncloud
+# Not use.
+
+# sudo podman run -d --name mdb docker.io/yobasystems/alpine-mariadb:latest
+# sudo podman exec mdb grep -Ei "^mysql" /etc/passwd
+mysql:x:100:101:mysql:/var/lib/mysql:/sbin/nologin
+# sudo podman stop mdb && sudo podman rm mdb
+
+# sudo podman run -d --name nextcloud docker.io/nextcloud
+# sudo podman exec nextcloud ls -lha /var/www/ | grep -Ei "html"
+drwxr-xr-x 14 www-data root 4.0K Feb 23 06:18 html
+# sudo podman stop nextcloud && sudo podman rm nextcloud
+
+
+
+
+
+$ mkdir -p ncloud/{db,nextcloud} && cd ncloud
+# Not use.
+# podman unshare chown 100:101 -R db
+# sudo chown root:www-data -R nextcloud
 
 sudo podman pod create --name ncloud -p 1080:80
 
