@@ -466,6 +466,16 @@ $ podman run --rm -v $HOME/mysql-data:/var/lib/mysql/data:Z -e MYSQL_USER=user -
 
 
 
+PODMAN COMMAND "UNSHARE" - DESCRIPTION.
+
+Launches a process (by default, $SHELL) in a new user namespace. 
+The user namespace is configured so that the invoking user’s UID and primary GID appear to be UID 0 and GID 0, respectively. 
+Any ranges which match that user and group in /etc/subuid and /etc/subgid 
+are also mapped in as themselves with the help of the newuidmap(1) and newgidmap(1) helpers.
+Запускает процесс (по умолчанию, $SHELL) в новом пользовательском пространстве имен. 
+Пространство имен пользователя настроено таким образом, чтобы UID вызывающего пользователя и основной GID отображались как UID 0 и GID 0 соответственно. 
+Любые диапазоны, которые соответствуют этому пользователю и группе в /etc/subuid и /etc/subgid, 
+также отображаются как сами по себе с помощью помощников newuidmap(1) и newgidmap(1).
 
 
 
