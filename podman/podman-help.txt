@@ -420,6 +420,58 @@ $ podman run -dt --pod servers --rm --name pma -p SOMEPORT:80 phpmyadmin/phpmyad
 
 
 
+
+
+
+
+
+
+MYSQL AS NON-ROOT.
+
+$ podman run --rm -v $HOME/mysql-data:/var/lib/mysql/data:Z -e MYSQL_USER=user -e MYSQL_PASSWORD=pass -e MYSQL_DATABASE=db -p 3306:3306 mariadb/server
+Permission denied …
+
+$ podman run -ti mariadb/server grep mysql /etc/passwd
+mysql:x:999:999::/home/mysql:/bin/sh
+
+$ chown 999:999 -R $HOME/mysql-data
+Permission denied …
+
+But the user is going to get permission denied. Furthermore, this is the wrong UID:GID pair. 
+Remember that the UID:GID pair is relative to the user namespace that the user is going to run the container with. 
+Now we have a big math problem. 
+We must look at the user namespace the user going to run the container with and then add 999 to the beginning UID of the range - 1. 
+And hope we got it right.
+Но пользователю будет отказано в разрешении. Кроме того, это неправильная пара UID:GID. 
+Помните, что пара UID:GID относится к пользовательскому пространству имен, с которым пользователь собирается запустить контейнер. 
+Теперь у нас есть большая математическая проблема. 
+Мы должны посмотреть на пространство имен пользователя, с которым пользователь собирается запустить контейнер, а затем добавить 999 в начальную строку диапазона - 1. 
+И надеюсь, что мы все сделали правильно.
+
+$ sudo chown CONTAINER999:CONTAINER999 -R $HOME/mysql-data
+
+An easier way to handle this situation would be to use podman unshare. 
+The unshare command is a cool command that joins the user namespace without running any containers.
+For example, the user could enter.
+Более простым способом справиться с этой ситуацией было бы использовать pod man unshare. 
+Команда unshare - это классная команда, которая присоединяется к пользовательскому пространству имен без запуска каких-либо контейнеров.
+Например, пользователь может ввести.
+
+$ podman unshare chown 999:999 -R $HOME/mysql-data
+
+Now the user is ready to run the rootless container with the following command.
+Теперь пользователь готов запустить контейнер без корня со следующей командой.
+
+$ podman run --rm -v $HOME/mysql-data:/var/lib/mysql/data:Z -e MYSQL_USER=user -e MYSQL_PASSWORD=pass -e MYSQL_DATABASE=db -p 3306:3306 mariadb/server
+
+
+
+
+
+
+
+
+
 Kubernetes.
 
 pods/commands.yaml
