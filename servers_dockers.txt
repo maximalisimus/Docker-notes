@@ -2,6 +2,19 @@
 
 ArchLinux:
 
+???
+
+Enable /etc/network/interfaces:
+
+$ sudo nano /etc/NetworkManager/NetworkManager.conf
+or
+$ sudo nano /etc/NetworkManager/conf.d/managed.conf
+
+[ifupdown]
+managed=true
+
+
+
 To stop NetworkManager from touching
 /etc/resolv.conf
 set main.dns=none with a configuration file in
