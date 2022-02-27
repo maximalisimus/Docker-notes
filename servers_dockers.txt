@@ -2,8 +2,6 @@
 
 ArchLinux:
 
-???
-
 Enable /etc/network/interfaces:
 
 $ sudo nano /etc/NetworkManager/NetworkManager.conf
