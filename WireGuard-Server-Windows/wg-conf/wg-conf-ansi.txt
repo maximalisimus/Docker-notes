@@ -1,0 +1,115 @@
+
+
+sudo echo 'deb http://ftp.debian.org/debian buster-backports main' | sudo tee /etc/apt/sources.list.d/buster-backports.list
+sudo apt update
+sudo apt install wireguard
+
+sudo nano /etc/sysctl.conf
+
+net.ipv4.ip_forward = 1
+net.ipv6.conf.default.forwarding = 1
+net.ipv6.conf.all.forwarding = 1
+net.ipv4.conf.all.rp_filter = 1
+net.ipv4.conf.default.proxy_arp = 0
+net.ipv4.conf.default.send_redirects = 1
+net.ipv4.conf.all.send_redirects = 0
+
+sudo sysctl -p
+
+
+mkdir -p wireguard-server && cd wireguard-server
+
+Server:
+wg genkey | sudo tee server_private.key | wg pubkey | sudo tee server_public.key
+
+Client:
+wg genkey | sudo tee client_private.key | wg pubkey | sudo tee client_public.key
+
+sudo nano /etc/wireguard/wg0.conf
+
+[Interface]
+Address = 10.10.10.1/24
+ListenPort = 51820
+PrivateKey = OFCMMpdPYUTndTkTuCDCZDg6uYrzGcjcL6Tg4aAp5kU=
+PostUp = iptables -A FORWARD -i wg0 -j ACCEPT; iptables -t nat -A POSTROUTING -o enp0s3 -j MASQUERADE; ip6tables -A FORWARD -i wg0 -j ACCEPT; ip6tables -t nat -A POSTROUTING -o enp0s3 -j MASQUERADE
+PostDown = iptables -D FORWARD -i wg0 -j ACCEPT; iptables -t nat -D POSTROUTING -o enp0s3 -j MASQUERADE; ip6tables -D FORWARD -i wg0 -j ACCEPT; ip6tables -t nat -D POSTROUTING -o enp0s3 -j MASQUERADE
+[Peer]
+PublicKey = 2g8MWhxN1QGLAfGwEnxHG38/krdcPbgjo87zSKurP1g=
+AllowedIPs = 10.10.10.2/32
+PersistentKeepalive=25
+
+
+
+Interface - настройка сервера;
+Peer - настройка клиентов
+Address - адрес сервера в сети VPN;
+ListenPort - порт, на котором будет ожидать подключения WireGuard;
+PrivateKey - приватный ключ сервера, сгенерированный ранее;
+PostUp - команда, которая выполняется после запуска сервера. 
+В данном случае включается поддержка MASQUERADE для интерфейса enp0s3, 
+а также разрешается прием пакетов на интерфейсе wg0.
+Сетевые интерфейсы вам придется заменить на свои.
+PostDown - выполняется после завершения работы WireGuard, 
+в данном случае удаляет все правила, добавленные в PostUp.
+
+Секции Peer содержат настройки клиентов, которые могут подключится к серверу:
+PublicKey - публичный ключ клиента, сгенерированный ранее;
+AllowedIPs - IP адрес, который может взять клиент. Обратите внимание, маска для IPv4 должна быть 32.
+
+client.conf
+
+[Interface]
+PrivateKey = GMJXo+phyNS/kodizn353D2MN8bPNOSqJEhQ83caKkY=
+Address = 10.66.66.2/24,fd42:42:42::2/64
+DNS = 8.8.8.8,8.8.4.4
+[Peer]
+PublicKey = xxIV2fvMp7J2H1GxVuQcfVi2TJ0lQ/2K8UXSKC/byhM=
+Endpoint = 192.168.56.101:63665
+AllowedIPs = 0.0.0.0/0,::/0
+PersistentKeepalive=25
+
+
+PrivateKey - приватный ключ клиента, сгенерированный ранее;
+Address - IP адрес интерфейса wg0 клиента;
+DNS - серверы DNS, которые будут использоваться для разрешения доменных имён;
+PublicKey - публичный ключ сервера, к которому надо подключится.
+Endpoint - здесь надо указать IP адрес сервера, на котором установлен WireGuard и порт;
+AllowedIPs - IP адреса, трафик с которых будет перенаправляться в сеть VPN, 
+в данном примере выбраны все адреса.
+
+После того, как вы внесли все изменения, скопируйте файл на компьютер клиента под именем /etc/wireguard/wg0.conf.
+
+$ sudo wg-quick up wg0
+or
+$ sudo systemctl start wg-quick@wg0
+or
+$ sudo systemctl enable wg-quick@wg0
+
+$ sudo ufw allow 63665/udp
+$ sudo ufw status
+
+$ sudo wg show
+
+
+
+Example.
+
+mikl@debian:~/wireguard-server$ ls
+client_private.key  client_public.key  server_private.key  server_public.key
+mikl@debian:~/wireguard-server$ cat server_private.key 
+iMGWHSAmwSICw/kZlXcBoUv+qXB8VeDjQ+/esDJimk4=
+mikl@debian:~/wireguard-server$ cat server_public.key 
+hs61GWIC1SBrAPP5/JivR6hUyKAK7BXNHhIp/KulfiI=
+mikl@debian:~/wireguard-server$ cat client_private.key 
+WNvOZfNERFeWD9jFZKp/b8EyZIUCO1V3r6lwyvI34nQ=
+mikl@debian:~/wireguard-server$ cat client_public.key 
+1sGVW1p02kwmuCb6BlU60+d0v0bpBw105xvim0zswVs=
+mikl@debian:~/wireguard-server$
+
+
+
+
+
+
+
+
