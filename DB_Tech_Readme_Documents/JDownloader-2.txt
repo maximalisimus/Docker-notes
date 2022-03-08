@@ -1,0 +1,23 @@
+
+
+version: 2
+services:
+  jdownloader-2:
+    image: jlesage/jdownloader-2
+    ports:
+      - 5800:5800
+    volumes:
+      - /srv/dev-disk-by-label-Files/Config/JDownloader-2:/config:rw
+      - /srv/dev-disk-by-label-Files/YouTube:/output:rw
+
+
+
+Ports
+Port	Mapping to host	Description
+5800	Mandatory	Port used to access the application’s GUI via the web interface.
+5900	Optional	Port used to access the application’s GUI via the VNC protocol. Optional if no VNC client is used.
+3129	Optional	Port used by MyJDownloader mobile applications and browser extensions to establish a direct connect to the JDownloader Docker container instance. Port needs to be exposed only if MyJDownloader is enabled and configured in Direct Connection mode. NOTE: Since this port is being reported to the MyJDownloader online service, the port mapped on the host side must be the same (i.e. 3129).
+
+
+
+
