@@ -464,6 +464,111 @@ And docker-container restart
 
 
 
+Запуск ONLYOFFICE Docs с использованием HTTPS
+
+Закрытый ключ (.key)
+SSL-сертификат (.crt)
+
+/app/onlyoffice/DocumentServer/data/certs/onlyoffice.key
+/app/onlyoffice/DocumentServer/data/certs/onlyoffice.crt
+
+Переключение ONLYOFFICE Docs на протокол HTTPS с помощью certbot
+Проще всего переключить ONLYOFFICE Docs на протокол HTTPS, автоматически получив SSL-сертификаты от Let's Encrypt с помощью certbot.
+
+Запустите Docker-контейнер ONLYOFFICE Docs, указав порты 80 и 443 и задав собственные значения для переменных:
+
+sudo docker run -i -t -d -p 80:80 -p 443:443 \
+    -e LETS_ENCRYPT_DOMAIN=yourdomain.com -e LETS_ENCRYPT_MAIL=email@example.com  onlyoffice/documentserver
+
+Где:
+
+LETS_ENCRYPT_DOMAIN - доменное имя, используемое для сертификата.
+LETS_ENCRYPT_MAIL - адрес электронной почты, используемый для регистрации и восстановления.
+
+Сертификат, подписанный Центром Сертификации letsencrypt.org, будет автоматически сгенерирован и установлен на ваш сервер. 
+Теперь инсталляция ONLYOFFICE Docs должна быть доступна по адресу https://yourdomain.com.
+
+
+Генерация самоподписанных сертификатов
+
+ШАГ 1: Создайте закрытый ключ сервера
+openssl genrsa -out onlyoffice.key 2048
+ШАГ 2: Создайте запрос подписи сертификата (CSR)
+openssl req -new -key onlyoffice.key -out onlyoffice.csr
+ШАГ 3: Подпишите сертификат с помощью закрытого ключа и CSR
+openssl x509 -req -days 365 -in onlyoffice.csr -signkey onlyoffice.key -out onlyoffice.crt
+Вы только что сгенерировали SSL-сертификат со сроком действия 365 дней.
+
+Усиление безопасности сервера
+В этом разделе приводятся инструкции по усилению безопасности вашего сервера.
+
+Для этого необходимо сгенерировать параметры Диффи-Хеллмана (DHE), обеспечивающие более высокую стойкость.
+
+openssl dhparam -out dhparam.pem 2048
+
+Установка SSL-сертификатов
+
+Из четырех ранее сгенерированных файлов на сервер onlyoffice необходимо установить файлы onlyoffice.key, onlyoffice.crt и dhparam.pem. 
+Файл CSR не требуется, но убедитесь, что вы создали его резервную копию (на случай, если он вам снова понадобится).
+
+По умолчанию приложение onlyoffice настроено для поиска SSL-сертификатов в каталоге /var/www/onlyoffice/Data/certs. 
+Этот путь можно изменить, используя параметры настройки SSL_KEY_PATH, SSL_CERTIFICATE_PATH и SSL_DHPARAM_PATH.
+
+Путь /var/www/onlyoffice/Data/ - это путь к хранилищу данных. 
+Вам надо создать папку с именем certs в каталоге /app/onlyoffice/DocumentServer/data/ и скопировать файлы в нее, 
+а также в качестве меры безопасности необходимо изменить права доступа к файлу onlyoffice.key, 
+чтобы он был доступен на чтение только владельцу.
+
+mkdir -p /app/onlyoffice/DocumentServer/data/certs
+cp onlyoffice.key /app/onlyoffice/DocumentServer/data/certs/
+cp onlyoffice.crt /app/onlyoffice/DocumentServer/data/certs/
+cp dhparam.pem /app/onlyoffice/DocumentServer/data/certs/
+chmod 400 /app/onlyoffice/DocumentServer/data/certs/onlyoffice.key
+И перезапустите Docker-контейнер:
+
+sudo docker restart {{DOCUMENT_SERVER_ID}}
+
+Остался всего один шаг, чтобы обеспечить безопасный доступ к приложению.
+
+Доступные параметры настройки
+
+Флаг `--env-file` в параметрах команды docker run позволяет задать все необходимые переменные среды в одном файле. 
+Так можно избежать написания потенциально длинной команды docker run.
+
+ONLYOFFICE_HTTPS_HSTS_ENABLED: Дополнительный параметр настройки для отключения HSTS (HTTP Strict Transport Security). Применяется только в тех случаях, когда используется SSL. По умолчанию задано значение true.
+ONLYOFFICE_HTTPS_HSTS_MAXAGE: Дополнительный параметр настройки для задания параметра max-age HSTS в конфигурации виртуального хоста NGINX для onlyoffice. Применяется только в тех случаях, когда используется SSL. По умолчанию задано значение 31536000.
+SSL_CERTIFICATE_PATH: Путь к используемому SSL-сертификату. По умолчанию задано значение /var/www/onlyoffice/Data/certs/tls.crt.
+SSL_KEY_PATH: Путь к закрытому ключу SSL-сертификата. По умолчанию задано значение /var/www/onlyoffice/Data/certs/tls.key.
+SSL_DHPARAM_PATH: Путь к параметру Диффи-Хеллмана. По умолчанию задано значение /var/www/onlyoffice/Data/certs/dhparam.pem.
+SSL_VERIFY_CLIENT: Включение проверки сертификатов клиента с помощью файла CA_CERTIFICATES_PATH file. По умолчанию задано значение false.
+DB_TYPE: Тип базы данных. Поддерживаются значения postgres, mariadb или mysql. По умолчанию задано значение postgres.
+DB_HOST: IP-адрес или имя хоста, на котором запущен сервер базы данных.
+DB_PORT: Номер порта сервера базы данных.
+DB_NAME: Имя базы данных, которая должна создаваться при запуске образа.
+DB_USER: Имя нового пользователя с правами суперпользователя для учетной записи базы данных.
+DB_PWD: Пароль, заданный для учетной записи базы данных.
+AMQP_URI: AMQP URI для подключения к серверу менеджера сообщений.
+AMQP_TYPE: Тип менеджера сообщений. Поддерживаются значения rabbitmq или activemq. По умолчанию задано значение rabbitmq.
+REDIS_SERVER_HOST: IP-адрес или имя хоста, на котором запущен Redis.
+REDIS_SERVER_PORT: Номер порта сервера Redis.
+NGINX_WORKER_PROCESSES: Определяет число рабочих процессов NGINX.
+NGINX_WORKER_CONNECTIONS: Задаёт максимальное число соединений, которые одновременно может открыть рабочий процесс NGINX.
+JWT_ENABLED: Управляет включением валидации посредством JSON веб-токена ONLYOFFICE Docs.По умолчанию задано значение false.
+JWT_SECRET: Определяет секретный ключ для валидации JSON веб-токена при запросе к ONLYOFFICE Docs. По умолчанию задано значение secret.
+JWT_HEADER: Определяет HTTP-заголовок, который будет использоваться для отправки JSON веб-токена. По умолчанию задано значение Authorization.
+JWT_IN_BODY: Управляет включением валидации посредством токена в теле запроса к ONLYOFFICE Docs. По умолчанию задано значение false.
+USE_UNAUTHORIZED_STORAGE: Задайте значение true при использовании самозаверенных сертификатов для вашего хранилища, например, Nextcloud. По умолчанию задано значение false.
+GENERATE_FONTS: Когда задано значение true, заново генерирует список шрифтов, эскизы шрифтов и т.д. при каждом запуске. По умолчанию задано значение true.
+METRICS_ENABLED: Управляет включением StatsD для ONLYOFFICE Docs. По умолчанию задано значение false.
+METRICS_HOST: Определяет хост StatsD. По умолчанию задано значение localhost.
+METRICS_PORT: Определяет порт StatsD. По умолчанию задано значение 8125.
+METRICS_PREFIX: Определяет префикс метрик StatsD для серверных служб. По умолчанию задано значение ds..
+LETS_ENCRYPT_DOMAIN: Определяет домен для сертификата Let's Encrypt.
+LETS_ENCRYPT_MAIL: Определяет почтовый адрес администратора домена для сертификата Let's Encrypt.
+
+
+
+
 
 
 mkdir searx && cd searx
