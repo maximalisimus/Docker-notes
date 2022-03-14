@@ -608,6 +608,112 @@ services:
       
 
 
+Whogle.
+
+docker-cli:
+
+docker run --publish 5000:5000 --detach --name whoogle-search benbusby/whoogle-search:latest
+
+docker run --publish 5000:5000 --detach --name whoogle-search \
+  -e WHOOGLE_USER=username \
+  -e WHOOGLE_PASS=password \
+  -e WHOOGLE_PROXY_USER=username \
+  -e WHOOGLE_PROXY_PASS=password \
+  -e WHOOGLE_PROXY_TYPE=socks5 \
+  -e WHOOGLE_PROXY_LOC=ip \
+  whoogle-search:1.0
+
+
+mkdir whoogle && cd whoogle
+nano docker-compose.yml
+
+docker-compose.yml
+---
+version: '2'
+services:
+	whoogle:
+		image: benbusby/whoogle-search:latest
+		container_name: whoogle
+		ports:
+			- 5000:5000
+		restart: unless-stopped
+
+
+
+Variable                Description
+WHOOGLE_DOTENV          Load environment variables in whoogle.env
+WHOOGLE_USER            The username for basic auth. WHOOGLE_PASS must also be set if used.
+WHOOGLE_PASS            The password for basic auth. WHOOGLE_USER must also be set if used.
+WHOOGLE_PROXY_USER      The username of the proxy server.
+WHOOGLE_PROXY_PASS      The password of the proxy server.
+WHOOGLE_PROXY_TYPE      The type of the proxy server. Can be "socks5", "socks4", or "http".
+WHOOGLE_PROXY_LOC       The location of the proxy server (host or ip).
+EXPOSE_PORT             The port where Whoogle will be exposed.
+HTTPS_ONLY              Enforce HTTPS. (See here)
+WHOOGLE_ALT_TW          The twitter.com alternative to use when site alternatives are enabled in the config.
+WHOOGLE_ALT_YT          The youtube.com alternative to use when site alternatives are enabled in the config.
+WHOOGLE_ALT_IG          The instagram.com alternative to use when site alternatives are enabled in the config.
+WHOOGLE_ALT_RD          The reddit.com alternative to use when site alternatives are enabled in the config.
+WHOOGLE_ALT_TL          The Google Translate alternative to use. This is used for all "translate ____" searches.
+
+Variable                Description
+WHOOGLE_DOTENV          Загружать переменные среды в whoogle.env
+WHOOGLE_USER            Имя пользователя для базовой авторизации. WHOOGLE_PASS также должен быть установлен, если используется.
+WHOOGLE_PASS            Пароль для базовой авторизации. WHOOGLE_USER также должен быть установлен, если используется.
+WHOOGLE_PROXY_USER      Имя пользователя прокси-сервера.
+WHOOGLE_PROXY_PASS      Пароль прокси-сервера.
+WHOOGLE_PROXY_TYPE      Тип прокси-сервера. Может быть "socks5", "socks4", или "http".
+WHOOGLE_PROXY_LOC       Местоположение прокси-сервера (хост или ip).
+EXPOSE_PORT             Порт, на котором будет доступен Whoogle.
+HTTPS_ONLY              Применяйте HTTPS. (Смотрите здесь)
+WHOOGLE_ALT_TW          В twitter.com альтернатива для использования, когда в конфигурации включены альтернативные варианты сайта.
+WHOOGLE_ALT_YT          В youtube.com альтернатива для использования, когда в конфигурации включены альтернативные варианты сайта.
+WHOOGLE_ALT_IG          В instagram.com альтернатива для использования, когда в конфигурации включены альтернативные варианты сайта.
+WHOOGLE_ALT_RD          В reddit.com альтернатива для использования, когда в конфигурации включены альтернативные варианты сайта.
+WHOOGLE_ALT_TL          Альтернатива Google Translate для использования. Это используется для всех поисковых запросов "перевести ____".
+
+Config Environment Variables
+
+Variable                            Description
+WHOOGLE_CONFIG_DISABLE              Hide config from UI and disallow changes to config by client
+WHOOGLE_CONFIG_COUNTRY              Filter results by hosting country
+WHOOGLE_CONFIG_LANGUAGE             Set interface language
+WHOOGLE_CONFIG_SEARCH_LANGUAGE      Set search result language
+WHOOGLE_CONFIG_BLOCK                Block websites from search results (use comma-separated list)
+WHOOGLE_CONFIG_THEME                Set theme mode (light, dark, or system)
+WHOOGLE_CONFIG_SAFE                 Enable safe searches
+WHOOGLE_CONFIG_ALTS                 Use social media site alternatives (nitter, invidious, etc)
+WHOOGLE_CONFIG_TOR                  Use Tor routing (if available)
+WHOOGLE_CONFIG_NEW_TAB              Always open results in new tab
+WHOOGLE_CONFIG_VIEW_IMAGE           Enable View Image option
+WHOOGLE_CONFIG_GET_ONLY             Search using GET requests only
+WHOOGLE_CONFIG_URL                  The root url of the instance (https://<your url>/)
+WHOOGLE_CONFIG_STYLE                The custom CSS to use for styling (should be single line)
+
+Variable                            Description
+WHOOGLE_CONFIG_DISABLE              Скрыть конфигурацию из пользовательского интерфейса и запретить изменения конфигурации клиентом
+WHOOGLE_CONFIG_COUNTRY              Фильтровать результаты по принимающей стране
+WHOOGLE_CONFIG_LANGUAGE             Установить язык интерфейса
+WHOOGLE_CONFIG_SEARCH_LANGUAGE      Установите язык результатов поиска
+WHOOGLE_CONFIG_BLOCK                Блокировать веб-сайты из результатов поиска (используйте список, разделенный запятыми)
+WHOOGLE_CONFIG_THEME                Установите режим темы (светлый, темный или системный)
+WHOOGLE_CONFIG_SAFE                 Включить безопасный поиск
+WHOOGLE_CONFIG_ALTS                 Используйте альтернативные сайты социальных сетей (nitter, invidious, etc)
+WHOOGLE_CONFIG_TOR                  Используйте маршрутизацию Tor (если таковая имеется)
+WHOOGLE_CONFIG_NEW_TAB              Всегда открывайте результаты в новой вкладке
+WHOOGLE_CONFIG_VIEW_IMAGE           Включить опцию Просмотра изображения
+WHOOGLE_CONFIG_GET_ONLY             Поиск только с использованием запросов GET
+WHOOGLE_CONFIG_URL                  Корневой URL-адрес экземпляра (https://<your url>/)
+WHOOGLE_CONFIG_STYLE                Пользовательский CSS, используемый для стилизации (должен быть однострочным)
+
+
+
+Firefox (iOS)
+Title: "Whoogle"
+URL: http[s]://\<your whoogle url\>/search?q=%s
+
+
+
 
 
 mkdir -p ./heimdall/config && cd ./heimdall
