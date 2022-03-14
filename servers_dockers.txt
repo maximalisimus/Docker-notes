@@ -696,7 +696,7 @@ WHOOGLE_CONFIG_COUNTRY              Фильтровать результаты 
 WHOOGLE_CONFIG_LANGUAGE             Установить язык интерфейса
 WHOOGLE_CONFIG_SEARCH_LANGUAGE      Установите язык результатов поиска
 WHOOGLE_CONFIG_BLOCK                Блокировать веб-сайты из результатов поиска (используйте список, разделенный запятыми)
-WHOOGLE_CONFIG_THEME                Установите режим темы (светлый, темный или системный)
+WHOOGLE_CONFIG_THEME                Установите режим темы (light, dark, or system)
 WHOOGLE_CONFIG_SAFE                 Включить безопасный поиск
 WHOOGLE_CONFIG_ALTS                 Используйте альтернативные сайты социальных сетей (nitter, invidious, etc)
 WHOOGLE_CONFIG_TOR                  Используйте маршрутизацию Tor (если таковая имеется)
