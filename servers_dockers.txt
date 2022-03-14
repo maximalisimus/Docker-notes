@@ -122,9 +122,21 @@ sudo apt-get install apt-transport-https ca-certificates curl gnupg lsb-release 
 
 
 
-sudo ln -s /var/lib/snapd/snap /snap
+Locale and Language.
 
-sudo systemctl enable --now snapd.socket
+$ sudo locale-gen ru_RU.UTF-8
+$ sudo nano /etc/environment
+LANGUAGE=en_US.UTF-8
+LANG=en_US.utf-8
+LC_ALL=ru_RU.UTF-8
+LC_COLLATE=ru_RU.UTF-8
+LC_TIME=en_US.utf-8
+
+Time Date.
+
+$ timedatectl
+$ sudo dpkg-reconfigure tzdata
+
 
 
 
