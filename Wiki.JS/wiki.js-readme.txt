@@ -1,0 +1,113 @@
+
+
+---
+version: "2.1"
+services:
+  wikijs:
+    image: linuxserver/wikijs
+    container_name: wikijs
+    environment:
+      - PUID=998
+      - PGID=100
+      - TZ=America/Denver
+    volumes:
+      - /srv/WikiJS/config:/config
+      - /srv/WikiJS/data:/data
+    ports:
+      - 3000:3000
+    restart: unless-stopped
+
+
+
+Environment Variables
+
+DB_TYPE : Type of database (mysql, postgres, mariadb, mssql or sqlite)
+For PostgreSQL, MySQL, MariaDB and MSSQL only:
+
+DB_HOST : Hostname or IP of the database
+DB_PORT : Port of the database
+DB_USER : Username to connect to the database
+DB_PASS : Password to connect to the database
+DB_NAME : Database name
+When connecting to a database server with SSL enforced:
+
+DB_SSL : Set to either 1 or true to enable. (optional, off if omitted)
+DB_SSL_CA : Database CA certificate content, as a single line string (without spaces or new lines), without the prefix and suffix lines. (optional, requires 2.3+)
+Alternative way to provide the database password, via a local file secret:
+
+DB_PASS_FILE: Path to the mapped file containing to the database password. (optional, replaces DB_PASS)
+For SQLite only:
+
+DB_FILEPATH : Path to the SQLite file
+
+Examples
+
+docker run -d -p 8080:3000 --name wiki --restart unless-stopped -e "DB_TYPE=postgres" -e "DB_HOST=db" -e "DB_PORT=5432" -e "DB_USER=wikijs" -e "DB_PASS=wikijsrocks" -e "DB_NAME=wiki" ghcr.io/requarks/wiki:2
+
+or to a MySQL database:
+
+docker run -d -p 8080:3000 --name wiki --restart unless-stopped -e "DB_TYPE=mysql" -e "DB_HOST=db" -e "DB_PORT=3306" -e "DB_USER=wikijs" -e "DB_PASS=wikijsrocks" -e "DB_NAME=wiki" ghcr.io/requarks/wiki:2
+
+Let's Encrypt example:
+
+docker run -d -p 80:3000 -p 443:3443 -e "LETSENCRYPT_DOMAIN=wiki.example.com" -e "LETSENCRYPT_EMAIL=admin@example.com" --name wiki --restart unless-stopped -e "DB_TYPE=postgres" -e "DB_HOST=db" -e "DB_PORT=5432" -e "DB_USER=wikijs" -e "DB_PASS=wikijsrocks" -e "DB_NAME=wiki" ghcr.io/requarks/wiki:2
+
+Alternative: Mount the config file
+
+docker run -d -p 8080:3000 --name wiki --restart unless-stopped -v YOUR-FILE.yml:/wiki/config.yml ghcr.io/requarks/wiki:2
+
+Change User Mode
+
+docker run -d -p 8080:3000 -u="root" --name wiki --restart unless-stopped -e "DB_TYPE=postgres" -e "DB_HOST=db" -e "DB_PORT=5432" -e "DB_USER=wikijs" -e "DB_PASS=wikijsrocks" -e "DB_NAME=wiki" ghcr.io/requarks/wiki:2
+
+Using Docker Compose
+
+version: "3"
+services:
+
+  db:
+    image: postgres:11-alpine
+    environment:
+      POSTGRES_DB: wiki
+      POSTGRES_PASSWORD: wikijsrocks
+      POSTGRES_USER: wikijs
+    logging:
+      driver: "none"
+    restart: unless-stopped
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  wiki:
+    image: ghcr.io/requarks/wiki:2
+    depends_on:
+      - db
+    environment:
+      DB_TYPE: postgres
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: wikijs
+      DB_PASS: wikijsrocks
+      DB_NAME: wiki
+    restart: unless-stopped
+    ports:
+      - "80:3000"
+
+volumes:
+  db-data:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
