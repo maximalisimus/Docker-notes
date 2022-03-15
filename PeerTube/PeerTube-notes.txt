@@ -1,0 +1,24 @@
+
+
+https://hub.docker.com/r/chocobozzz/peertube
+
+Dependencies
+nginx
+PostgreSQL >= 9.6
+Redis >= 2.8.18
+NodeJS >= 10.x
+yarn >= 1.x
+FFmpeg >= 3.x
+
+https://hub.docker.com/r/linuxserver/ffmpeg
+
+https://hub.docker.com/r/yarnpkg/node-yarn/tags
+
+https://hub.docker.com/_/postgres?tab=description&page=1
+
+https://hub.docker.com/r/marvambass/versatile-postfix
+
+
+
+
+
