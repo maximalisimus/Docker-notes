@@ -21,21 +21,28 @@ services:
     image: adguard/adguardhome
     container_name: adguardhome
     ports:
-      - 53:53/tcp # DNS
-      - 53:53/udp # DNS
-      - 853:853/tcp # DNS
-      - 3123:3000/tcp # DashBoard Setup, do not change 80
-      - 5449:5443/tcp
-      - 3080:80/tcp
-      - 3443:443/tcp
+      - "53:53/tcp" # DNS
+      - "53:53/udp" # DNS
+      - "853:853/tcp" # DNS
+      - "3123:3000/tcp" # DashBoard Setup, do not change 80
+      - "5449:5443/tcp"
+      - "3080:80/tcp"
+      - "3443:443/tcp"
     volumes:
       - ./workdir:/opt/adguardhome/work
       - ./confdir:/opt/adguardhome/conf
     restart: unless-stopped
     networks:
       - adguard_net
+    networks:
+      adguard_net:
+        ipv4_address: 172.20.0.2
 
 networks:
   adguard_net:
     driver: bridge
+    ipam:
+     config:
+       - subnet: 172.20.0.0/16
+         gateway: 172.20.0.1
 
