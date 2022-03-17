@@ -5,9 +5,12 @@ sudo systemctl disable systemd-resolved
 sudo nano /etc/systemd/resolved.conf
 
 [Resolve]
-DNS=1.1.1.1
+DNS=8.8.8.8
+FallbackDNS=8.8.4.4
 DNSStubListener=no
 
+sudo nano /etc/resolv.conf
+nameserver 172.20.0.2
 sudo mv /etc/resolv.conf /etc/resolv.conf.backup
 sudo ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf
 
