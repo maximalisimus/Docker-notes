@@ -34,7 +34,7 @@ docker-compose up -d
 
 
 
-
+docker-compose logs peertube | grep -A1 root
 
 
 
