@@ -54,8 +54,21 @@ peertube._domainkey.mydomain.tld.	IN	TXT	( "v=DKIM1; h=sha256; k=rsa; "
 
 
 
+  volumes:
+      - /home/docker/services/web/peertube/avatars:/PeerTube/avatars
+      - /home/docker/services/web/peertube/certs:/PeerTube/certs
+      - /home/docker/services/web/peertube/videos:/PeerTube/videos
+      - /home/docker/services/web/peertube/logs:/PeerTube/logs
+      - /home/docker/services/web/peertube/previews:/PeerTube/previews
+      - /home/docker/services/web/peertube/thumbnails:/PeerTube/thumbnails
+      - /home/docker/services/web/peertube/torrents:/PeerTube/torrents
 
+	 
+  volumes: # chocobozzz/peertube:production-bullseye
+      - ./config:/config
+	  - ./data:/data
 
+chocobozzz/peertube-webserver:latest
 
 
 
