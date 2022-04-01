@@ -4,6 +4,8 @@
 
 # sudo nano /etc/systemd/resolved.conf
 
+# sudo apt install resolvconf
+
 sudo mkdir /etc/systemd/resolved.conf.d/
 sudo nano /etc/systemd/resolved.conf.d/dns_servers.conf
 
