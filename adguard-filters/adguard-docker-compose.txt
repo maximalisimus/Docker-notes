@@ -28,6 +28,7 @@ sudo mv /etc/resolv.conf /etc/resolv.conf.backup
 sudo ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf
 
 sudo systemctl restart systemd-resolved
+sudo resolvectl status
 
 mkdir adguard && cd adguard
 nano docker-compose.yml
