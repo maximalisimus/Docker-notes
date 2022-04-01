@@ -224,6 +224,36 @@ iptables -I FORWARD 1 -i $EXT_IF -o $INT_IF -d $LAN_IP -p tcp -m tcp --dport $SR
 
 
 
+#!/bin/bash
+EXT_IP="192.168.0.120"      # внешний, реальный IP-адрес шлюза;
+INT_IP="192.168.0.120"      # внутренний IP-адрес шлюза, в локальной сети;
+EXT_IF="enp0s3"             # внешний интерфейс шлюза. Именно ему присвоен сетевой адрес $EXT_IP;
+#INT_IF="eth1"              # внутренний интерфейс шлюза, с адресом $INT_IP;
+FAKE_PORT="53"              # Вначале передаём скрипту порт на внешнем интерфейсе
+FAKE2_PORT="853"            # Вначале передаём скрипту порт на внешнем интерфейсе 2
+LAN_IP="172.20.0.2"         # внутренний IP-адрес сервера.
+SRV_PORT="5353"             # порт службы. Можно просто 53.
+SRV2_PORT="5853"            # порт службы 2. Можно просто 853.
+
+iptables -t nat -A PREROUTING -d $EXT_IP -p tcp -m tcp --dport $FAKE_PORT -j DNAT --to-destination ${LAN_IP}:${SRV_PORT}
+iptables -t nat -A PREROUTING -d $EXT_IP -p udp -m udp --dport $FAKE_PORT -j DNAT --to-destination ${LAN_IP}:${SRV_PORT}
+iptables -t nat -A POSTROUTING -d $LAN_IP -p tcp -m tcp --dport $SRV_PORT -j SNAT --to-source $INT_IP
+iptables -t nat -A POSTROUTING -d $LAN_IP -p udp -m udp --dport $SRV_PORT -j SNAT --to-source $INT_IP
+iptables -t nat -A OUTPUT -d $EXT_IP -p tcp -m tcp --dport $SRV_PORT -j DNAT --to-destination $LAN_IP
+iptables -t nat -A OUTPUT -d $EXT_IP -p udp -m udp --dport $SRV_PORT -j DNAT --to-destination $LAN_IP
+iptables -I FORWARD 1 -i $EXT_IF -d $LAN_IP -p tcp -m tcp --dport $SRV_PORT -j ACCEPT # -o $INT_IF
+iptables -I FORWARD 2 -i $EXT_IF -d $LAN_IP -p udp -m udp --dport $SRV_PORT -j ACCEPT # -o $INT_IF
+
+iptables -t nat -A PREROUTING -d $EXT_IP -p tcp -m tcp --dport $FAKE2_PORT -j DNAT --to-destination ${LAN_IP}:${SRV2_PORT}
+iptables -t nat -A PREROUTING -d $EXT_IP -p udp -m udp --dport $FAKE2_PORT -j DNAT --to-destination ${LAN_IP}:${SRV2_PORT}
+iptables -t nat -A POSTROUTING -d $LAN_IP -p tcp -m tcp --dport $SRV2_PORT -j SNAT --to-source $INT_IP
+iptables -t nat -A POSTROUTING -d $LAN_IP -p udp -m udp --dport $SRV2_PORT -j SNAT --to-source $INT_IP
+iptables -t nat -A OUTPUT -d $EXT_IP -p tcp -m tcp --dport $SRV2_PORT -j DNAT --to-destination $LAN_IP
+iptables -t nat -A OUTPUT -d $EXT_IP -p udp -m udp --dport $SRV2_PORT -j DNAT --to-destination $LAN_IP
+iptables -I FORWARD 3 -i $EXT_IF -d $LAN_IP -p tcp -m tcp --dport $SRV2_PORT -j ACCEPT # -o $INT_IF
+iptables -I FORWARD 4 -i $EXT_IF -d $LAN_IP -p udp -m udp --dport $SRV2_PORT -j ACCEPT # -o $INT_IF
+
+
 
 
 

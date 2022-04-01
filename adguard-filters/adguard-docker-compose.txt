@@ -45,6 +45,7 @@ services:
       - "53:53/tcp" # DNS
       - "53:53/udp" # DNS
       - "853:853/tcp" # DNS
+      - "853:853/udp" # DNS
       - "3123:3000/tcp" # DashBoard Setup, do not change 80
       - "5449:5443/tcp"
       - "3080:80/tcp"
