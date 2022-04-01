@@ -2,7 +2,10 @@
 # sudo systemctl stop systemd-resolved
 # sudo systemctl disable systemd-resolved
 
-sudo nano /etc/systemd/resolved.conf
+# sudo nano /etc/systemd/resolved.conf
+
+sudo mkdir /etc/systemd/resolved.conf.d/
+sudo nano /etc/systemd/resolved.conf.d/dns_servers.conf
 
 [Resolve]
 DNS=172.20.0.2 192.168.0.1 8.8.8.8 8.8.4.4
