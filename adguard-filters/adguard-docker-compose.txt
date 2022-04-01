@@ -1,18 +1,30 @@
 
-sudo systemctl stop systemd-resolved
-sudo systemctl disable systemd-resolved
+# sudo systemctl stop systemd-resolved
+# sudo systemctl disable systemd-resolved
 
 sudo nano /etc/systemd/resolved.conf
 
 [Resolve]
-DNS=8.8.8.8
-FallbackDNS=8.8.4.4
+DNS=172.20.0.2 192.168.0.1 8.8.8.8 8.8.4.4
+FallbackDNS=8.8.8.8 8.8.4.4
+Domains=~.
 DNSStubListener=no
+DNSSEC=true
+DNSOverTLS=yes
 
-sudo nano /etc/resolv.conf
-nameserver 172.20.0.2
+DNS over TLS: DNS=ip_адрес#имя_хоста
+
+[Resolve]
+DNS=9.9.9.9#dns.quad9.net
+DNSOverTLS=yes
+
+
+# sudo nano /etc/resolv.conf
+# nameserver 172.20.0.2
 sudo mv /etc/resolv.conf /etc/resolv.conf.backup
 sudo ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf
+
+sudo systemctl restart systemd-resolved
 
 mkdir adguard && cd adguard
 nano docker-compose.yml
