@@ -1,6 +1,6 @@
 # Dockers
 
-https://github.com/maximalisimus/Dockers.git
+https://github.com/maximalisimus/Dockers-notes.git
 
 Заметки по Docker-ам, сохранённая информация, скрипты, записи, мысли, идеи - от старого до нового.
 
