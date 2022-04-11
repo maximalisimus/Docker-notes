@@ -1,0 +1,8 @@
+
+
+$ sudo apt install npm
+$ npm install composerize -g
+
+# Example:
+$ composerize docker run -d --name tinypin -p 3030:3000 -v "$(pwd)/data:/data" --restart=unless-stopped slynn1324/tinypin
+
