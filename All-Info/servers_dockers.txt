@@ -68,7 +68,7 @@ Next Debian.
 su
 apt update
 apt upgrade
-apt install sudo
+apt install sudo nano net-tools
 nano /etc/sudoers
 
 %sudo ALL=(ALL:ALL) ALL
@@ -79,7 +79,12 @@ gpasswd -a ${USER} sudo
 /sbin/reboot
 
 
-/etc/network/interfaces
+$ nano /etc/sysctl.d/00-sysctl.conf
+vm.swappiness=10
+
+
+
+nano /etc/network/interfaces
 
 allow-hotplug eth0
 auto eth0
