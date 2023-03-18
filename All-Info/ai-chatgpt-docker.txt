@@ -2,6 +2,10 @@
 
 ---
 version: "2.1"
+
+volumes:
+  path_to_appdata:
+
 services:
   ai-chat-app:
     image: ghcr.io/imagegenius/ai-chat-app:latest
