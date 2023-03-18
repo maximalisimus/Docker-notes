@@ -346,6 +346,8 @@ $ sudo ufw status
 $ sudo wg show
 
 $ qrencode -t ansiutf8 < client.conf
+$ qrencode -t png -o client-qr.png -r wg-client.conf
+
 
 
 Example.
