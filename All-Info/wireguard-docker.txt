@@ -287,6 +287,7 @@ PostDown = iptables -D FORWARD -i wg0 -j ACCEPT; iptables -t nat -D POSTROUTING 
 [Peer]
 PublicKey = 2g8MWhxN1QGLAfGwEnxHG38/krdcPbgjo87zSKurP1g=
 AllowedIPs = 10.10.10.2/32
+PersistentKeepAlive = 25
 
 
 
@@ -316,6 +317,7 @@ DNS = 8.8.8.8,8.8.4.4
 PublicKey = xxIV2fvMp7J2H1GxVuQcfVi2TJ0lQ/2K8UXSKC/byhM=
 Endpoint = 192.168.56.101:63665
 AllowedIPs = 0.0.0.0/0,::/0
+PersistentKeepAlive = 25
 
 
 PrivateKey - приватный ключ клиента, сгенерированный ранее;
