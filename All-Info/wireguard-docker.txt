@@ -249,6 +249,10 @@ services:
 sudo echo 'deb http://ftp.debian.org/debian buster-backports main' | sudo tee /etc/apt/sources.list.d/buster-backports.list
 sudo apt update
 sudo apt install wireguard
+sudo apt install qrencode
+# sudo pacman -Sy qrencode
+# sudo dnf install qrencode
+
 
 sudo nano /etc/sysctl.conf
 
@@ -341,6 +345,7 @@ $ sudo ufw status
 
 $ sudo wg show
 
+$ qrencode -t ansiutf8 < client.conf
 
 
 Example.
