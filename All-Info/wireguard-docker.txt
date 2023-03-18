@@ -271,6 +271,8 @@ Client:
 wg genkey | sudo tee client_private.key | wg pubkey | sudo tee client_public.key
 
 sudo nano /etc/wireguard/wg0.conf
+sudo chmod u=rwx,go= /etc/wireguard/wg0.conf
+
 
 Windows:
 C:\Program Files\WireGuard\Data\Configurations
