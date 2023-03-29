@@ -1732,7 +1732,24 @@ Docker registry.
 
 
 
+----------------------------------------------------------------------
 
+mkdir -p ./remotely && cd ./remotely
+nano docker-compose.yml
+
+---
+version: "3.1"
+services:
+  remotely:
+    image: immybot/remotely:latest
+    container_name: remotely
+    ports:
+      - 5000:5000
+    volumes:
+      - ./remotely-data:/remotely-data
+    restart: unless-stopped
+
+sudo docker-compose up -d
 
 
 
