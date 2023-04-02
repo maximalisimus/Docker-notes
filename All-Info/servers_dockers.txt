@@ -453,6 +453,9 @@ services:
 
 
 
+
+--------------------------------------------------
+
 version: "2"
 
 services:
@@ -467,7 +470,37 @@ services:
     restart: unless-stopped
 
 
+--------------------------------------------------
 
+# Generate ADMIN_TOKEN:
+$ openssl rand -base64 48
+# example:
+EeZ4kfsJPxx4sUiPnnOHeSx/HMcivBk/KKT2auZYJIGAZPlMgsJiDKSupJBsdYcU
+
+# Generate INSTALLATION_ID and INSTALLATION_KEY - to your@mail.com on
+https://bitwarden.com/host/
+
+nano docker-compose.yml
+
+---
+version: "2"
+services:
+  bitwardenrs:
+    image: bitwardenrs/server:latest
+    container_name: bitwardenrs
+    environment:
+      - ADMIN_TOKEN=EeZ4kfsJPxx4sUiPnnOHeSx/HMcivBk/KKT2auZYJIGAZPlMgsJiDKSupJBsdYcU
+      - BW_INSTALLATION_ID=INSTALLATION_ID
+      - BW_INSTALLATION_KEY=INSTALLATION_KEY
+      - adminSettings__admins=your@mail.com
+    volumes:
+      - ./bwdata:/data/
+    ports:
+      - 8100:80
+    restart: unless-stopped
+
+
+--------------------------------------------------
 
 
 Nextcloud.
