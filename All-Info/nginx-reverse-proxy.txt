@@ -54,6 +54,56 @@ sudo crontab -l
 
 
 
+HOWTO: A+ with all 100%’s on SSL Labs test using Nginx ...
+
+https://community.letsencrypt.org/t/howto-a-with-all-100-s-on-ssl-labs-test-using-nginx-mainline-stable/55033
+
+
+Example (RSA):
+_ certbot --rsa-key-size 4096 -(other-arguments) _
+
+You’ll need to use ciphers greater than or equal to 256 bit to get 100%
+
+ssl_ciphers TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256: ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES256-GCM-SHA384;
+
+Using Ciphers >=128 bit for best compatibility (Will get 90% in score)
+
+ssl_ciphers TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_128_GCM_SHA256:TLS_AES_128_CCM_8_SHA256:TLS_AES_128_CCM_SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384;
+
+Use ECDH curve >= 256bit ( optional if you are not using ECDHE suite)
+
+ssl_ecdh_curve secp384r1;
+
+Entry level hsts (Just satisified A+)
+add_header Strict-Transport-Security "max-age=63072000;";
+
+Enable OCSP Stapling (Optional)
+ssl_stapling on;
+ssl_stapling_verify on;
+ssl_trusted_certificate your cert path/letsencrypt-full-chain.pem; (the CA&Intermediate CA file for your cert)
+
+Expect CT (Optional)
+Few Usages:
+testing only (With no report uri): add_header Expect-CT "max-age=0";
+testing only (With report-uri) (Please follow the link above for report-uri’s usage) : add_header Expect-CT "max-age 0, report-uri https://{$subdomain}.report-uri.com/r/d/ct/reportOnly ";
+enforce (go for short duration first): add_header Expect-CT "enforce, max-age 30, report-uri https://{$subdomain}.report-uri.com/r/d/ct/reportOnly ";
+
+Add xframe (Optional)
+add_header X-Frame-Options DENY;
+Warning: This will deny all frame for your website. For example: WordPress’s update process page will not work properly (show blank.instead of actual progress)
+
+
+
+
+
+
+
+
+
+
+
+
+
 BitWardenRS:
 
 WEBSOCKET_ENABLED: 'true'
