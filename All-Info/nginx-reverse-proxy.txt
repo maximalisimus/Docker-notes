@@ -41,7 +41,7 @@ nano
 
 # minute (m), hour (h), day of month (dom), month (mon),
 # and day of week (dow) or use '*' in these fields (for 'any').
-0 20 * * 1 certbot renew
+0 20 * * 1 certbot renew --rsa-key-size 4096
 
 CTRL + o
 CTRL + x
