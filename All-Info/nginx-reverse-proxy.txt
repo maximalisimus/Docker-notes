@@ -42,7 +42,7 @@ nano
 # minute (m), hour (h), day of month (dom), month (mon),
 # and day of week (dow) or use '*' in these fields (for 'any').
 # 0 20 * * 1 certbot renew
-0 21 7,28 * * certbot renew --rsa-key-size 4096
+0 21 7,28 * * certbot renew --rsa-key-size 4096 1>>/etc/cron_logs/cron_log.log 2>>/etc/cron_logs/cron_log.log
 
 
 CTRL + o
