@@ -1,0 +1,49 @@
+
+
+If 413 Request Enity Too Large. <<!-- a padding to disable MSIE and Chrome friendly. -->
+
+$ sudo nano /etc/nginx/nginx.conf
+
+
+http {
+	client_max_body_size 100M;
+	client_body_buffer_size 256k;
+	proxy_max_temp_file_size 0;
+
+...
+
+}
+
+Эти строки устанавливают максимальный размер тела запроса, 
+размер буфера тела запроса клиента и размер временного файла, 
+создаваемого nginx при передаче данных.
+
+Отредактируйте файл docker-compose.yml для вашего Bitwarden-сервера и в разделе environment добавьте следующую строку.
+
+$ cd docker-config/bitwarden
+$ nano docker-compose.yml
+
+...
+	environment:
+		- WEBSOCKET_MAX_RECV=100
+...
+
+CTRL + o - Save file
+CTRL + x - end exit
+
+Проверьте конфигурацию nginx, чтобы убедиться, что ошибок нет:
+
+$ sudo nginx -t
+
+Перезапустите nginx, выполнив команду:
+
+sudo systemctl restart nginx
+
+
+
+
+
+
+
+
+
