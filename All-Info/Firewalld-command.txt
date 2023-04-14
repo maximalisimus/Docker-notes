@@ -1,0 +1,99 @@
+
+
+sudo ufw disable
+sudo systemctl stop ufw
+sudo systemctl disable ufw
+sudo apt remove ufw
+
+sudo systemctl stop iptables
+sudo systemctl mask iptables
+sudo systemctl status iptables
+
+sudo apt -y install firewalld
+sudo systemctl enable firewalld
+sudo systemctl start firewalld
+sudo systemctl status firewalld
+
+sudo firewall-cmd --state
+sudo firewall-cmd --reload
+
+sudo firewall-cmd --complete-reload
+
+sudo firewall-cmd --list-all
+
+sudo firewall-cmd --get-active-zones
+
+sudo firewall-cmd --runtime-to-permanent
+
+firewall-cmd --get-zones
+
+sudo firewall-cmd --set-default-zone=home
+
+firewall-cmd --permanent --zone=public --set-target=DROP
+
+sudo firewall-cmd --permanent --new-zone=myadmin
+
+firewall-cmd --permanent --delete-zone=docker
+
+
+sudo nano /etc/sysconfig/network-scripts/ifcfg-eth0
+В конец файла добавьте переменную ZONE= и в качестве значения укажите другую зону, например, home:
+. . .  DNS1=2001:4860:4860::8844  DNS2=2001:4860:4860::8888  DNS3=8.8.8.8  ZONE=home 
+
+sudo systemctl restart network.service
+sudo systemctl restart firewalld.service
+
+
+
+
+firewall-cmd --direct --permanent --add-rule ipv4 filter FORWARD 0 -i ens192 -o ens224 -j ACCEPT
+firewall-cmd --direct --permanent --add-rule ipv4 filter FORWARD 0 -i ens224 -o ens192 -j ACCEPT
+
+firewall-cmd --direct --permanent --add-rule ipv4 filter FORWARD 0 -i ens192 -o ens224 -j ACCEPT
+
+firewall-cmd --direct --permanent --add-rule ipv4 filter FORWARD 0 -i ens192 -o ens224 -j DROP
+firewall-cmd --direct --permanent --add-rule ipv4 filter FORWARD 0 -i ens224 -o ens192 -j DROP
+
+
+
+dhcpv6-client ssh
+
+sudo firewall-cmd --permanent --new-zone=myadmin
+sudo firewall-cmd --permanent --new-zone=mysite
+sudo firewall-cmd --permanent --new-zone=mywg
+sudo firewall-cmd --reload
+
+sudo firewall-cmd --zone=myadmin --add-service=ssh
+sudo firewall-cmd --zone=myadmin --add-service=dhcpv6-client
+sudo firewall-cmd --info-zone=myadmin
+
+sudo firewall-cmd --zone=mysite --add-port=51820/udp
+sudo firewall-cmd --zone=myadmin --add-port=51820/udp
+
+sudo firewall-cmd --zone=mysite --add-interface=eth0
+sudo firewall-cmd --info-zone=mysite
+
+# sudo firewall-cmd --zone=publicweb --change-interface=eth0
+# sudo firewall-cmd --zone=<zone> --add-interface=eth1 --permanent
+# sudo firewall-cmd --add-masquerade --permanent
+# sudo firewall-cmd --permanent --zone=dmz --add-masquerade
+
+# sudo firewall-cmd --direct --permanent --add-rule ipv4 filter FORWARD 0 -i ens192 -o ens224 -j ACCEPT
+# sudo firewall-cmd --direct --permanent --add-rule ipv4 filter FORWARD 0 -i ens224 -o ens192 -j ACCEPT
+
+
+
+
+sudo firewall-cmd --permanent --zone=dmz --add-masquerade
+sudo firewall-cmd --permanent --direct --add-rule ipv4 nat POSTROUTING 0 -o ens33 -j MASQUERADE
+sudo firewall-cmd --direct --permanent --add-rule ipv4 filter FORWARD 0 -i ens32 -o ens33 -j ACCEPT
+sudo firewall-cmd --direct --permanent --add-rule ipv4 filter FORWARD 0 -i ens33 -o ens32 -m state --state RELATED,ESTABLISHED -j ACCEPT
+sudo systemctl restart firewalld
+sudo firewall-cmd --direct --get-all-rules
+
+
+
+
+
+
+

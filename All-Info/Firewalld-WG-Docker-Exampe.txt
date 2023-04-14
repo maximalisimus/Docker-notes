@@ -1,0 +1,123 @@
+
+
+sudo ufw disable
+sudo systemctl stop ufw
+sudo systemctl disable ufw
+sudo apt remove ufw
+
+sudo systemctl stop iptables
+sudo systemctl mask iptables
+sudo systemctl status iptables
+
+sudo apt -y install firewalld
+sudo systemctl enable firewalld
+sudo systemctl start firewalld
+sudo systemctl status firewalld
+
+sudo firewall-cmd --state
+sudo firewall-cmd --reload
+
+sudo firewall-cmd --complete-reload
+
+sudo firewall-cmd --list-all
+
+sudo firewall-cmd --get-active-zones
+
+
+sudo firewall-cmd --permanent --new-zone=mysite
+sudo firewall-cmd --permanent --zone=mysite --add-service=dhcpv6-client
+sudo firewall-cmd --permanent --zone=mysite --add-service=ssh
+sudo firewall-cmd --permanent --zone=mysite --add-port=80/tcp
+sudo firewall-cmd --permanent --zone=mysite --add-port=443/tcp
+sudo firewall-cmd --permanent --zone=mysite --add-port=51820/udp
+sudo firewall-cmd --permanent --zone=mysite --add-masquerade
+#sudo firewall-cmd --permanent --zone=mysite --set-target=DEFAULT
+sudo firewall-cmd --reload
+sudo firewall-cmd --permanent --zone=mysite --add-interface=enp0s3
+sudo firewall-cmd --set-default-zone=mysite
+sudo firewall-cmd --reload
+sudo firewall-cmd --get-default-zone
+sudo firewall-cmd --info-zone=mysite
+sudo firewall-cmd --info-zone=public
+sudo firewall-cmd --get-active-zones
+sudo firewall-cmd --list-all
+
+
+
+sudo firewall-cmd --permanent --new-zone=mywg
+sudo firewall-cmd --reload
+sudo firewall-cmd --permanent --zone=mywg --add-interface=wg0
+sudo firewall-cmd --reload
+sudo firewall-cmd --permanent --direct --add-rule ipv4 nat POSTROUTING 0 -o enp0s3 -j MASQUERADE
+sudo firewall-cmd --direct --permanent --add-rule ipv4 filter FORWARD 0 -i enp0s3 -o wg0 -j ACCEPT
+sudo firewall-cmd --direct --permanent --add-rule ipv4 filter FORWARD 0 -i wg0 -o enp0s3 -m state --state RELATED,ESTABLISHED -j ACCEPT
+sudo systemctl restart firewalld
+sudo firewall-cmd --direct --get-all-rules
+
+sudo firewall-cmd --permanent --zone=mywg --add-service=ssh
+sudo firewall-cmd --permanent --zone=mywg --add-port=9000/tcp
+sudo firewall-cmd --reload
+
+sudo firewall-cmd --info-zone=mywg
+sudo firewall-cmd --info-zone=public
+sudo firewall-cmd --get-active-zones
+
+
+
+
+
+sudo nano /home/mikl/fdcmdconf.sh
+
+#!/bin/bash
+
+sudo firewall-cmd --permanent --delete-zone=docker 2>/dev/null
+sudo firewall-cmd --reload
+
+sudo chmod 700 /home/mikl/fdcmdconf.sh
+sudo chown root:root /home/mikl/fdcmdconf.sh
+
+
+
+sudo nano /etc/systemd/system/fdcmdconf.service
+
+[Unit]
+Description=firewalld configuration
+Wants=firewalld.service
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/home/mikl/fdcmdconf.sh
+
+[Install]
+WantedBy=multi-user.target
+
+
+
+sudo nano /etc/systemd/system/fdcmdconf.timer
+
+[Unit]
+Description=firewalld configuration
+
+[Timer]
+Unit=fdcmdconf.service
+OnBootSec=30s
+OnUnitActiveSec=30s
+AccuracySec=30s
+
+[Install]
+WantedBy=timers.target
+
+
+
+
+
+
+
+
+
+
+
+
+
+
