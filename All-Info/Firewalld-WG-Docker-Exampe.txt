@@ -112,7 +112,32 @@ WantedBy=timers.target
 
 
 
+$ ip a
+br-00aaad17d4b5 br-c2ecab4afa7c docker0
 
+sudo firewall-cmd --info-zone=internal
+sudo firewall-cmd --permanent --zone=internal --add-interface=br-00aaad17d4b5
+sudo firewall-cmd --permanent --zone=internal --add-interface=br-c2ecab4afa7c
+sudo firewall-cmd --permanent --zone=internal --add-interface=docker0
+sudo firewall-cmd --reload
+
+sudo systemctl disable firewalld
+
+sudo nano /etc/systemd/system/firewalld.timer
+
+[Unit]
+Description=Starting Firewalld on after services
+
+[Timer]
+Unit=firewalld.service
+OnBootSec=15s
+OnUnitActiveSec=15s
+AccuracySec=15s
+
+[Install]
+WantedBy=timers.target
+
+sudo systemctl enable firewalld.timer
 
 
 
