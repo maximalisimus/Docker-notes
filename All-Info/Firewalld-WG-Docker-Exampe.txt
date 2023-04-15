@@ -64,54 +64,6 @@ sudo firewall-cmd --get-active-zones
 
 
 
-
-
-sudo nano /home/mikl/fdcmdconf.sh
-
-#!/bin/bash
-
-sudo firewall-cmd --permanent --delete-zone=docker 2>/dev/null
-sudo firewall-cmd --reload
-
-sudo chmod 700 /home/mikl/fdcmdconf.sh
-sudo chown root:root /home/mikl/fdcmdconf.sh
-
-
-
-sudo nano /etc/systemd/system/fdcmdconf.service
-
-[Unit]
-Description=Finished Firewalld configuration
-Wants=firewalld.service
-After=network.target
-
-[Service]
-Type=oneshot
-ExecStart=/home/mikl/fdcmdconf.sh
-
-[Install]
-WantedBy=multi-user.target
-
-
-
-sudo nano /etc/systemd/system/fdcmdconf.timer
-
-[Unit]
-Description=Starting Firewalld configuration
-
-[Timer]
-Unit=fdcmdconf.service
-OnBootSec=30s
-OnUnitActiveSec=30s
-AccuracySec=30s
-
-[Install]
-WantedBy=timers.target
-
-
-
-
-
 $ ip a
 br-00aaad17d4b5 br-c2ecab4afa7c docker0
 
@@ -138,6 +90,54 @@ AccuracySec=15s
 WantedBy=timers.target
 
 sudo systemctl enable firewalld.timer
+
+
+
+
+
+
+
+
+sudo nano /home/mikl/fdcmdconf.sh
+
+#!/bin/bash
+
+sudo firewall-cmd --permanent --delete-zone=docker 2>/dev/null
+sudo firewall-cmd --reload
+
+sudo chmod 700 /home/mikl/fdcmdconf.sh
+sudo chown root:root /home/mikl/fdcmdconf.sh
+
+sudo nano /etc/systemd/system/fdcmdconf.service
+
+[Unit]
+Description=Finished Firewalld configuration
+Wants=firewalld.service
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/home/mikl/fdcmdconf.sh
+
+[Install]
+WantedBy=multi-user.target
+
+sudo nano /etc/systemd/system/fdcmdconf.timer
+
+[Unit]
+Description=Starting Firewalld configuration
+
+[Timer]
+Unit=fdcmdconf.service
+OnBootSec=30s
+OnUnitActiveSec=30s
+AccuracySec=30s
+
+[Install]
+WantedBy=timers.target
+
+
+
 
 
 
