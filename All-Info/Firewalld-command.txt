@@ -52,6 +52,16 @@ firewall-cmd --permanent --direct --add-rule ipv4 filter OUTPUT 1 -j ACCEPT
 
 
 
+sudo firewall-cmd --get-services
+
+dhcp
+dhcpv6
+dns
+dns-over-tls
+
+
+
+
 sudo firewall-cmd --direct --permanent --add-rule ipv4 filter FORWARD 0 -i ens192 -o ens224 -j ACCEPT
 sudo firewall-cmd --direct --permanent --add-rule ipv4 filter FORWARD 0 -i ens224 -o ens192 -j ACCEPT
 

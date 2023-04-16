@@ -25,6 +25,7 @@ sudo firewall-cmd --get-active-zones
 
 
 sudo firewall-cmd --permanent --new-zone=mysite
+sudo firewall-cmd --permanent --zone=mysite --add-service=dhcp
 sudo firewall-cmd --permanent --zone=mysite --add-service=dhcpv6-client
 sudo firewall-cmd --permanent --zone=mysite --add-service=ssh
 sudo firewall-cmd --permanent --zone=mysite --add-port=80/tcp
