@@ -46,6 +46,12 @@ sudo systemctl restart firewalld.service
 
 
 
+firewall-cmd --permanent --direct --add-rule ipv4 filter OUTPUT 0 -p tcp -m tcp --dport=9000 -j DROP
+firewall-cmd --permanent --direct --add-rule ipv4 filter OUTPUT 1 -j ACCEPT
+
+
+
+
 sudo firewall-cmd --direct --permanent --add-rule ipv4 filter FORWARD 0 -i ens192 -o ens224 -j ACCEPT
 sudo firewall-cmd --direct --permanent --add-rule ipv4 filter FORWARD 0 -i ens224 -o ens192 -j ACCEPT
 
