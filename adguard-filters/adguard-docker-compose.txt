@@ -55,8 +55,6 @@ services:
       - ./confdir:/opt/adguardhome/conf
     restart: unless-stopped
     networks:
-      - adguard_net
-    networks:
       adguard_net:
         ipv4_address: 172.20.0.2
 
