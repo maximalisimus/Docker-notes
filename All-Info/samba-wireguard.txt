@@ -1,7 +1,7 @@
 
 mkdir -p /home/mikl/data/www/example.com
 chown -R www-data:www-data /home/mikl/data/www/example.com
-sudo chmod -R 777 /home/mikl/data/www/
+sudo chmod -R 777 /home/mikl/data/www/example.com
 
 sudo nano /etc/nginx/sites-available/example
 
