@@ -1846,7 +1846,52 @@ sudo docker-compose up -d
 
 
 
+--------------------------------------------------
 
+endlessh - Ловушка SSH.
+
+---
+version: "3.4"
+services:
+  endlessh:
+    image: harshavardhanj/endlessh:alpine
+    container_name: endlessh
+    ports:
+      - "22:2222"
+    restart: unless-stopped
+
+--------------------------------------------------
+
+ai-chat-app.
+
+---
+version: "2.1"
+services:
+  ai-chat-app:
+    image: ghcr.io/imagegenius/ai-chat-app:latest
+    container_name: ai-chat-app
+    environment:
+      - PUID=1000
+      - PGID=100
+      - TZ=Europe/Moscow
+      - NEXTAUTH_SECRET=secret_key
+      - NEXTAUTH_URL=https://AUTH_URL
+      - ADMIN_EMAIL=yor-name@mail.ru
+      - ADMIN_PASSWORD=super_pass
+      #- NEXT_PUBLIC_MULTI_USER=1
+      #- EMAIL_SERVER_HOST=smtp.yandex.ru
+      #- EMAIL_SERVER_PORT=465
+      #- EMAIL_SERVER_USER=yor-name@mail.ru
+      #- EMAIL_SERVER_PASSWORD=server_pass
+      #- EMAIL_FROM=yor-name@mail.ru
+    volumes:
+      - ./path_to_appdata:/config
+    ports:
+      - 3000:3000
+    restart: unless-stopped
+
+
+--------------------------------------------------
 
 
 
