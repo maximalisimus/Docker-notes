@@ -36,6 +36,12 @@ sudo apt -y install \
   libapparmor-dev
 Установка conmon: вам нужно установить последнюю версию conmon в вашей системе. Введите данную команду для установки conmon:
 
+-------------------
+
+sudo apt install autoconf automake autotools-dev make cmake gcc golang
+
+-------------------
+
 git clone https://github.com/containers/conmon
 cd conmon
 make
