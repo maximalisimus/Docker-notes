@@ -1,0 +1,139 @@
+
+
+sudo nano /etc/nginx/sites-available/owcl
+
+server {
+	listen 80;
+	server_name example.com;
+	
+	location /{
+	  proxy_pass http://localhost:7070/;
+	  proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header X-Scheme $scheme;
+	  proxy_set_header X-Forwarded-Host $host;
+	  proxy_set_header X-Forwarded-Port $server_port;
+      #proxy_set_header X-Forwarded-Proto https;
+      proxy_set_header X-Forwarded-Proto $scheme;
+      proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Ssl on;
+	}
+	
+	location /.well-known {
+        alias /var/www/example.com;
+    }
+}
+
+sudo ln -s /etc/nginx/sites-available/owcl /etc/nginx/sites-enabled/owcl
+
+sudo systemctl restart nginx
+
+cd docker-config/
+
+sudo systemctl stop fail2ban.timer
+sudo systemctl stop fail2ban
+sudo systemctl stop firewalld.timer
+sudo systemctl stop firewalld
+sudo systemctl restart docker
+
+mkdir -p ./owncloud && cd ./owncloud
+nano docker-compose.yml
+
+version: '3.1'
+
+services:
+
+  owncloud:
+    image: owncloud
+    restart: unless-stopped
+    container_name: owncloud
+    environment:
+      - OWNCLOUD_DOMAIN=localhost:7070
+      - OWNCLOUD_TRUSTED_DOMAINS=localhost:7070
+      - OWNCLOUD_DB_TYPE=mysql
+      - OWNCLOUD_DB_NAME=owncloud
+      - OWNCLOUD_DB_USERNAME=owncloud
+      - OWNCLOUD_DB_PASSWORD=owncloud
+      - OWNCLOUD_DB_HOST=ownsql
+      - OWNCLOUD_ADMIN_USERNAME=admin
+      - OWNCLOUD_ADMIN_PASSWORD=12345678
+      - OWNCLOUD_MYSQL_UTF8MB4=true
+      - OWNCLOUD_REDIS_ENABLED=true
+      - OWNCLOUD_REDIS_HOST=ownredis
+    depends_on:
+      - ownsql
+      - ownredis
+    links:
+      - ownsql
+      - ownredis
+    ports:
+      - 7070:80
+    volumes:
+      - ./html:/var/www/html
+      - ./apps:/var/www/html/apps
+      - ./config:/var/www/html/config
+      - ./data:/var/www/html/data
+      - ./files:/mnt/data
+    healthcheck:
+      test: ["CMD", "/usr/bin/healthcheck"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+  
+  ownsql:
+    image: mariadb:10.6
+    container_name: ownsql
+    restart: unless-stopped
+    command: ["--max-allowed-packet=128M", "--innodb-log-file-size=64M"]
+    environment:
+      MYSQL_ROOT_PASSWORD: 'owncloud'
+      MYSQL_DATABASE: 'owncloud'
+      MYSQL_USER: 'owncloud'
+      MYSQL_PASSWORD: 'owncloud'
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-u", "root", "--password=owncloud"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - ./mysql:/var/lib/mysql
+  
+  ownredis:
+    image: redis:6
+    container_name: ownredis
+    restart: unless-stopped
+    command: ["--databases", "1"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - ./redis:/data
+
+
+
+sudo docker-compose up -d
+sudo systemctl start fail2ban.timer
+sudo systemctl start fail2ban
+sudo systemctl start firewalld.timer
+sudo systemctl start firewalld
+
+
+
+ip a
+sudo firewall-cmd --permanent --zone=internal --add-interface=
+sudo firewall-cmd --reload
+sudo firewall-cmd --info-zone=internal
+
+
+
+
+
+
+
+
+
+
+
+
+
