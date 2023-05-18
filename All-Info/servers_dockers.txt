@@ -322,9 +322,23 @@ services:
     restart: always
     
     
-    
 
 
+-----------------------
+
+
+  volumes:
+    - "/etc/localtime:/etc/localtime:ro"
+    - "/etc/timezone:/etc/timezone:ro"
+
+or
+
+  environment:
+    - TZ=Europe/Moscow
+
+
+
+-----------------------
 
 openssl rand -base64 48
 If3VUCE75QBEbbhervInaHvfJcPC5/g3k4C5gli1hU6BTZfp3mOKTTOEjqhegl1l
