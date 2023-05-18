@@ -131,6 +131,37 @@ sudo firewall-cmd --info-zone=internal
 
 
 
+version: "3"
+services:
+  onlyoffice:
+    image: onlyoffice/documentserver
+    container_name: onlyoffice
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    environment:
+      - JWT_SECRET=secret
+    ports:
+      - 1180:80
+    volumes:
+      - ./DocumentServer/logs:/var/log/onlyoffice
+      - ./DocumentServer/data:/var/www/onlyoffice/Data
+      - ./DocumentServer/lib:/var/lib/onlyoffice
+      - ./DocumentServer/db:/var/lib/postgresql
+
+
+
+git clone https://github.com/ONLYOFFICE/onlyoffice-owncloud.git onlyoffice
+cd onlyoffice
+git submodule update --init --recursive
+chown -R www-data:www-data onlyoffice
+
+./own-data/config/config.php
+
+'onlyoffice' => array (
+    'verify_peer_off' => true
+),
+'allow_local_remote_servers' => true,
 
 
 
