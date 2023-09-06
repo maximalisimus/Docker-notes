@@ -1,0 +1,148 @@
+﻿
+Аутентификация в Nginx при помощи клиентского сертификата
+
+https://halfoff.ru/ru/sysadmin/client-ssl
+
+NGINX letsencrypt.
+
+openssl genrsa -des3 -out ca.key 4096
+openssl req -new -x509 -days 1095 -key ca.key -out ca.crt
+
+# openssl x509 -in ca.crt -noout -text
+
+openssl genrsa -des3 -out user.key 4096
+openssl req -new -key user.key -out user.csr
+openssl x509 -req -days 365 -in user.csr -CA ca.crt -CAkey ca.key -set_serial 01 -out user.crt
+
+openssl pkcs12 -export -out user.pfx -inkey user.key -in user.crt -certfile ca.crt
+
+Nginx
+
+server {
+  listen 80;
+  server_name halfoff.ru;
+  return 301 https://halfoff.ru$request_uri;
+}
+
+server {
+  listen 443 ssl http2;
+  server_name halfoff.ru;
+
+  access_log /var/log/nginx/halfoff.ru.access.log;
+  ssl_protocols TLSv1.2 TLSv1.3;
+
+  # letsencrypt certificate
+  ssl_certificate /etc/letsencrypt/live/halfoff.ru/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/halfoff.ru/privkey.pem;
+
+  # client certificate
+  ssl_client_certificate /etc/nginx/client_certs/ca.crt;
+  # можно включить проверку опционально и обрабатывать далее, возвращая 403
+  ssl_verify_client optional;
+  # либо обязательная проверка сертификата
+  # ssl_verify_client on;
+
+  location / {
+    # вывод 403 при ошибке проверки сертификата клиента
+    if ($ssl_client_verify != SUCCESS) {
+        return 403;
+    }
+
+    proxy_set_header    Host $host;
+    proxy_set_header    X-Real-IP $remote_addr;
+    proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header    X-Forwarded-Proto $scheme;
+
+    proxy_pass          http://halfoff.local:8080;
+    proxy_read_timeout  90;
+
+    # web sockets
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+
+    proxy_redirect      http://halfoff.local:8080 https://halfoff.ru;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+NGINX SELF SIGNED.
+
+openssl req -new -newkey rsa:1024 -nodes -keyout ca.key -x509 -days 500 -subj /C=RU/ST=Moscow/L=Moscow/O=halfoff/OU=User/CN=etc/emailAddress=support@halfoff.ru -out ca.crt
+
+openssl genrsa -des3 -out server.key 1024
+openssl req -new -key server.key -out server.csr
+openssl x509 -req -days 365 -in server.csr -CA ca.crt -CAkey ca.key -set_serial 01 -out server.crt
+
+openssl rsa -in server.key -out server.nopass.key
+
+Nginx
+
+ssl_certificate /etc/nginx/ssl/server.crt;
+ssl_certificate_key /etc/nginx/ssl/server.nopass.key;
+ssl_client_certificate /etc/nginx/ssl/ca.crt;
+ssl_verify_client on;
+
+keepalive_timeout 70;
+fastcgi_param SSL_VERIFIED $ssl_client_verify;
+
+
+Для упрощения выпуска клиентских сертификатов сделаем конфиг:
+
+[ ca ]
+default_ca = CA_CLIENT # по умолчанию использовать CA_CLIENT
+
+[ CA_CLIENT ]
+dir = ./db
+certs = $dir/certs
+new_certs_dir = $dir/newcerts
+
+database = $dir/index.txt
+serial = $dir/serial
+certificate = ./ca.crt
+private_key = ./ca.key
+
+default_days = 365
+default_crl_days = 7
+default_md = md5
+
+policy = policy_anything
+
+[ policy_anything ]
+countryName = optional
+stateOrProvinceName = optional
+localityName = optional
+organizationName = optional
+organizationalUnitName = optional
+commonName = optional
+emailAddress = supplied
+
+
+openssl req -new -newkey rsa:1024 -nodes -keyout client01.key -subj /C=RU/ST=Moscow/L=Moscow/O=halfoff/OU=User/CN=etc/emailAddress=support@halfoff.ru -out client01.csr
+openssl ca -config ca.config -in client01.csr -out client01.crt -batch
+
+openssl pkcs12 -export -in client01.crt -inkey client01.key -certfile ca.crt -out client01.p12 -passout pass:123456qwerty
+
+Проверка сертификата с помощью curl
+
+curl -k --key client.key --cert client1.crt --url "https://halfoff.ru"
+
+
+
+
+
+
+
+
+
+
+
+
