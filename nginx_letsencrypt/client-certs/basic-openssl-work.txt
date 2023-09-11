@@ -1,0 +1,202 @@
+
+
+mkdir -p /root/ca/config
+mkdir -p /root/ca/{RootCA,PersonIntermediateCA,ServerIntermediateCA,CodeIntermediateCA}/{certs,crl,newcerts,private}
+mkdir -p /root/ca/{PersonIntermediateCA,ServerIntermediateCA,CodeIntermediateCA}/csr
+
+chmod 400 /root/ca/RootCA/private
+chmod 400 /root/ca/PersonIntermediateCA/private
+chmod 400 /root/ca/ServerIntermediateCA/private
+chmod 400 /root/ca/CodeIntermediateCA/private
+
+touch /root/ca/config/RootCA.cnf
+touch /root/ca/config/PersonIntermediateCA.cnf cp
+touch /root/ca/config/ServerIntermediateCA.cnf cp 
+touch /root/ca/config/CodeIntermediateCA.cnf
+
+touch /root/ca/RootCA/index.txt
+touch /root/ca/PersonIntermediateCA/index.txt
+touch /root/ca/ServerIntermediateCA/index.txt
+touch /root/ca/CodeIntermediateCA/index.txt
+
+echo 1000 > /root/ca/RootCA/serial
+echo 1A00000000000000 > /root/ca/PersonIntermediateCA/serial
+echo 1B00000000000000 > /root/ca/ServerIntermediateCA/serial
+echo 1C00000000000000 > /root/ca/CodeIntermediateCA/serial
+
+echo 1000 > /root/ca/RootCA/crlnumber
+echo 1FA0000000000000 > /root/ca/PersonIntermediateCA/crlnumber
+echo 1FB0000000000000 > /root/ca/ServerIntermediateCA/crlnumber
+echo 1FC0000000000000 > /root/ca/CodeIntermediateCA/crlnumber
+
+openssl genrsa -aes256 -out /root/ca/RootCA/private/RootCA.key.pem 4096 chmod 400 /root/ca/RootCA/private/RootCA.key.pem
+
+openssl req -config /root/ca/config/RootCA.cnf \
+-key /root/ca/RootCA/private/RootCA.key.pem \
+-new -x509 -days 7300 -sha256 -extensions root_ca \
+-out /root/ca/RootCA/certs/RootCA.cert.pem
+
+chmod 444 /root/ca/RootCA/certs/RootCA.cert.pem
+
+# openssl x509 -noout -text -in /root/ca/RootCA/certs/RootCA.cert.pem
+
+#Создаем приватный ключ 
+openssl genrsa -aes256 \
+-out /root/ca/PersonIntermediateCA/private/PersonIntermediateCA.key.pem 4096
+chmod 400 /root/ca/PersonIntermediateCA/private/PersonIntermediateCA.key.pem
+#Создаем запрос
+openssl req -config /root/ca/config/PersonIntermediateCA.cnf -new -sha256 \
+-key /root/ca/PersonIntermediateCA/private/PersonIntermediateCA.key.pem \
+-out /root/ca/PersonIntermediateCA/csr/PersonIntermediateCA.csr.pem #Создаем подписанный сертификат
+openssl ca -config /root/ca/config/RootCA.cnf -extensions intermediate_ca \
+-days 3650 -notext -md sha256 \
+-in /root/ca/PersonIntermediateCA/csr/PersonIntermediateCA.csr.pem \
+-out /root/ca/PersonIntermediateCA/certs/PersonIntermediateCA.cert.pem
+
+Using configuration from /root/ca/config/RootCA.cnf
+Enter pass phrase for /root/ca/RootCA/private/RootCA.key.pem: secret
+
+Check that the request matches the signature
+Signature ok
+Certificate Details:
+...
+Sign the certificate? [y/n]:y
+1 out of 1 certificate requests certified, commit? [y/n]y
+Write out database with 1 new entries
+Data Base Updated
+
+chmod 444 /root/ca/PersonIntermediateCA/certs/PersonIntermediateCA.cert.pem
+
+#Создаем приватный ключ 
+openssl genrsa -aes256 \
+-out /root/ca/ServerIntermediateCA/private/ServerIntermediateCA.key.pem 4096
+chmod 400 /root/ca/ServerIntermediateCA/private/ServerIntermediateCA.key.pem
+#Создаем запрос
+openssl req -config /root/ca/config/ServerIntermediateCA.cnf -new -sha256 \
+-key /root/ca/ServerIntermediateCA/private/ServerIntermediateCA.key.pem \ 
+-out /root/ca/ServerIntermediateCA/csr/ServerIntermediateCA.csr.pem 
+
+#Создаем подписанный сертификат
+openssl ca -config /root/ca/config/RootCA.cnf -extensions intermediate_ca \
+-days 3650 -notext -md sha256 \
+-in /root/ca/ServerIntermediateCA/csr/ServerIntermediateCA.csr.pem \
+-out /root/ca/ServerIntermediateCA/certs/ServerIntermediateCA.cert.pem
+
+Using configuration from /root/ca/config/RootCA.cnf
+Enter pass phrase for /root/ca/RootCA/private/RootCA.key.pem: secret
+
+Check that the request matches the signature
+Signature ok
+Certificate Details:
+...
+Sign the certificate? [y/n]:y
+1 out of 1 certificate requests certified, commit? [y/n]y
+Write out database with 1 new entries
+Data Base Updated
+
+chmod 444 /root/ca/ServerIntermediateCA/certs/ServerIntermediateCA.cert.pem
+
+#Создаем приватный ключ 
+openssl genrsa -aes256 \
+-out /root/ca/CodeIntermediateCA/private/CodeIntermediateCA.key.pem 4096
+chmod 400 /root/ca/CodeIntermediateCA/private/CodeIntermediateCA.key.pem
+#Создаем запрос
+openssl req -config /root/ca/config/CodeIntermediateCA.cnf -new -sha256 \
+-key /root/ca/CodeIntermediateCA/private/CodeIntermediateCA.key.pem \ 
+-out /root/ca/CodeIntermediateCA/csr/CodeIntermediateCA.csr.pem 
+
+#Создаем подписанный сертификат
+openssl ca -config /root/ca/config/RootCA.cnf -extensions intermediate_ca \
+-days 3650 -notext -md sha256 \
+-in /root/ca/CodeIntermediateCA/csr/CodeIntermediateCA.csr.pem \
+-out /root/ca/CodeIntermediateCA/certs/CodeIntermediateCA.cert.pem
+
+Using configuration from /root/ca/config/RootCA.cnf
+Enter pass phrase for /root/ca/RootCA/private/RootCA.key.pem: secret
+
+Check that the request matches the signature
+Signature ok
+Certificate Details:
+...
+Sign the certificate? [y/n]:y
+1 out of 1 certificate requests certified, commit? [y/n]y
+Write out database with 1 new entries
+Data Base Updated
+
+chmod 444 /root/ca/CodeIntermediateCA/certs/CodeIntermediateCA.cert.pem
+
+openssl verify -CAfile /root/ca/RootCA/certs/RootCA.cert.pem \ /root/ca/PersonIntermediateCA/certs/PersonIntermediateCA.cert.pem
+#result: /root/ca/PersonIntermediateCA/certs/PersonIntermediateCA.cert.pem: OK
+
+certificate chain — эта цепочка нам нужна, когда у клиента нет корневого, или промежуточного сертификата.
+
+Если в AD мы ничего не добавили, то клиенту нужна связка конечный+промежуточный+корневой.
+Если мы добавим в AD только корневой сертификат, то certificate chain нам нужен в связке конечный+промежуточный.
+Если в AD добавлены и промежуточный сертификаты, то certificate chain нам не нужен
+
+cat /root/ca/PersonIntermediateCA/certs/PersonIntermediateCA.cert.pem \
+/root/ca/RootCA/certs/RootCA.cert.pem > /root/ca/PersonIntermediateCA/certs/ca-chain.cert.pem
+chmod 444 /root/ca/PersonIntermediateCA/certs/ca-chain.cert.pem
+
+cat /root/ca/CodeIntermediateCA/certs/CodeIntermediateCA.cert.pem \
+/root/ca/RootCA/certs/RootCA.cert.pem > /root/ca/CodeIntermediateCA/certs/ca-chain.cert.pem
+chmod 444 /root/ca/CodeIntermediateCA/certs/ca-chain.cert.pem cat
+
+/root/ca/ServerIntermediateCA/certs/ServerIntermediateCA.cert.pem \
+/root/ca/RootCA/certs/RootCA.cert.pem > /root/ca/ServerIntermediateCA/certs/ca-chain.cert.pem
+chmod 444 /root/ca/ServerIntermediateCA/certs/ca-chain.cert.pem
+
+Создадим по одному сертификату для каждого подразделения
+
+Клиент (используем -extensions user_cert)
+
+openssl genrsa -aes256 -out /root/ca/PersonIntermediateCA/private/User1.key.pem 2048
+chmod 400 /root/ca/PersonIntermediateCA/private/User1.key.pem
+
+openssl req -config /root/ca/config/PersonIntermediateCA.cnf \
+	-key /root/ca/PersonIntermediateCA/private/User1.key.pem \
+	-new -sha256 -out /root/ca/PersonIntermediateCA/csr/User1.csr.pem
+
+openssl ca -config /root/ca/config/PersonIntermediateCA.cnf \
+	-extensions user_cert -days 375 -notext -md sha256 \
+	-in /root/ca/PersonIntermediateCA/csr/User1.csr.pem \
+	-out /root/ca/PersonIntermediateCA/certs/User1.cert.pem
+chmod 444 /root/ca/PersonIntermediateCA/certs/User1.cert.pem
+
+Сервер (используем -extensions server_cert)
+
+openssl genrsa -aes256 -out /root/ca/ServerIntermediateCA/private/certservice.info.key.pem 2048
+chmod 400 /root/ca/ServerIntermediateCA/private/certservice.info.key.pem
+
+openssl req -config /root/ca/config/ServerIntermediateCA.cnf \
+	-key /root/ca/ServerIntermediateCA/private/certservice.info.key.pem \
+	-new -sha256 -out /root/ca/ServerIntermediateCA/csr/certservice.info.csr.pem
+
+openssl ca -config /root/ca/config/ServerIntermediateCA.cnf \
+	-extensions server_cert -days 375 -notext -md sha256 \
+	-in /root/ca/ServerIntermediateCA/csr/certservice.info.csr.pem \
+	-out /root/ca/ServerIntermediateCA/certs/certservice.info.cert.pem
+
+chmod 444 /root/ca/ServerIntermediateCA/certs/certservice.info.cert.pem
+
+#для веб-вервера убираем пароль с приватного ключа
+openssl rsa -in /root/ca/ServerIntermediateCA/private/certservice.info.key.pem -out /root/ca/ServerIntermediateCA/private/certservice.info.keynopass.pem
+chmod 400 /root/ca/ServerIntermediateCA/private/certservice.info.keynopass.pem
+
+Для кода (используем -extensions code_cert)
+
+openssl genrsa -aes256 -out /root/ca/CodeIntermediateCA/private/Calculator.key.pem 2048
+chmod 400 /root/ca/CodeIntermediateCA/private/Calculator.key.pem
+
+openssl req -config /root/ca/config/CodeIntermediateCA.cnf \
+	-key /root/ca/CodeIntermediateCA/private/Calculator.key.pem \
+	-new -sha256 -out /root/ca/CodeIntermediateCA/csr/Calculator.csr.pem
+
+openssl ca -config /root/ca/config/CodeIntermediateCA.cnf \
+	-extensions code_cert -days 375 -notext -md sha256 \
+	-in /root/ca/CodeIntermediateCA/csr/Calculator.csr.pem \
+	-out /root/ca/CodeIntermediateCA/certs/Calculator.cert.pem
+chmod 444 /root/ca/CodeIntermediateCA/certs/Calculator.cert.pem
+
+
+

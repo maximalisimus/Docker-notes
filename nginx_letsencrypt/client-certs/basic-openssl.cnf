@@ -1,0 +1,222 @@
+[ ca ] 
+default_ca = CA_default
+
+[ CA_default ]
+# Переменные указывающие директории, нам это пригодиться в конфиге
+# (чтоб не редактировать в ста местах)
+
+# это исключительно наша переменная, для того, чтоб сэкономить нам время. 
+# Тут мы укажем пусть до основной директории того ЦС, для которого конфигурация будет предназначена;
+dir = /root/ca/RootCA
+# эта переменная для сертификатов, ей мы указываем нашу папку;
+certs = $dir/certs
+# аналогично certs (в разных версиях OpenSSL разные переменные для сертификатов), поэтому указываем обе
+new_certs_dir = $certs
+# в эту переменную передаем место нашей приватной директории, 
+# в описании директорий, мы уже говорили, что тут храним приватные ключи
+private = $dir/certs
+# путь к директории отозванных сертификатов
+crl_dir = $dir/crl
+# файл serial
+serial = $dir/serial
+# текстовая база данных, index.txt
+database = $dir/index.txt
+# случайный файл для случайных данных
+RANDFILE = $dir/private/.rand
+
+# путь и имена файлов приватного ключа и сертификата, соответственно
+private_key = $private/RootCA.key.pem
+certificate = $certs/RootCA.cert.pem
+
+# путь к файлу с серийным номером для отзыва
+crlnumber = $dir/crlnumber
+# файл отозванных сертификатов
+crl = $crl_dir/RootCA.crl.pem
+# расширение, которые вызывается при crl
+crl_extensions = crl_ext
+# количество дней до нового CRL
+default_crl_days = 30
+
+# используемый алгоритм хеширования
+default_md = sha256
+
+# отвечают за вывод и формат вывода информации по проверяемому сертификату
+name_opt = ca_default
+cert_opt = ca_default
+
+# сколько дней будет сертификат действителен
+default_days = 365
+# заставляем конечный сертификат совпадать порядком полей с корневым (или промежуточным)
+preserve = no
+# политика для подписи сертификата
+policy = policy_root
+
+# [ section ]
+# ...Name = match — Обязательное заполнение, полное совпадение с Root CA
+# ...Name = supplied — Обязательное заполнение, не обязательно совпадение с Root CA
+# ...Name = optional — Не обязательное поле для заполнения
+
+[ policy_root ]
+countryName = match
+stateOrProvinceName = match
+organizationName = match
+organizationalUnitName = supplied
+commonName = supplied
+emailAddress = optional
+subjectAltName = optional
+
+[ policy_user ]
+countryName = optional
+stateOrProvinceName = optional
+localityName = optional
+organizationName = match
+organizationalUnitName = optional
+commonName = supplied
+emailAddress = supplied
+subjectAltName = supplied
+
+# Параметры из раздела [req] применяются при создании сертификатов или запросов на подпись сертификата.
+[ req ]
+# размер ключа RSA по умолчанию
+default_bits = 4096
+# этот параметр вызовет секцию, в которой перечислены параметры для сертификата
+distinguished_name = req_distinguished_name
+# в какой кодировке будет наш текст в сертификате
+string_mask = utf8only
+# тот же алгоритм хеширования
+default_md = sha256
+
+# секция, которая будет использована, когда будет указан параметр x509
+x509_extensions = root_ca
+
+[ req_distinguished_name ]
+# страна, код страны A2 (ISO) www.worldatlas.com/aatlas/ctycodes.htm ;
+countryName = Country Name (2 letter code) (C)
+countryName_min = 2
+countryName_max = 2
+countryName_default = RU
+
+# Название штата или провинции
+stateOrProvinceName = State or Province Name (S)
+stateOrProvinceName_default = Krasnoyarskiy kray
+
+# Город
+localityName = Locality Name (L)
+localityName_default = Norilsk
+
+# название организации
+0.organizationName = Organization Name (O)
+0.organizationName_default = CertService
+
+# отдел\департамент организации
+organizationalUnitName = Organizational Unit Name (OU) organizationalUnitName_default = CertService. IT-Department.
+
+# ип адрес. для ПО – название приложения, для пользователя – ФИО. Для корневого и промежуточного их название
+commonName = Common Name (CN)
+#commonName_default = CertService.info
+
+# почта
+emailAddress = Email Address
+emailAddress_max = 60
+#emailAddress_default = support@CertService.info
+
+# альтернативное название (другие домены, почты и т.д.)
+subjectAltName = Alternative DNS names (comma seperated list)
+#subjectAltName_default = DNS:www.CertService.info
+
+# _default – задает значение по умолчанию;
+
+# Расширения
+[ root_ca ]
+# идентификатор субъекта. Может быть шестнадцатеричной строкой (hex), либо хешем (hash)
+subjectKeyIdentifier = hash
+# этот параметр допускает всего два значения keyid и issuer. 
+# Keyid – копирует идентификатор ключевого слова из родительского, 
+# если не получается получить и стоит always, то вернется ошибка. 
+# Issuer копирует issuer(подписанта) и серийный номер из сертификата, которым подписан. 
+# Он работает, только в том случае, если не работает keyid
+authorityKeyIdentifier = keyid:always,issuer
+# если true, то разрешает быть issuer’ом, false – нет 
+# (для уточнения: issuer – эмитет (подписант), т.е. может подписывать сертификаты)
+basicConstraints = critical, CA:true
+
+# что может делать сертификат;
+keyUsage = critical, digitalSignature, cRLSign, keyCertSign
+
+# Значение ключа keyUsage|Описание
+# — — serverAuth Аутентификация веб-сервера SSL / TLS.
+# clientAuth Аутентификация веб-клиента SSL / TLS.
+# codeSigning Подписание кода.
+# emailProtection Защита электронной почты (S / MIME).
+# timeStamping Доверенная отметка времени.
+# msCodeInd Microsoft Индивидуальная подмена кода (аутентификация).
+# msCodeCom Microsoft Подписание коммерческого кода (аутентификация).
+# msCTLSign Microsoft Доверенный лист подписей.
+# msSGC Microsoft Сервер криптографической защиты.
+# msEFS Microsoft Шифрование файловой системы.
+# nsSGC Netscape Server Gated Crypto.
+
+# Для промежуточных сертификатов
+# [ intermediate_ca ]
+# subjectKeyIdentifier = hash
+# authorityKeyIdentifier = keyid:always,issuer
+# basicConstraints = critical, CA:true, pathlen:0
+# keyUsage = critical, digitalSignature, cRLSign, keyCertSign
+# Параметр basicConstraints содержит «pathlen:0». 
+# pathlen указывает максимальное количество ЦС, 
+# которые могут появляться ниже этого в цепочке. 
+# Поэтому, если у вас есть ЦС с нулевой точкой, 
+# он может использоваться только для подписывания 
+# сертификатов конечных пользователей, а не для дальнейших ЦС.
+
+# То есть, если вы хотите создать промежуточные сертификаты отделам, 
+# а потом пользователям, то pathlen должен будет быть равен 1, 
+# и также рекомендую создать расширение для таких сертификатов 
+# с параметром равным нулю.
+
+# Для конечных сертификатов
+# Клиентские (для аутентификации и почты)
+[ user_cert ]
+# Пользовательский (для аутентификации и почты
+basicConstraints = CA:FALSE
+# тип сертификата. Допустимые значения: client, server, email, objsign, reserved, sslCA, emailCA, objCA
+nsCertType = client, email
+# комментарий к сертификату
+nsComment = "Client certificates"
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid,issuer
+keyUsage = critical, nonRepudiation, digitalSignature, keyEncipherment extendedKeyUsage = clientAuth, emailProtection
+
+# Серверные
+[ server_cert ]
+# Серверный
+basicConstraints = CA:FALSE
+nsCertType = server
+nsComment = "Server Certificate"
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid,issuer:always
+keyUsage = critical, digitalSignature, keyEncipherment
+extendedKeyUsage = serverAuth
+
+# Для подписи кода
+[ code_cert ]
+# Для подписи кода
+basicConstraints = CA:FALSE
+nsCertType = server
+nsComment = "Code Certificate"
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid,issuer:always
+keyUsage = digitalSignature
+extendedKeyUsage = codeSigning, msCodeInd, msCodeCom
+
+[ crl_ext ]
+# Для отзыва сертификатов
+authorityKeyIdentifier=keyid:always
+
+[ ocsp ]
+# Для OCSP (Online Certificate Status Protocol)
+basicConstraints = CA:FALSE
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid,issuer
+keyUsage = critical, digitalSignature
+extendedKeyUsage = critical, OCSPSigning
