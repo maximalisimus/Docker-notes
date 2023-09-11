@@ -157,11 +157,11 @@ keyUsage = critical, digitalSignature, cRLSign, keyCertSign
 # nsSGC Netscape Server Gated Crypto.
 
 # Для промежуточных сертификатов
-# [ intermediate_ca ]
-# subjectKeyIdentifier = hash
-# authorityKeyIdentifier = keyid:always,issuer
-# basicConstraints = critical, CA:true, pathlen:0
-# keyUsage = critical, digitalSignature, cRLSign, keyCertSign
+[ intermediate_ca ]
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid:always,issuer
+basicConstraints = critical, CA:true, pathlen:0
+keyUsage = critical, digitalSignature, cRLSign, keyCertSign
 # Параметр basicConstraints содержит «pathlen:0». 
 # pathlen указывает максимальное количество ЦС, 
 # которые могут появляться ниже этого в цепочке. 
