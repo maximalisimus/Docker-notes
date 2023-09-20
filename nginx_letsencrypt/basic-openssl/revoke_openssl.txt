@@ -1,0 +1,285 @@
+
+
+https://www.golinuxcloud.com/revoke-certificate-generate-crl-openssl/
+
+Revoke certificate and generate CRL OpenSSL [Step-by-Step]
+
+Create directory structure
+
+[root@controller ~]# mkdir /root/tls; cd /root/tls
+[root@controller tls]# mkdir certs private crl
+[root@controller tls]# touch index.txt serial
+[root@controller tls]# touch crlnumber
+[root@controller tls]# echo 01 &gt; serial
+[root@controller tls]# echo 1000 &gt; crlnumber
+
+
+
+-----------------------------------------------------------------------------------------
+
+[ ca ]
+default_ca      = CA_default            # The default ca section
+
+[ CA_default ]
+dir             = /root/tls             # Where everything is kept
+certs           = $dir/certs            # Where the issued certs are kept
+crl_dir         = $dir/crl              # Where the issued crl are kept
+database        = $dir/index.txt        # database index file.
+new_certs_dir   = $dir/certs            # default place for new certs.
+certificate     = $dir/certs/cacert.pem         # The CA certificate
+serial          = $dir/serial           # The current serial number
+crlnumber       = $dir/crlnumber        # the current crl number
+crl             = $dir/crl.pem          # The current CRL
+private_key     = $dir/private/cakey.pem # The private key
+x509_extensions = v3_ca                 # The extensions to add to the cert
+name_opt        = ca_default            # Subject Name options
+cert_opt        = ca_default            # Certificate field options
+
+# crlnumber must also be commented out to leave a V1 CRL.
+ crl_extensions = crl_ext
+
+default_days    = 365                   # how long to certify for
+default_crl_days= 30                    # how long before next CRL
+default_md      = sha256                # use SHA-256 by default
+preserve        = no                    # keep passed DN ordering
+
+policy          = policy_match
+
+# For the CA policy
+[ policy_match ]
+countryName             = optional
+stateOrProvinceName     = optional
+organizationName        = optional
+organizationalUnitName  = optional
+commonName              = supplied
+emailAddress            = optional
+
+####################################################################
+[ req ]
+default_bits            = 2048
+default_md              = sha256
+default_keyfile         = privkey.pem
+distinguished_name      = req_distinguished_name
+attributes              = req_attributes
+x509_extensions = v3_ca # The extensions to add to the self signed cert
+
+[ req_distinguished_name ]
+countryName                     = Country Name (2 letter code)
+countryName_default             = IN
+stateOrProvinceName             = State or Province Name (full name)
+stateOrProvinceName_default     = Karnataka
+localityName                    = Locality Name (eg, city)
+localityName_default            = Bengaluru
+0.organizationName              = Organization Name (eg, company)
+0.organizationName_default      = GoLinuxCloud
+organizationalUnitName          = Organizational Unit Name (eg, section)
+organizationalUnitName_default  = Admin
+
+commonName                      = Common Name (eg, your name or your server\'s hostname)
+commonName_max                  = 64
+
+emailAddress                    = Email Address
+emailAddress_max                = 64
+
+[ req_attributes ]
+challengePassword               = A challenge password
+challengePassword_min           = 4
+challengePassword_max           = 20
+unstructuredName                = An optional company name
+
+[ v3_req ]
+# Extensions to add to a certificate request
+basicConstraints = CA:FALSE
+keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+
+[ v3_ca ]
+# Extensions for a typical CA
+# PKIX recommendation.
+subjectKeyIdentifier=hash
+authorityKeyIdentifier=keyid:always,issuer
+basicConstraints = critical,CA:true
+
+[ crl_ext ]
+# CRL extensions.
+# Only issuerAltName and authorityKeyIdentifier make any sense in a CRL.
+authorityKeyIdentifier=keyid:always
+
+-----------------------------------------------------------------------------------------
+
+## navigate inside your tls path
+cd /root/tls
+
+## generate rootca private key
+openssl genrsa  -out private/cakey.pem 4096
+
+## generate rootCA certificate
+openssl req -new -x509 -days 3650  -config openssl.cnf  -key private/cakey.pem -out certs/cacert.pem
+
+## Verify the rootCA certificate content and X.509 extensions
+openssl x509 -noout -text -in certs/cacert.pem
+
+## navigate to /certs folder where we will store the certificates
+cd /certs
+
+## generate server private key
+openssl genrsa -out server.key.pem 4096
+
+## generate certificate signing request
+openssl req -new -key server-1.key.pem -out server-1.csr
+
+## generate and sign the server certificate using rootca certificate
+openssl ca -config /root/tls/openssl.cnf -notext -batch -in server-1.csr -out server-1.crt -extfile ext_template.cnf
+
+Following is the content of ext_template.cnf which contains the X,509 extension to be used for the server certificate:
+
+basicConstraints = CA:FALSE
+nsCertType = client, email
+nsComment = "OpenSSL Generated Client Certificate"
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid,issuer
+keyUsage = critical, nonRepudiation, digitalSignature, keyEncipherment
+extendedKeyUsage = clientAuth, serverAuth
+
+[root@controller certs]# cat /root/tls/index.txt
+V       220904031732Z           01      unknown /C=IN/ST=Karnataka/O=GoLinuxCloud/OU=Admin/CN=server-1.example.com
+V       220904031929Z           02      unknown /C=IN/ST=Karnataka/O=GoLinuxCloud/OU=Admin/CN=server-2.example.com
+V       220904032019Z           03      unknown /C=IN/ST=karnataka/O=golinuxcloud/OU=Admin/CN=server-3.example.com
+V       220904040850Z           04      unknown /C=IN/ST=Karnataka/O=golinuxcloud/OU=admin/CN=server-4.example.com
+V       220904042808Z           05      unknown /C=IN/ST=karnataka/O=golinuxcloud/OU=admin/CN=server-5.example.com
+
+
+[root@controller certs]# openssl ca -config /root/tls/openssl.cnf -revoke /certs/server-1.crt
+Using configuration from /root/tls/openssl.cnf
+Revoking Certificate 01.
+Data Base Updated
+
+[root@controller certs]# cat /root/tls/index.txt
+R       220904031732Z   210904032109Z   01      unknown /C=IN/ST=Karnataka/O=GoLinuxCloud/OU=Admin/CN=server-1.example.com
+V       220904031929Z           02      unknown /C=IN/ST=Karnataka/O=GoLinuxCloud/OU=Admin/CN=server-2.example.com
+V       220904032019Z           03      unknown /C=IN/ST=karnataka/O=golinuxcloud/OU=Admin/CN=server-3.example.com
+V       220904040850Z           04      unknown /C=IN/ST=Karnataka/O=golinuxcloud/OU=admin/CN=server-4.example.com
+V       220904042808Z           05      unknown /C=IN/ST=karnataka/O=golinuxcloud/OU=admin/CN=server-5.example.com
+
+[root@controller certs]# openssl ca -config /root/tls/openssl.cnf -gencrl -out /root/tls/crl/rootca.crl
+Using configuration from /root/tls/openssl.cnf
+
+[root@controller certs]# openssl crl -in /root/tls/crl/rootca.crl -text -noout
+Certificate Revocation List (CRL):
+        Version 2 (0x1)
+        Signature Algorithm: sha256WithRSAEncryption
+        Issuer: C = IN, ST = Karnataka, L = Bengaluru, O = GoLinuxCloud, OU = Admin, CN = rootca.com
+        Last Update: Sep  4 03:22:06 2021 GMT
+        Next Update: Oct  4 03:22:06 2021 GMT
+        CRL extensions:
+            X509v3 CRL Number:
+                4096
+Revoked Certificates:
+    Serial Number: 01
+        Revocation Date: Sep  4 03:21:09 2021 GMT
+    Signature Algorithm: sha256WithRSAEncryption
+...
+
+[root@controller tls]# cat crlnumber
+1001
+
+[root@controller tls]# cat certs/cacert.pem crl/rootca.crl > /tmp/test.pem
+
+[root@controller tls]# openssl verify -extended_crl -verbose -CAfile /tmp/test.pem -crl_check /certs/server-1.crt
+C = IN, ST = Karnataka, O = GoLinuxCloud, OU = Admin, CN = server-1.example.com
+error 23 at 0 depth lookup: certificate revoked
+error /certs/server-1.crt: verification failed
+
+[root@controller tls]# openssl verify -extended_crl -verbose -CAfile /tmp/test.pem -crl_check /certs/server-2.crt
+/certs/server-2.crt: OK
+
+[root@controller certs]# openssl ca -config /root/tls/openssl.cnf -revoke /certs/server-2.crt
+Using configuration from /root/tls/openssl.cnf
+Revoking Certificate 02.
+Data Base Updated
+
+[root@controller tls]# cat index.txt
+R       220904031732Z   210904032109Z   01      unknown /C=IN/ST=Karnataka/O=GoLinuxCloud/OU=Admin/CN=server-1.example.com
+R       220904031929Z   210904033301Z   02      unknown /C=IN/ST=Karnataka/O=GoLinuxCloud/OU=Admin/CN=server-2.example.com
+V       220904032019Z           03      unknown /C=IN/ST=karnataka/O=golinuxcloud/OU=Admin/CN=server-3.example.com
+V       220904040850Z           04      unknown /C=IN/ST=Karnataka/O=golinuxcloud/OU=admin/CN=server-4.example.com
+V       220904042808Z           05      unknown /C=IN/ST=karnataka/O=golinuxcloud/OU=admin/CN=server-5.example.com
+
+[root@controller tls]# openssl ca -config /root/tls/openssl.cnf -gencrl -out /root/tls/crl/rootca.crl
+Using configuration from /root/tls/openssl.cnf
+
+[root@controller tls]# openssl crl -in /root/tls/crl/rootca.crl -text -noout
+Certificate Revocation List (CRL):
+        Version 2 (0x1)
+        Signature Algorithm: sha256WithRSAEncryption
+        Issuer: C = IN, ST = Karnataka, L = Bengaluru, O = GoLinuxCloud, OU = Admin, CN = rootca.com
+        Last Update: Sep  4 03:33:57 2021 GMT
+        Next Update: Oct  4 03:33:57 2021 GMT
+        CRL extensions:
+            X509v3 CRL Number:
+                4099
+Revoked Certificates:
+    Serial Number: 01
+        Revocation Date: Sep  4 03:21:09 2021 GMT
+    Serial Number: 02
+        Revocation Date: Sep  4 03:33:01 2021 GMT
+    Signature Algorithm: sha256WithRSAEncryption
+...
+
+[root@controller tls]# openssl verify -extended_crl -verbose -CAfile /tmp/test.pem -crl_check /certs/server-2.crt
+/certs/server-2.crt: OK
+
+[root@controller tls]# cat certs/cacert.pem crl/rootca.crl > /tmp/test.pem
+
+[root@controller tls]# openssl verify -extended_crl -verbose -CAfile /tmp/test.pem -crl_check /certs/server-2.crt
+C = IN, ST = Karnataka, O = GoLinuxCloud, OU = Admin, CN = server-2.example.com
+error 23 at 0 depth lookup: certificate revoked
+
+default_days    = 365                   # how long to certify for
+default_crl_days= 30                    # how long before next CRL
+default_md      = sha256                # use SHA-256 by default
+
+[root@controller tls]# faketime '2021-12-24 08:15:42' openssl verify -extended_crl  -CAfile /tmp/test.pem -crl_check /certs/server-5.crt
+C = IN, ST = karnataka, O = golinuxcloud, OU = admin, CN = server-5.example.com
+error 12 at 0 depth lookup: CRL has expired
+error /certs/server-5.crt: verification failed
+
+
+
+
+
+
+
+
+
+
+-----------------------------------------------------------------------------------------
+
+
+
+openssl ca -config /root/tls/openssl.cnf -revoke /certs/server-1.crt
+openssl ca -config /root/tls/openssl.cnf -gencrl -out /root/tls/crl/rootca.crl
+openssl crl -in /root/tls/crl/rootca.crl -text -noout
+cat certs/cacert.pem crl/rootca.crl > /tmp/test.pem
+openssl verify -extended_crl -verbose -CAfile /tmp/test.pem -crl_check /certs/server-1.crt
+openssl verify -extended_crl -verbose -CAfile /tmp/test.pem -crl_check /certs/server-2.crt
+openssl ca -config /root/tls/openssl.cnf -revoke /certs/server-2.crt
+openssl ca -config /root/tls/openssl.cnf -gencrl -out /root/tls/crl/rootca.crl
+openssl crl -in /root/tls/crl/rootca.crl -text -noout
+openssl verify -extended_crl -verbose -CAfile /tmp/test.pem -crl_check /certs/server-2.crt
+cat certs/cacert.pem crl/rootca.crl > /tmp/test.pem
+openssl verify -extended_crl -verbose -CAfile /tmp/test.pem -crl_check /certs/server-2.crt
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
