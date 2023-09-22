@@ -1,4 +1,9 @@
 ﻿
+
+openssl dhparam -out dhparam.pem 4096
+
+
+
 Аутентификация в Nginx при помощи клиентского сертификата
 
 https://halfoff.ru/ru/sysadmin/client-ssl
