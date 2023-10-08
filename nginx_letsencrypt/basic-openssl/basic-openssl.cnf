@@ -123,6 +123,7 @@ emailAddress_max = 60
 # альтернативное название (другие домены, почты и т.д.)
 subjectAltName = Alternative DNS names (comma seperated list)
 #subjectAltName_default = DNS:www.CertService.info
+#subjectAltName_default = DNS:domain1.com,domain2.ru,domain3.en
 
 # _default – задает значение по умолчанию;
 
@@ -155,6 +156,9 @@ keyUsage = critical, digitalSignature, cRLSign, keyCertSign
 # msSGC Microsoft Сервер криптографической защиты.
 # msEFS Microsoft Шифрование файловой системы.
 # nsSGC Netscape Server Gated Crypto.
+# nonRepudiation неотказуемость (если ключом что-то подписали то аннулировать подпись невозможно)
+# digitalSignature цифровая подпись (сертификат можно использовать в качестве цифровой подписи)
+# keyEncipherment шифрование ключей (сертификат можно использовать для симметричного шифрования)
 
 # Для промежуточных сертификатов
 [ intermediate_ca ]
