@@ -216,6 +216,11 @@ extendedKeyUsage = codeSigning, msCodeInd, msCodeCom
 [ crl_ext ]
 # Для отзыва сертификатов
 authorityKeyIdentifier=keyid:always
+# authorityKeyIdentifier   = keyid:always,issuer
+# Когда центр сертификации подписывает сертификат, 
+# он обычно кодирует местоположение CRL в сертификате. 
+# Добавьте crlDistributionPoints в соответствующие разделы.
+crlDistributionPoints = URI:http://localhost:8000/crl/distripoint.crl.pem
 
 [ ocsp ]
 # Для OCSP (Online Certificate Status Protocol)
