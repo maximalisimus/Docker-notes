@@ -144,6 +144,8 @@ basicConstraints = critical, CA:true
 # что может делать сертификат;
 keyUsage = critical, digitalSignature, cRLSign, keyCertSign
 
+#The defined values are: digitalSignature, nonRepudiation, keyEncipherment, 
+# dataEncipherment, keyAgreement, keyCertSign, cRLSign, encipherOnly, and decipherOnly.
 # Значение ключа keyUsage|Описание
 # — — serverAuth Аутентификация веб-сервера SSL / TLS.
 # clientAuth Аутентификация веб-клиента SSL / TLS.
@@ -160,9 +162,31 @@ keyUsage = critical, digitalSignature, cRLSign, keyCertSign
 # digitalSignature цифровая подпись (сертификат можно использовать в качестве цифровой подписи)
 # keyEncipherment шифрование ключей (сертификат можно использовать для симметричного шифрования)
 
+extendedKeyUsage = critical, codeSigning, 1.2.3.4
+extendedKeyUsage = serverAuth, clientAuth
+
+#Value                  Meaning according to RFC 5280 etc.
+#-----                  ----------------------------------
+#serverAuth             SSL/TLS WWW Server Authentication
+#clientAuth             SSL/TLS WWW Client Authentication
+#codeSigning            Code Signing
+#emailProtection        E-mail Protection (S/MIME)
+#timeStamping           Trusted Timestamping
+#OCSPSigning            OCSP Signing
+#ipsecIKE               ipsec Internet Key Exchange
+#msCodeInd              Microsoft Individual Code Signing (authenticode)
+#msCodeCom              Microsoft Commercial Code Signing (authenticode)
+#msCTLSign              Microsoft Trust List Signing
+#msEFS                  Microsoft Encrypted File System
+
 # Для промежуточных сертификатов
 [ intermediate_ca ]
 subjectKeyIdentifier = hash
+# none - No SKID extension will be included.
+# hash - The process specified in RFC 5280 section 4.2.1.2. (1) is followed: 
+# The keyIdentifier is composed of the 160-bit SHA-1 hash of the value of the 
+# BIT STRING subjectPublicKey (excluding the tag, 
+# length, and number of unused bits).
 authorityKeyIdentifier = keyid:always,issuer
 basicConstraints = critical, CA:true, pathlen:0
 keyUsage = critical, digitalSignature, cRLSign, keyCertSign
@@ -177,6 +201,8 @@ keyUsage = critical, digitalSignature, cRLSign, keyCertSign
 # а потом пользователям, то pathlen должен будет быть равен 1, 
 # и также рекомендую создать расширение для таких сертификатов 
 # с параметром равным нулю.
+
+issuerAltName = issuer:copy
 
 # Для конечных сертификатов
 # Клиентские (для аутентификации и почты)
@@ -216,11 +242,9 @@ extendedKeyUsage = codeSigning, msCodeInd, msCodeCom
 [ crl_ext ]
 # Для отзыва сертификатов
 authorityKeyIdentifier=keyid:always
-# authorityKeyIdentifier   = keyid:always,issuer
-# Когда центр сертификации подписывает сертификат, 
-# он обычно кодирует местоположение CRL в сертификате. 
-# Добавьте crlDistributionPoints в соответствующие разделы.
-crlDistributionPoints = URI:http://localhost:8000/crl/distripoint.crl.pem
+crlDistributionPoints = URI:http://example.com/myca.crl
+#crlDistributionPoints = URI:http://example.com/myca.crl, URI:http://example.org/my.crl
+#crlDistributionPoints = crldp1_section
 
 [ ocsp ]
 # Для OCSP (Online Certificate Status Protocol)
@@ -229,3 +253,18 @@ subjectKeyIdentifier = hash
 authorityKeyIdentifier = keyid,issuer
 keyUsage = critical, digitalSignature
 extendedKeyUsage = critical, OCSPSigning
+authorityInfoAccess = OCSP;URI:http://ocsp.example.com/
+#authorityInfoAccess = OCSP;URI:http://ocsp.example.com/,caIssuers;URI:http://myca.example.com/ca.cer
+
+[crldp1_section]
+# The recognized values are: keyCompromise, CACompromise, 
+# affiliationChanged, superseded, cessationOfOperation, 
+# certificateHold, privilegeWithdrawn, and AACompromise.
+fullname = URI:http://example.com/myca.crl
+CRLissuer = dirName:issuer_sect
+reasons = keyCompromise, CACompromise
+
+[issuer_sect]
+C = UK
+O = Organisation
+CN = Some Name
