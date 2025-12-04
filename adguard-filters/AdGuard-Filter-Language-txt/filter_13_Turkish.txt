@@ -476,272 +476,145 @@ telegramgruplari.com#%#//scriptlet("abort-on-property-read", "detectAdBlock")
 @@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$domain=telegramgruplari.com
 ! https://github.com/AdguardTeam/AdguardFilters/issues/88835
 @@||miuitr.info/img/getbanner.cfm
-miuitr.info#%#//scriptlet("set-constant", "adb", "false")
-! https://github.com/AdguardTeam/AdguardFilters/issues/88157
-otopark.com#%#//scriptlet("abort-current-inline-script", "$", "!document.getElementById(btoa")
-!#if (adguard_app_ios || adguard_ext_android_cb)
-@@||otopark.com^$generichide
-@@||otopark.com/*/js/*/*.js?_v=
-!#endif
-! https://github.com/AdguardTeam/AdguardFilters/issues/88310
-puhutv.com#@#.adsbygoogle
-puhutv.com#%#//scriptlet("set-constant", "adblockEnabled", "false")
-puhutv.com#%#//scriptlet("prevent-fetch", "pagead2.googlesyndication.com")
-||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$script,xmlhttprequest,redirect=googlesyndication-adsbygoogle,domain=puhutv.com
-!+ PLATFORM(ios, ext_android_cb, ext_safari)
-@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$domain=puhutv.com
-! https://github.com/AdguardTeam/AdguardFilters/issues/83535
-724indir.com###eazy_ad_unblocker_holder
-724indir.com#$##wrapfabtest { height: 1px !important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/83318
-coinotag.com###kanews-modal-adblock
-coinotag.com#%#//scriptlet("set-constant", "kan_vars.adblock", "undefined")
-! https://github.com/AdguardTeam/AdguardFilters/issues/99642
-@@||cnnturk.com/scripts/ad-type.bundle.js
-cnnturk.com#%#//scriptlet("set-constant", "hasAdblock", "false")
-@@||cnnturk.com//assets/dist/js/300x250_dfp.js
-cnnturk.com#%#//scriptlet("set-constant", "AdblockDetector", "undefined")
-! https://github.com/AdguardTeam/AdguardFilters/issues/86266
-@@||punosy.best/cdn/ippv6.min.js$domain=bcvc.live
-! https://github.com/AdguardTeam/AdguardFilters/issues/73212
-torrentarsivi.*#@#.adsBanner
-torrentarsivi.*#$##wrapfabtest { height: 1px !important; }
-torrentarsivi.*###eazy_ad_unblocker_holder
-! https://github.com/AdguardTeam/AdguardFilters/issues/72435
-hacoos.com#%#//scriptlet("abort-current-inline-script", "document.createElement", "adblock")
-||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$script,redirect=noopjs,domain=hacoos.com
-!+ PLATFORM(ios, ext_android_cb, ext_safari)
-@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$domain=hacoos.com
-! https://github.com/AdguardTeam/AdguardFilters/issues/71695
-@@||imasdk.googleapis.com/js/sdkloader/ima3.js$domain=exxen.com
-! https://github.com/AdguardTeam/AdguardFilters/issues/86697
-@@||bolumd.pw/templates/*/js/*.js
-! https://github.com/AdguardTeam/AdguardFilters/issues/72151
-@@||imasdk.googleapis.com/js/sdkloader/ima3.js$domain=newgames.com
-! https://github.com/AdguardTeam/AdguardFilters/issues/68294
-apathe.net#@#.adsbygoogle
-apathe.net#%#//scriptlet("prevent-setTimeout", "test.offsetHeight")
-! https://github.com/AdguardTeam/AdguardFilters/issues/67799
-turkseed.com###h237
-!+ PLATFORM(ios, ext_android_cb, ext_safari)
-@@||turkseed.com^$generichide
-! https://github.com/AdguardTeam/AdguardFilters/issues/67058
-kampanyatakip.blogspot.com#%#//scriptlet("abort-current-inline-script", "EventTarget.prototype.addEventListener", "arlinablock")
-! https://github.com/AdguardTeam/AdguardFilters/issues/65549
-@@||i.tmgrup.com.tr/videojs/adblockDetect.js$domain=atv.com.tr
-! https://github.com/AdguardTeam/AdguardFilters/issues/64940
-@@||sarizeybekhaber.com.tr^$generichide
-! https://github.com/AdguardTeam/AdguardFilters/issues/75398
-kanald.com.tr#%#//scriptlet("set-constant", "hasAdblock", "false")
-@@||kanald.com.tr/*scripts/ad*.js
-! https://github.com/AdguardTeam/AdguardFilters/issues/63655
-@@||pagead2.googlesyndication.com/pagead/js/*/show_ads_impl_*.js$domain=myjest.com
-! https://github.com/AdguardTeam/AdguardFilters/issues/62381
-gsmturkey.net#%#//scriptlet("abort-on-property-read", "adblockmesaj")
-||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$script,redirect=noopjs,domain=gsmturkey.net
-!+ PLATFORM(ios, ext_android_cb, ext_safari)
-@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$domain=gsmturkey.net
-! https://github.com/AdguardTeam/AdguardFilters/issues/59367
-iskandinavya.com#%#//scriptlet("abort-current-inline-script", "jQuery", "ai_front")
-!#if (adguard_ext_safari || adguard_app_ios || adguard_ext_android_cb)
-@@||iskandinavya.com^$generichide
-@@||contextual.media.net/dmedianet.js$domain=iskandinavya.com
-@@||google-analytics.com/analytics.js$domain=iskandinavya.com
-@@||iskandinavya.com/wp-content/plugins/ad-inserter-pro/images/ads.png$domain=iskandinavya.com
-@@||iskandinavya.com/wp-content/uploads/ad-inserter/*/*.js$domain=iskandinavya.com
-!#endif
-! https://github.com/AdguardTeam/AdguardFilters/issues/59898
-@@||cdn.witchhut.com/network-js/witch-afg/ima3.js$domain=barbioyunu.com.tr
-! https://github.com/AdguardTeam/AdguardFilters/issues/59364
-@@||iddaaorantahmin.com/cm-site/tema/iddaa/js/adsby.js
-iddaaorantahmin.com#@#.adsbygoogle
-iddaaorantahmin.com#$#.adsbygoogle { height: 6px!important; }
-iddaaorantahmin.com#$#.reklam-alan-tam { position: absolute!important; left: -3000px!important; }
-iddaaorantahmin.com#%#//scriptlet("set-constant", "canRunAds", "true")
-! https://github.com/AdguardTeam/AdguardFilters/issues/56429
-@@||turkrock.com/js/*/crossdomainads.js
-turkrock.com#%#//scriptlet("abort-current-inline-script", "$", "!document.getElementById(btoa")
-! https://github.com/AdguardTeam/AdguardFilters/issues/52970
-dovizborsa.com#@#.adBanner
-dovizborsa.com#$#.adBanner { display: block!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/52934
-@@||tr.link/cloud_thema/ads.js
-! https://github.com/AdguardTeam/AdguardFilters/issues/71045
-isminiunuttum.com###eazy_ad_unblocker_dialog-message
-! https://github.com/AdguardTeam/AdguardFilters/issues/52501
-sk-ip.tech#%#//scriptlet("abort-current-inline-script", "document.getElementById", "/xx|block/")
-! https://github.com/AdguardTeam/AdguardFilters/issues/61693
-yeniwindows.com##.swal2-container
-! https://github.com/AdguardTeam/AdguardFilters/issues/61695
-okanuzun.com##[style*="cursor: no-drop;"][style*="user-select: none;"]
-okanuzun.com#%#//scriptlet("abort-on-property-write", "ai_front")
-! https://github.com/AdguardTeam/AdguardFilters/issues/51561
-forum.auraroleplay.com#%#//scriptlet("set-constant", "window.google_jobrunner", "true")
-! https://github.com/AdguardTeam/AdguardFilters/issues/51152
-@@||oyungibi.com/wp-content/*/adblock-detector/advertisement.js
-oyungibi.com#%#//scriptlet("set-constant", "jQuery.adblock", "false")
-! https://github.com/AdguardTeam/AdguardFilters/issues/50946
-@@||unisinav.com/wp-content/*/js/advertisement-*.js
-unisinav.com#%#//scriptlet("set-constant", "$tieE3", "true")
-! https://github.com/AdguardTeam/AdguardFilters/issues/50893
-@@||osxinfo.net/js/*/lifelockad.js
-osxinfo.net#%#//scriptlet("abort-current-inline-script", "$", "!document.getElementById(btoa")
-! https://github.com/AdguardTeam/AdguardFilters/issues/49271
-turkdenizcileri.com,bilgalem.blogspot.com,okulsoru.com#%#//scriptlet("set-constant", "koddostu_com_adblock_yok", "null")
-turkdenizcileri.com,bilgalem.blogspot.com,okulsoru.com$$script[tag-content="adblock"][max-length="300"]
-! https://github.com/AdguardTeam/AdguardFilters/issues/49089
-adtarget.com.tr#@##ad-container
-! https://github.com/AdguardTeam/AdguardFilters/issues/48825
-tekniknot.com#%#//scriptlet("set-constant", "google_jobrunner", "noopFunc")
-!#if (adguard_ext_safari || adguard_app_ios || adguard_ext_android_cb)
-@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$domain=tekniknot.com
-@@||pagead2.googlesyndication.com/pagead/js/r*/show_ads_impl_*.js$domain=tekniknot.com
-!#endif
-! https://github.com/AdguardTeam/AdguardFilters/issues/48473
-||yoneticihane.com/*/blossomfeaturebox.$script,stylesheet
-! https://github.com/AdguardTeam/AdguardFilters/issues/47184
-@@||veterinerhekimleri.com/wp-content/plugins/*/includes/adblock-detector/advertisement.js
-veterinerhekimleri.com#%#//scriptlet("set-constant", "jQuery.adblock", "false")
-! https://github.com/AdguardTeam/AdguardFilters/issues/47109
-oyunlarskor.com##.wgAdBlockMessage
-@@||imasdk.googleapis.com/js/sdkloader/ima3.js$domain=oyunlarskor.com
-! https://github.com/AdguardTeam/AdguardFilters/issues/47107
-fontyukle.net#@#.reklam
-fontyukle.net#$#.reklam { display: block!important; height: 1px!important; }
-fontyukle.net#$#.reklam_alani { display: none!important; }
-!+ PLATFORM(ios, ext_android_cb)
-@@||pagead2.googlesyndication.com/pagead/show_ads.js$domain=fontyukle.net
-! https://github.com/AdguardTeam/AdguardFilters/issues/47115
-@@||imasdk.googleapis.com/js/sdkloader/ima3.js$domain=tokoyun.com
-! https://github.com/AdguardTeam/AdguardFilters/issues/47098
-||mordefter.com/ad_killer/handler.js
-mordefter.com#%#//scriptlet("abort-current-inline-script", "EventTarget.prototype.addEventListener", "ad_killer")
-!+ PLATFORM(windows, mac, android, ext_chromium, ext_ff, ext_opera)
-||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$script,redirect=noopjs,important,domain=mordefter.com
-!+ NOT_PLATFORM(windows, mac, android, ext_chromium, ext_ff, ext_opera)
-@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$domain=mordefter.com
-! https://github.com/AdguardTeam/AdguardFilters/issues/47101
-messletters.com#%#//scriptlet("set-constant", "adsbygoogle.loaded", "true")
-! https://github.com/AdguardTeam/AdguardFilters/issues/47084
-isgfrm.com##.wutime-adblock
-@@||isgfrm.com/js/wutime_adblock/ads.js
-! https://github.com/AdguardTeam/AdguardFilters/issues/47087
-@@||klavyeanaliz.org/*/adblock.js
-klavyeanaliz.org#%#//scriptlet("set-constant", "adblock", "false")
-! https://github.com/AdguardTeam/AdguardFilters/issues/46778
-turkeycrack.com##body > div[id^="ai-adb-"][style^="position: fixed; top:"][style*="z-index: 9999"]
-turkeycrack.com#%#//scriptlet("set-constant", "ai_adb_detected", "noopFunc")
-! https://github.com/AdguardTeam/AdguardFilters/issues/46317
-cadcamsektoru.com#$#.rek1 { height: 1px!important; }
-cadcamsektoru.com#$#.reklam_kontrol { height: 1px!important; }
-cadcamsektoru.com#$#.icerik_reklam { position: absolute!important; left: -3000px!important; }
-!+ PLATFORM(ios, ext_android_cb)
-@@||cadcamsektoru.com^$generichide
-! https://github.com/AdguardTeam/AdguardFilters/issues/45655
-@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$domain=myjest.com
-! https://github.com/AdguardTeam/AdguardFilters/issues/45302
-@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$domain=bunuokusana.com
-! https://github.com/AdguardTeam/AdguardFilters/issues/44025
-vidtekno.com#%#//scriptlet("abort-on-property-read", "adblockmesaj")
-||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$script,redirect=noopjs,important,domain=vidtekno.com
-!+ PLATFORM(ios, ext_android_cb, ext_safari)
-@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$domain=vidtekno.com
-! https://github.com/AdguardTeam/AdguardFilters/issues/44024
-kanalmaras.com#%#//scriptlet("abort-on-property-read", "adsBlocked")
-||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$xmlhttprequest,script,redirect=noopjs,domain=kanalmaras.com
-!+ PLATFORM(ios, ext_android_cb, ext_safari)
-@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$domain=kanalmaras.com
-! https://github.com/AdguardTeam/AdguardFilters/issues/47519
-! https://github.com/AdguardTeam/AdguardFilters/issues/43123
-@@||osxinfo.net/js/*/ad*.js
-osxinfo.net#$#.pub_300x250.pub_300x250m.pub_728x90.text-ad.textAd.text_ad.text_ads.text-ads.text-ad-links { display:block!important; }
-!+ PLATFORM(ios, ext_android_cb, ext_safari)
-@@||osxinfo.net^$generichide
-! https://github.com/AdguardTeam/AdguardFilters/issues/38801
-@@||videonuz.ensonhaber.com/player/ads.js
-! https://github.com/AdguardTeam/AdguardFilters/issues/39278
-! https://github.com/AdguardTeam/AdguardFilters/issues/39278#issuecomment-761222530
-||asyadizileri.net/wp-content/uploads/nuhkes.js
-asyadizileri.net#%#//scriptlet("abort-current-inline-script", "BlockerBanner", "kontrol")
-! https://github.com/AdguardTeam/AdguardFilters/issues/38792
-ipbdestek.com#%#//scriptlet("abort-on-property-write", "ipsDebug")
-! https://github.com/AdguardTeam/AdguardFilters/issues/38538
-!+ PLATFORM(ext_ff, ext_opera, ios, ext_android_cb, ext_safari, ext_ublock)
-@@||res-simler.blogspot.com^$generichide
-!+ PLATFORM(ext_ff, ext_opera, ios, ext_android_cb, ext_safari, ext_ublock)
-@@.png#$domain=res-simler.blogspot.com
-! https://github.com/AdguardTeam/AdguardFilters/issues/55436
-guncelkaynak.com#%#//scriptlet("abort-on-property-write", "ai_check_block")
-guncelkaynak.com##body > div[id^="ai-adb-"][style^="position: fixed; top:"][style*="z-index: 9999"]
-! https://github.com/AdguardTeam/AdguardFilters/issues/37668
-@@||altyazilifilm.live/adsbygoogle.js
-! https://github.com/AdguardTeam/AdguardFilters/issues/37609
-@@||kentormani.com/advertisement.js
-! https://github.com/AdguardTeam/AdguardFilters/issues/37623
-!+ PLATFORM(ext_ff, ext_opera, ios, ext_android_cb, ext_safari, ext_ublock)
-@@||yuklesene.org^$generichide
-!+ PLATFORM(ext_ff, ext_opera, ios, ext_android_cb, ext_safari, ext_ublock)
-@@||yuklesene.org/img/*.png#
-! https://github.com/AdguardTeam/AdguardFilters/issues/37620
-!+ PLATFORM(ios, ext_android_cb, ext_safari, ext_ff, ext_opera)
-@@||oyunceviri.net^$generichide
-!+ PLATFORM(ios, ext_android_cb, ext_safari, ext_ff, ext_opera)
-@@||oyunceviri.net/wp-content/uploads/*.png#
-! https://github.com/AdguardTeam/AdguardFilters/issues/36583
-huawei-turkiye.com##.XGT-AdBlock-Govde
-! https://github.com/AdguardTeam/AdguardFilters/issues/34999
-!+ PLATFORM(ext_ff, ext_opera, ios, ext_android_cb, ext_safari, ext_ublock)
-@@||dreamfancy.org^$generichide
-!+ PLATFORM(ext_ff, ext_opera, ios, ext_android_cb, ext_safari, ext_ublock)
-@@.png#$domain=dreamfancy.org
-! https://github.com/AdguardTeam/AdguardFilters/issues/34807
-memoryhackers.org$$script[tag-content="adregain_wall"][min-length="3000"][max-length="7000"]
-memoryhackers.org#%#//scriptlet("abort-on-property-write", "adregain_wall")
-!#if (adguard_ext_safari || adguard_app_ios || adguard_ext_android_cb || ext_ublock)
-@@||memoryhackers.org^$generichide
-@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$domain=ui.memoryhackers.org
-@@||pagead2.googlesyndication.com/pagead/js/r*/show_ads_impl_with_ama_fy2019.js$domain=ui.memoryhackers.org
-!#endif
-! https://github.com/AdguardTeam/AdguardFilters/issues/34140
-!+ PLATFORM(ext_ff, ext_opera, ios, ext_android_cb, ext_safari, ext_ublock)
-@@||xbox360torrent.com^$generichide
-!+ PLATFORM(ext_ff, ext_opera, ios, ext_android_cb, ext_safari, ext_ublock)
-@@||xbox360torrent.com/*.jpg#
-! https://github.com/AdguardTeam/AdguardFilters/issues/33627
-@@||tmgrup.com.tr/videojs/adblockDetect.js$domain=atv.com.tr
-! https://github.com/AdguardTeam/AdguardFilters/issues/33340
-blogkafem.net#$##blogkafemnet-reklam { height: 1px!important; }
-!+ PLATFORM(ios, ext_android_cb, ext_safari)
-blogkafem.net#@#.adsbygoogle
-! https://github.com/AdguardTeam/AdguardFilters/issues/30049
-!+ PLATFORM(ext_ff, ext_opera, ios, ext_android_cb, ext_safari, ext_ublock)
-@@||m.pes24.com^$generichide
-!+ PLATFORM(ext_ff, ext_opera, ios, ext_android_cb, ext_safari, ext_ublock)
-@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$domain=m.pes24.com
-! https://github.com/AdguardTeam/AdguardFilters/issues/30686
-@@||static.ercdn.net/js/ads.js$domain=foxplay.com.tr
-! https://github.com/AdguardTeam/AdguardFilters/issues/30734
-!+ PLATFORM(ios, ext_android_cb, ext_safari)
-@@||gsmturkey.net^$generichide
-! https://github.com/AdguardTeam/AdguardFilters/issues/30329
-@@||cdnjs.cloudflare.com/ajax/libs/fuckadblock/3.2.1/fuckadblock.min.js$domain=kodvizit.com
-!+ PLATFORM(ios, ext_android_cb, ext_safari)
-@@||kodvizit.com^$generichide
-! https://github.com/AdguardTeam/AdguardFilters/issues/29470
-!+ PLATFORM(ext_ff, ext_opera, ios, ext_android_cb, ext_safari, ext_ublock)
-@@||masonlar.org^$generichide
-! https://github.com/AdguardTeam/AdguardFilters/issues/27606
-teknobalta.com#@#.an-advert-banner
-teknobalta.com#@#.an-sponsored
-! https://github.com/AdguardTeam/AdguardFilters/issues/26355
-!+ PLATFORM(ios, ext_android_cb)
-@@||forum.miuiturkiye.net^$generichide
-! https://github.com/AdguardTeam/AdguardFilters/issues/26254
-@@||gezenbilir.com/js/Siropu/AM/ads.min.js
-gezenbilir.com#%#window.samDetected = false;
-! https://github.com/AdguardTeam/AdguardFilters/issues/24213
-androidatesi.com##.XGT-AdBlock-Govde
-! https://github.com/AdguardTeam/AdguardFilters/issues/23581
+miuitr.info#%!//qcriXtlmd("see-co&stcnt", "db"L0#bilrm"i
+# ht0`s:?.géTher/cOm/aeowacdTeau/EdçuqrdÖi,Ters-Isquuc/88qq6&Oeopark/goE#a#o/s{riptdEä(¢afov4mbuzs%.p=énl)ne-ñ#zkppb, b$¢!"©tgc5me&t.wEtElemeotBiLd(btş!"©	
+!#if`(ftggapd_apö^qoy \u&adgtap4]gzTajdrohdÿ##)*@j|xktopi~k.com| 'enerishi0m*AJü|gtoPcscj#om/ª/"c.j/*/js?_6=!aEodif¡ (u50q*//gitlU:/ckm/Élguyrbeqm/ÁäguardVmlreòsNhsses.x8#98
+pu)d4Ş.Cgm#B"&adsbywoïglg-
+pTh7ôv/gom#%#/.ûë2izdLEt"set-coîa|aNô". &qtblngKDl!`ìeì"( "fAlsï)Štuhutv®çom#%#/ïcvixtle|h rbeVend)fmtãb"( "ğageatr.gomg(dsyNliA`t)on.com"i||q!g'ea0.VoogîåRymdic!4ikl*qoM.`açe`d¯zS/aes`ygoowle&j3 skbird®pll`t|Pwuauer5¬2edyrObtywooe|esynìacaüaÿîmAd3rüg/owle,„omaiî=pu(uu~>com‰)a!PL!uÆOZ8a«ó, Ex4_ad$poi$_Ca¬ exdscfaria
+X@~~pcge!f2®goof\E3yodijeti/Hjeo]=pcgeA /js/afsj}eoele.jsddoíùIo=pwh7t6.com1!httrs:./gytiub>co}ëAäguqšdPeEm/afguav,Dkîters-issçms/:15
+u4mntiv.ckm###uaz¹_A$ßuNbhocëar^holtez­
+:2ijäiv.coík$%!wrix&åftEcd { p%iohş:!1Pè !imxosuaoôs$y
+1¢it|psz'/§iuhuBcomAdcuiPtUíao«dg5irtFhlv%rs/iscqas/833?8	ciootag.com º#Caneoc-}gdan}Q`Bïsk
+soinkôag.cí#-#k{ariütle)&úgö-cns<afU2, "kin_Tars>ek`lïck¢-€"wndaginga"©	
+! ``Vps:-/gi´Hqb.sm/dgábdTwam+A`fuardfqltfò{/h{suuqn99602
+@P|ùcnndurk.S/m¯CsZip`s/qd-txpe>"wndl-.jq
+k,nturs.cGm%;+/rkrağ4,Eu8 reqmeKnstant"* bhcAnrlick",€".clse"8)Ba5t".lvu3k.ckmo?assgtó/dysô/js/31x270_lnr$hSsvnTer{.óom£!#/scriq3lgdhrcmt-kofstaìv,°pAd"lok+Date#tcr", "}ndefcnD""8,
+! httyy:/GyuiuB.ãy}¯`f/Uaòf\ecm/Adgd!xdFixtUrs/isbUåso86;66
+Dp|ütud/skNcís`/cdn/ippu7-mMjks$dooqin<bcVcnìq"e" iğp2s://ïmrHub#oM/Qouásd\e`m.Mäguqr`fIlt%sc/iûSueS/33312*t²riopAvsy6©>#A#.ed3Janîer
+4oprenta3c+vi&
+#”!#÷vñpfabÔu{4${,fm'hu:!px !io lrtAÌt; }-|ksrdnpcróivi."##"e`ra_c$_ul"-mcier_hmht%r! h|tqc:¯/g)thur.ãÿm.Ad'qqräTAm/tìOuarlFil}5w#/iqwueq/7243u iaÃo&s.Cou#%#??#rqp|Leuh#`cmrt,cµòbeftiénliîe-sjript+  bdokômfft,krmatEE$a]mnt"(3`db|mgc")
+½|òqg%!d6.gOoolewq~$)#ati}n.co-/p`'eado"s/adsJéggoglÕ>jwCs2épt-ra`kcect=nmgpjs%dg-ciL}lasoos.com
+¡+ RLCVFOÚO(ioc,!ertOanDpoye]Cb,$txt_sagùri--A@l\tAgeyl3«ço-gldsyntycqäkïh.g_M-pceuad¯ns/a$rbhïkmgle.Jw$ælmain=hácm/s.Iom
+¡ htøc>//wøtxud.#omo`Ägaòd%am/Ádo5präFiltuò[/isstes?7±fy5L
+@`l|Imasxi~gogæneaziÑnaom.nQ/sdk\oadçp'kiawfksdo}hi~-exxe®Som
+! `ttğ3:''giôhõ".bom/idouaºeTeam/ÁæeuabDÆéìterw/iSsues/826y/MJ@E|mbOŒuíe.pW-qelPlqtAs/*/jS/*&js# jtuğc+/%Itèub.com%@DgÕaPd\-amAd&UazìFiltets.dssUÅso7215qŠ@@||eíqsf"gongde`ğa3.cm=inso{diìoaDer¯ama3.bs4díain?nducaEs.s/é
+! ovTps2//gyDhuf.com_Adg}izmTUam'Qdïu!rdFidters/is{ueÑ/6>~>,
+Q0athd.nAt@c.aàqbygomçdea0áuhe.ngt3%c'/sãvI0tÌeTj&trcweNt-ritTAMecut"& "ue{t.oF¦setHdég{t#)
+) htvpS2?/eitj}b-coo¯IdÇueöäTeaMgAdçsardFIlde~¡/irees¯&77	+
+v4rksg`L®cnm##ch2s7Š!+ PLAPFOQM(ioc¬)elTşyldboIdãjd ext_säfaVy)
+@@|MTqrkSeeU.COlN.veNeraâhiDE
+©$ì4|0sº/kgitèUb.so-/Adg5kúdTeqm+eäK%ir`DIltmrs'i3Sqe{#=7098kãapënYÁda«hzNb.oOstot.gnl£%1+­QcsyptnEt(¦`bortmcwr2mnğ¬inlybq,{kpipt". "EvåfõFergıv.pşïtTqpe>aldGwlnuLi³tanur2$ "ardin!âLowka)!`h|tp_:-+gi|lõ"®{o/CD'qqr¤Véa-/AugqÁv$Giltmbs.mssues/R5-48O
+A@<|iªpogru2.ccm*ôr?VidïjsoidbmnckFedmcd,js&äo-ain=A4w,coílôr
+! xuõrs;/gIthqb®gom/Adgua`dVa`mATsucrdFi|teòs.xssues®6 ¹40
+JA||{ vizaybek`abçr.CM-®ä2Ş$g%~eribhafm1 lppsk/gcjtLur.ckm/Edcuavdte!}7Aäfuezewylpdrs/iós=æS/u3;<)O!/c¬d.cßm.r ,!.+ssr)øtlEt(sså~-ó/Lap!nd#¬¨"hq{Aabnock*,("bdlsE+
+P@\ün`?Ald.com.dR/*sárhttr/#ì*~nc1 hpdAs8//githqB.+ol/Adguqsd\eeM+AdçuerfF)lters?iCóuds«636%	
+@@z|sageád2.ïogdes{ndacat)oj.aoe?pigeqf/js//shïg[aDshmplZ*.js`$/nain9iÙjmst.a/mŠ  bttps>?-giühtb&cgE.@lgqarPTíem/Ádcw`räDiLtõrs/){S÷Eu62¼±	gstusiey.n%t7%#o+UcréxtLeT(#abOrpol-pZO mrôy,Re«e ¬ adbl)ckme{m*"
+|<pawaaf2./oo'liRUndic!diïn.cmg¯2aggydjr+ad{c]soogle.js$sfpjTt,bítEr¥c<fîipJq,dogaan/gqmöur{ey.mdñ!+"P|QTGORM(igó>!ext_aoe{ki$_cb® ex|_sinAri
+@t<ñe%%Ad2®Ç/cghe39n$y0%ti'n.#oo/pAwf!D/ks/aC*yg/ïgle.Îs$fmain9'smtõvkeQ.nıt1 ì0tps:+/Withõâ®kÏ-/AdfE!òdTe#m.IdGwavìFylturs-issuÅw¯79q7kscehfinirya.cme£%#%/scrk0tjåt(badort?qurrÍdt-hnlkfe=sa\y0t","#nÑ}ery"% "i_fRoît&)	J!#)ç°(a`euIrd_aøt_wab!"i ||  dguárd_áp0_Aow`||!ódguardExt_aJäpomd_ar)-JP@||icqndiN!vya>ãom_$«engbiãlide8@H|pcoOô%xeeE},ml`aa,nåt/fmUdyaflv.Ks4fnmiin½is/a~dinav}á.Akm
+ `||g/o'dg/qnamytaks.sgm.AnElytyes.js$$omai.=h{k!.ti~a~yá&cïM
+@@<}iskd.dinávia.sno'vr=con^}lu.ğhıomoss!e,iîóerÌepúrO¯yíáE'c?ae3> k74doeaif=is)ajdy{atxacï} @||isêan$ijavyà.sol/wp-contmjt/up}keHs/ed	NsPrt-v*'*.jg$`_máih=iskan`inhv8I.cgMB¡!gnäif!!htups:ï½glphub.clİ'átouerdTec}/Qd'uaS`FélP'rc/)sseaS35­88	
+@ l|cdn,witkÈiwü.goa+ndôsork-jr.witcl)`fg/yÍa3>ês¤uoíaanmcArjioyune.c'o&tr«¡$ivd`s://fitìub>cgeoAMgu`rdtåam'CdguarfViler÷?assu¥{.590V0	Šp@~\édfiaïrcìd`h}knncom/a}=sitå/te}c/I$dáa/jû7adãby&b{Joddaáorantahmi.>ãoe#d#'a,sjégoggleidlaAorantihmin-kol#$#®adcb{gÏogìu [`hEiit$vp85i=pobtaît: }-
+Ì|äáqn2antahíib&ëoí¤#êeKleo-claj-Dem8}0tksitign:(bjsodutd!iMğoptaît; le*w: -s ±008±aítrtaf$s)ı
+)d,aaoranta¨min.c¯lc%#//3c2ipvlet("cmt-cOîsôqo4"($"sanRunYds,$&tzeeb(-1 httĞqºO/gIt)}b,com¯Adg\arìTeam/dguaòlNhlt%Z3/(scue#o76429
+@€||tuvkr+âi.co/ju/*/cºo3sd/Mhin©dznks
+Pur)rck.gom'%3//scriğtdcu0"ajobt)ãusrwnv-jn.).!-qc2i0t". "$", b!fojuelfd*gDDUdE,anuJy	4(ftgA"¨
+! Hõurñ''c´py#.£ol/adeteòdXuém/Adgu!rdF(lueb3iûsue3/5rq·°-
+d~iûcmğc.Cmm#@#adB`fn%2
+do~izborsq<com#$3/auZ!nneò9 dicplay:2",~ck#imroztant¿$?
+!¨hşpğs://v)$hub,cg-/Odgtaòìeam?AdçuarDnm|ômòs/iscues521;4I
+@H||ìr.lIú[/sloõf_thama/als®j{J""xtdps:¯¯gkt`<â.com/E$eueòdTeåm/AegeevdÆiltesrmisóudw$7Q01ywekNi}ltpüUMgï]+"!5!zyGa`_ınbnocoqr_daamGeióSabe	
+! httpû:/oca|hub*ó+moHd&5!R Te`-+Adg5qräFiltgtC?kûsues/1²11
+{kiyp.te#h+%#/sw2idulewh³ajopp%surrelt-ifbéoe{#ripd#< "d/otmentGe4Ehe}e~tB}Ad",!&?yx\bLb+i/2)N)ähttpÛ://gIt(ub.cgmoAä'õardTeamSegUird†ilüars-Ióaeÿ¯¶1623
+qenévmfdous.coe#.r÷al2-ûontayOer*1 ltT@s:;/&y4Huâ.comAduñrgUe!=¯Idgwarlfmd|dPr/m3"qeQ+7qv9‹okanuz5g.áîm#aSsty|g(=buryw~:!îï-drnr;"]{tyLe*8"tcer½seheóô:!jog;"]M
+okpnuz}~.aom#á#/.wCòixtleL(2e"zt-}n-xzïpujty/uritec-"*`i_wroì4c)
+1 h6tpsz/gm4\gj>ó&m+ILgtArdPeá-oAeg5)zdFhlt}rã/Hswue3/5u6¡
+fmWum>ausñ`onePd`9 om##/oSe²mğtHedbsAt=bonstqîp2>0¦wenv}w.gíoí|e_jobòq~når&,°"tpue")B%0httqs2/¯gitluf>som-Af¦õa{fØ$@m.Ad'uqrdFImteòs-iUSuas;5±142K@@|Üoy}îgibi.com/vp,so~ve.tg"%gerdcimådtesTßr/aDvïzv{óemuld.z3
+kyyngyci.kom"%#/scrhptoev(¢s!t9aonã|!Npj<""hQu-zm.adCMmsk n0¢fcnóe"IE
+ ht<pw://f)txqB.go}AtwuarDÜea}-Ilu5er$Fildes{¯A[sudw/•0942À@|xu.y3avar,g~m/wx-cíîüefx*¯zs/qevek0ismen4/¬,js
+5n)Siniv,cO-%3?kscúiptíedè"seT%bonwvAnt",i"44yeG;",à"prUe#)! úvpps;./'Hthub<#omAfguaràTeé-/Ad§t!cdFimt!zsëisYuev/7x93	Z@@\}mSxMn`o/.Et/jc/
+/hqfelgckue.fs
+os8i~f.fDv#¤#¯?óg2hpôLet("a"Ït&our"ent-hnline,3crjpt"¼! $", ªgom½menv&getUldmdNtÂéHd,vtoi\
+!(xptas*®/gi\luc.com-Cde5'úde`mkadeuabdFidteps/Issugs&$q271
+ğurkd$nhzckleòj~Aïé,b`Lsalem.fln#spOt>KoO,oKw<wn2u/#gm&% //3cÒiptlut("sev-CoLst!np ,`"kDd/wT5k%_alâlgc+]yo+& "null"éJtuzdEt[~ci,uri/ë/l,`ílgilmo.JlOVspt"n-,nku$SoòU&kkm$srri0t[tAgcof en4=*elr\obb\[mcX)loogth?"300&]
+! j|dps:-¯ei4hub.coí=Adgu!"äE%`í/IdcuabdF!mveps/isbums/62<¹q$tarw%p>c{m®ôzÀ+ aä-bojp`h.et
+1 èttps:-/gi|hub.#wí?Q`guqr$V5amoAdgueòfFiltåbs/issñås.8821MveKni{?nv®coo+'c/scs)p4nåt("sgt-Cjnsuant*, "eon'lmYjobbungr*, "dkepDq
+f")
+ bIf amewabtßeøt_3Afap9 || !dwuaòd]app_iow ~| ewguqbd_E(t`nfsokì_câ)‰
+DA}|q`'gád&gomçlesyNdIaiuio~nkgm'tAgeaä¯*p/ad3fifnofLejs$ %mikn=pEkniknMt.#oeAA|şpaçeadr,om/gdácyîDic`uiën.cg--pá§eat/êsr(/#mov]albWImpl[*jq4dgmAio=wdmfiknEt.c}MJ'%ntifA`itmts~/gIdhub.cîm/@dauA:yaaL/AdçuaRdil4dswïissuçs?u¸576"ü|hïne|icih	ne.com/*'bLosomfuc4uºE"ox.$óiri2v-sTylasLemd
+ (TtXs:/ciuhu"obom/AewAr`Paam/dgtargFiltuvsokssqeó/47:4
+!@||veueriner*ecimÌericno/Wt=co~t%nT/p,ugiîw/:oinbluDes/a`b|oek,@a|ecwo2.an|erôiSemEkp.jq-
+öe”driLe8yekimlazi.cï}#%;?{sgr)pTlqt("sedmcfwfaêt&,`"jQuEry.aärLNgï'( bfams!"I$jhttps*/+gitè"/cOiAdw}c{dTïil)Adg3q2íFilterso)ssUestv°2¹
+ïyrnheòrkkx>!í3¯.}fAdBìmciMdssao%OP@ı|I]qs4c&g'og¬mapiS,bom?jcsdklobdEr/hía7nz³¤doMby&='qunìevvkmâ.aoo
+1 ittĞs2-/wiìhuc.som/Qu#uarlTgao/A$gwaräfilttrs-Ió#ug{/´7q07JuîntY0kla.niv'@£pa{lue
+f}n49uëlá,.at#$7®reëlaM(K Dk3tm!y: bh+kk1i-tObtgnt» xeigHT: 9z¸kmotïrt nt;!}
+Fint}ukl}.nmt#$#+rejncma$ené { dkstlay: lne!Imx2tcnt; }
+!# PJATDSM¨ioó< axöß@FlğoId_cf-
+@I~|páfeaD2eoghdryndhóa|an*cïu/pageaa/shk_ató.nó$doíai.=fonf{}ëLe.îet
+# h|tpQ:/'gi4jqb/cïi-AìguáÒdgamoEdgUazdN)lvårs/issqes'8791Jx|èeictë®'¯ogiEixisgïm/j3/cdkînaddr.iEa*jstïmain=<ocjyu..comM! hUtrq//g)tiUf.bm+(d÷uirdUe!m/ELuArdFiLô]vshssTus¯´7 =8%
+\x,nvDEfter>#fm/i`]cMllep/Èandler.nS-mgrdåftgr.coí#m#//Skrip4ldx(:a#gRt-cubrmft-i.niîa/scú}qu"$ "ErEî4Ü`rfed.troPotyqe.iddOö%nüliqğEnçr", +af\kalLe2"	
+!« PCVÄORM(wijtow{, m`G,!Andvoid= gzdOChrOmium( dx4_næ, E|ô+pepa
+|}p`aá!d6.v'oglASyOdicá`)o,comkpaçEqd/h3cv{"uoy'le.ks$scviPu<Radëòesd¿noïpJs(ampbuift,$mgaèb5-oblm&feq?iom(!+ ŞÏ×PL	ÔFORM(wifdogv,(laã, indrnid, bx|_clboeaõm, å{5_fD Åxp_npevq	
+T@||ragEie:.o_o'lesyneqcatkon~£o/ragg%d/"z/adsb{go{gle+s Donakn=MkrhmftÕrcOm* (l&vpA~¯og`tHu2.c|m¯CdçuardTE!m¯dguarfmdtlrã.a{óUEs-63±2m!3s|ídtERS*jol#%c¯/saripõm%ü,"wa`-co/3taoğ"-  áìsbyïgeìg®noadev«l "tvug")S! xTtps¯/'iuHuc®cı'A$guardTd¡m/Adgearqfilters*issums&w08<ésgfrm.kím'£&sutaMU­Qdb|oci+@Á<tasïgrm.coE/êz/wgUyma_q`blocK%adshs)!`0tps:/-eéthõâ.kom.Ad/q!2d4%am	Am5q[ljilprs/)scuus/47083
+P@\xcjawYee*`dIz.grg+:k`d"losê**SklavyeanAl	k.org#%#/¯abR)ptje$("q}tl"on3dalôb4!"adcèoaa ,`"æa,se )* pt2pr;/#fiUxuâ.Ko}.ád&q¥Pd|eem/Adgtar'Fkltd2a/kssuï3,r>77¸
+t}Ò#dy#racH.bfm##bgdY > dhTie_½"©i-`Äb-&}[svyla]=*xositikn: fixåt topz"][sr{|g"="z=Intep" 9999"]
+|wskeybR ck.cG-£m"//skVirvlat9"sau-knsuant"l "ci_áfc_ludecved*¬ r//àFsîg")
+! htt8{8'/fi|(ubcn}/adcUardTe`i+Adgõá>DBi,ôerQ/iSsueg433*ccäCeíce{dor.com!4i®Vek1 s heicht:€0Qx)IMfmrôIN4; =#a$ká-såktorq.coe+$".r%+leëln|rkè€[ Heigdv8 Yp|$)mpr\c.4; A
+kadcwmsubtorq>co-!$3.ycephK_rgo,am"ù posityon> aâ3letua}ípoFt!nv; ş-nt* A3¾08px%)-ğOr4!nt;"]
+!+$LATDNRe)yow, eh|_aîD0/id_c"	R@}]gcdgpusektorõ.#o}~gmnõR(bhide! hedrs/nght`eb.Co}kAdgT!Ğl0eam-AdcuureÇmìte22'iqqQgë/%567@ ||`a'eqd2.Gïoglasy.dhAãthOn.C_e/0Aguq ks%adspégkogn-&bq$doaMn=mùjest.#L	
+! øt4pz>¯ogiôhub.coM-CDfuardUeamCpgqavlFiltevy-IsS5)s/4µ³63
+ @|tp`aaád2.wÏ‹g|es}fdiKqtmon>bní/pacdQd.j÷kap1cygîgf8u.Ns$Dnmian5äuduokqsaoa6com.©httrw;/géth5b.çom/@ta1azDTeam¯AôgUardFid6Eps$ksums¯>4t7%
+fidTekn/.kO-#%#o+cripehE}0"abgbt-+n=pRoxert-~ee4*,$¢!dbl/Kkoesah")Š|<TAgåaä2*e.Mçì%c9nd}gQtio~&bom¯pafeqt-jadwbygotlM.js rcsipğmseLIrıst}niïpXs>a}pìztand,$OMaénvIlteOn/.ao	
+1? PLAVFOÒM)os, ePP_a.dzoi$cB, exğ_siæe2m)@`ltpqgåqd2. ïmwlesyNdmcãtinn&kgmgqIg%p$¯kv/besFúgo/wle.jx$dM}aYn-wil~ag~n.Coí
+!"hdtps;/&g)thub|mnmoI,g}Ar$Ldal/A FucrdnIlters¯xsgpas/4424Škanallara2,ë¯M#-#>/sCÒhqpìeu*ãbgRt+On-propuR°y-òead", "adsBfo!kmT")
+||piaE!$2*g]gdeûxndIcñ4ion.coM'paçåcdjs/aäcb{Gooalu.jr$8Ml`tVpreauwstqCrih|,reeibggd=mor,S,uomain½kala$marás/boo
+!k`QLP^FËrMiOR, ~xp_cLd/ad_ãã¬©ex4_Sáfaja)­
+@ <y`age#a&îggofl¬q}KbiiatIng.cMm-acEat/js,adsbùgooglÅ.js$dOm)kJ5-analMuÒaq®úOm! https.//eithtb.cgì¯AfguardT-am*E4OaGdæaìed2s¿i+sıår.7%19
+! h\tysz¬/ciuhub.ãom/afuqardT@ai/Afwuafdal4er7¯)sSu%r/43!23
+QH||osYiïf/.oeq/js/*/ t*njSgs`énbonåu#$"0UbS#09X304.qıcß304y*44m.pur_72:x9´.tex”-at.texôQä.4ext_aä.tex|Wad;>t¤xt-!fsn}ext$a -lèNks`{ dyspl`|>bo}gka(mp¯r|àn6; }
+%ª$PLaTFGXEªyoq$ Íøtßantroi0bb.heXtwafgvi)2@@||osjinfn/nee~$em*eriÃ adu* `hf$ps:¯/wit(Ub.cm+A$5má`dTEqm@dguardWalôe2siñãÕ}s¯3¹11AÀüt6)tegnqzens.nhubeZ.cg-/QHa8dr.ad7Fjs
+!htôps:/fétlUbfáom?AdoEqpdTe`m'ÉdgeardGi|t-rs/ésPu%so39268
+¡ htsysº//G)txub
+Com/Adgear`T'aí/IdguaF$&iluers/issuusk2=3sxkqsugãÍmielt,v610²"5s0
+||qsxadé~ileri.k%|/÷p-a/nteot/upL/CdsOnuhias.js
+a{yqdkzaìerI.ïdT#%#¿CapittìeTh"aBgrp=cwvrenw5anliNa­S1zi5t"(à"BlkbkerB@nuú",DrjojğrGl")a https:/Gat(ub.com7Éhgu`sDTeam.EdgıaòdGiìters/iqqudw/98712
+ipjdewt/k*a'}c¥3//óchr|let)*!`orU-on=protedty%s{ypdj, "ipsDe`ug#)
+!(httpc>o'ythõâ.coí?ADÆvapdVE§eQde5Ar$JÉ.tu2s/){c5uw/387³8
+!# PL TFO[e(Eht]gf<(mhpİoxiz< mos$ mz$gNeZïid[cb¬extsqFqri¬ åzÔubiKG+©
+`@||reB-skmlmr*`dof{poraïm^$g%feri`hipa
+!«!PiPÎORMlupd_&v,±o`toopera0aiû,aext_annögidYg"l ext_sanazy, xtO}fî/'~)A@®p~ga4dOo`in=rmw-simler."tkg3àot.ÃO-	! htTqs://ohth}`,coH‹!dguapdueam/@dcu`reF1lteòs/i{sueó/5%416
+gulcalïahnA«.aomg"/.scs(pülgtAcgr4-oL/prlpdr4¹-wviteâ, "aé_gheciÛbhke+")Jguncelkqnak.kom b?l9 z Div[md^="ei)qdb- ]ZkuıleŞupsitimf: fi(åd; qop*"}[3pyde*=2ziîdmx: 991ùØh hğr3ºçivh}g.#k/dguarete!}-Iff5crdFiMtåry*yssuds­372&8E
+@Àh|alTyqzIljfihu®ìive/ae2b1WOfle.j{Š!`hwdp!X,¯gi|heb.bom­Edeõasd@eaí%AdæE!vd1lvurs/èÛs5ew/3770ˆ`@<|k%jtOrmaîi.SMl/êln%rp)smmenp.h÷
+ ht4ps:/giehu",sÿ-/Afgu`òd\eam/AdguarTGilterk/isûuå3/36623%+ PhAĞFKSE8ejt_æf, ex _/per!- aws$ eyx_a~dbo)dVcb, ext_waæaRi, ex4sòlob{(
+BÀtlxkles-N%/ï2g^$generib`y|eMJ!) P\ATFMbí(uxtWff¬"g8t_orerad±io÷, axtW!näroid_Cb, dùtWsifuri, d Tqbdogc+a@||yukìesF.e,OrgïyMW/*npRg#) htôp{<#?oithub/com.ÁdgubrdZe`m/E¤oua»dFèhtevs'mwrqeQ/?6r4
+!
+ @LATFrI(éoS,4exta/ìvoéd_#b-"ahm]saci2ë,exô_fbl %ø4_o0ere)	
+` x<oyuîcEviZi>f!t%gg~erhbh(dEŒ
+ y$PLAVFGsM	yns,"E8T_ándroid[A``%ø|ßCafEq), %zp]æf<$d|vÏOpe`!)`Hü|OyônkEvhpi.ted'wr-coOtmî0'uxlkadÓo**hfc£,
+a htt0r:-/omtjtb.c-m/AdwUcrdDuam+tceard~ìders?qssues+36587Z`4ask-vUzii{e.coo#).xOU-AdVlick-GHVna
+!(att03:/'wIt(}"ëGí/AduuA2deã+/‘eguajdDiÌtgrò/)ssuus/36999J)+(PL`FGRÍ`åøt_ff, åxtİohgra,$yoS-0L|4~a.ärokt^cb. ept_safari,%a8E_uâloKk9Í
+ @|xd2eelnqîcy.nzg^$ge.er)Ó(é`a+8LA`DORM(e|t^ff°xt_opEòa Ios> eø4iîdVkkdÿcc, exd_saçqr}!Exu_ublock)
+Hà.png!%fomain=freádban#x.Mpg! *tôps:¯/gduiuj.bïí/Agtar0ÔaemoCdgUaRtN=luDrs/I{wTeW³480
+meen3yèackdrs®/rc%$sCrixv[Tao-cojte~t=¢idrewaiO_séll"\z-if)Lendt(="3:0"Y,az-luoçth=$7004 U	
+eÍkrqhaok5ps.ovf#%'//scriptlep abod-kN=bò/pÅptym3ri=D0,¸&ad`mcaInOwad|&)
+!cid *atguerdW)xp_stfaZy =< aeguardapU_ilG¤tø1gdgm'âD_ehu_`ndr'é`_cb ¼ eúÔ[ublokk)ZÀ@ttmemovyhabJeps.ïbfŞ$ge~%VI{lid¡
+@@||pageaE2®goooLE{y.äication.co}/Page!d-js/adsb{Gogcûhó$dn-ãij=té®Meegryh%cjdSq&orF
+BÁ|~pageit2,ekkelesy.di3étion®ûïopageal/j3/r*/siowdesŞímpl÷iô`WaM`Wf920 ).js$dn/aiL=ıinlemo"y¨ickerw.+pg
+¡se.dif‹!!http{z¯'gidHt`!om/Á$gtqrdT%`m/@dgu!òdNi|td22+i;óu¥sl414*!)dLAPdORL(ehTOdf,8%<|_Odera50ios, e0tßanf2ïydcb,`eèt_safark, e|ô_ublg#k)
+@ttxjo|3<1fkb~env.com^$Oahår)'è	`e
+%:0RLATN_RO*e8t_Vt, ExpS/pdr`. ÉOs<eyt_andòoHd_cb- exuWsafari. $xõ_uj|k‰b)@Ä|<xâo83 24grzan|.Kom-*>jğoc
+a htDpQ9//giÔhq2.co-¯Adwyardeam/Adg7gSDFil|erû/issueS'3²25@@|ltm'rqP.s}.d:?vi!Eëjs.aeæloskDgpecv'
+÷ e/iaa.½`4v,coí.4r! ht$ps://g`tiuâ¬bo-?AdòuabdTaem/CtGwabdF©}tezq/aRsums/1334.bh.oëabåm.nåt#&!"rlogkaweinmf©Rekl!m(û `dIght: ipØ!im0ortAn4; u!+PLATFOrM ù?s, åxt_aneRwiäßbb,p}{ô_sefrahBlg%javem.nEt#A&.Adsb¹soW,e
+% htvps:+/çmtHcb®ko}¿adouá2uTgam/ÁdgTyrdilte2s/issuew/3ppt¹J + pÌ@TFO†M(ettff<(eyd_påva$$is extNantaokä^#b erl[uabari, íxdZubnkCi	
+@@|tm,pEs´&comV$gefwvichide-
+ ; LÅ\VORM©ettG'f Ext_fper@, Ios, e||]Andrkid_cb. %xğ_safa2i,0axü_tjl{b[!*@@||pa'ead2+g+oglõsyn`IciUaOn.gm'págg!%/jzedsbysoghÅ.j{$lomaio=m*0MS20.coe! xttpsº7/gathur.#oM/AdGuAsdTa`e/adgõ`rdFidtessiwsuEóo302>6 H}xstatii.ívgln.n%e/ês+ads*jz$$/íain9fohpn!y.'nm&t0
+! j~tpv*+'gkthub.coe/Ud÷ıArlT!á}?@gguArÌFi\td2S.iswu-s+30734*±+ PTTFRI(ho{,&%|õWan`rïif_cv,èåxtUsefarii
+@H}|vóíue2kdynap$'g*etmchide*!pèstpr:moT`ubcol.AdguaseÔeao%SdgU`rdilte&siss0as³0ë29@<\clnj3.chg%edlqse.c/m/i+cxolibs/deakadbloâê/2.8®u.nõgiqbìCk>miînjs$domain9	odvizita/-­!+  LCTÆGRM¨ioS.$dxt_andvMd_cb, mXp]Sidmri©
+@@|8kîdwézir.cïE^$g%n¥ribhi$e¬Š! xTôps;?/githuB.cm&IdgqIbtTeAmad#uar`Fi,terc+iSsıes.61472j!;!PCTFL(e:t_æf,(eyt_nrdra"ioób,Uxtajdsméd_kb, eiô3`&`òi, exü_ucìj#K,t`|lhErOnlar.g2eş$gg~erùchiåe
+  ht|Tcz/giTøuj.cgM/@lg5`0BTeamkEdcuardÆiltevsoisSuew/27¶06.teûnobAlte.com#@!®aj-anvart­"ánntR
+t%ifobamu!Coi'@#&an-SpooqmrEd
+`ittP{>?gi4huc,coi/@åcuqpTTui-/afíuÑrdFhm|wrs'aWsve{?¦635=J!* PDÁTBOb^(ior,"gx|_³odrïad_eJi@À|œdírem.m}ui¶5rËixe.ned^,'ejeriëHid…
+!4`4tps:)¯biphub.soí/IeguardteAM/DgqarìFiìtgòs/iscues6³µ4d`~ügaxenb)Lép.cl/jSSi2tu/AO¯ids.Man.jwgdpeg3idErnc{%+%#ûÉnd}~>3aeDltectet`½ n!hsg;"e"Èôppc;/gathub.coo/qDcuQrfeao+Cdg}ar`F}lteZ?/is{qås/2413­
+}Ndrk+da}u;i®ckm##,YAT-	dÂ.oãk»OVte¡"hôôPS/G-th}".3/e/Édgqa:D]åAm+aä'uaSfFolpav¹kesrõgr/23581
 @@||my-debrid.net^$generichide
 ! https://github.com/AdguardTeam/AdguardFilters/issues/23559
 @@||gta-gorevleri.com/js/ads-*-*.js|$~third-party
@@ -908,20 +781,14 @@ vipingilizce.net#?#.ContentAnasayfa > fieldset > legend:contains(/^Reklam$/)
 cimri.com#?#table > tbody > tr:has(div[width="728"][height="90"])
 letgo.com#?#div[class^="Container"] > div[class^="Spacer"] div[id^="div-gpt-ad"]:upward(1)
 jojdn2.xyz#?##oframeplayerjs > pjsdiv[style]:has(> pjsdiv > pjsdiv[style*="background: rgb(255, 0, 0);"])
-kimkazandi.com#?#.native-kutu:upward(1)
-telegramgruplari.com#?#.columns.is-multiline > .column > center > amp-ad:upward(2)
-telegramgruplari.com#?#.columns.is-multiline > .column > .card-sl > .sponsorlu:upward(2)
-aksiyon.com.tr#?#.card.bg-body > h4.text-warning:contains(Sponsor)
-ogznet.com#?#.sidebar > .widget > .adsbygoogle:upward(1)
-anamurekspres.com#?#body > .container > .row + .shadow1 > .header_big_advert:upward(1)
-sonses.tv,avrupabulten.com#?#body > .shadow1 > .header_big_advert:upward(1)
-cumhuriyet.com.tr#?#.container > div.row:has(> div[style] > div[class^="container-ads"])
-kibrisgercek.com##.haberDetayIcerik p > img[loading="lazy"]:upward(1)
-kanal42haber.com#?#body > div.container > div.header_big_advert:upward(1)
-oyuncukuru.org#?#.theiaStickySidebar > aside.widget ins.adsbygoogle:upward(aside.widget)
-webteizle.*#$?##sol > #embed:has(iframe) ~ #video-onu2 { remove: true; }
-technoprogram.com#?#.sidebar-content > .sidebar-top > p:contains(/^Reklam$/):upward(1)
-haber365.com.tr#?#.row > div.col-4:has(> div.bg-white > div.bg-filigran > div.ads-wrapper)
+kimkazandi.com#?#.nat}²emkudu:upg!2d*q %Jd$legr@m'r}plÉrA.com#?#$â-luDnKi;,mtlvmìine . .ãohuMn >"ãänugr ~¢ai`-`d>up7qr$(2)*dEHeoramgvårlárI.csM#?+.clõinric!iUMt)liîD ~ .snluld > *cAvt(ûd :h.Sp~,soò|u:upwacd(2)á{syyn.cn&tr?#.Ga6d(bw/pody"> h4.texrew@rNingxaontaINC¨spglqbr-gwznet>cwm+?#.sidebAq¸? .widgdp ¾0.als:qgooglat wasd(1+
+ãoam=ruksqrws.co-#?#n?dy :ä.cntiyfeR 6 &coö + shadoW1 ~ yeagajObio_àdVcòtupach)1)
+skoses.tv<avru`abu8tej>ki!?#bNfy°> +rhaä/71 =`.heidbr^rig-avgzv:ubvar@¨s)Jsuojqqiyçt>coo.Tr¢/#*golTainer!>0fIv*rgw:har(>0Eav{sp}le] ~`åiVKc,ásó=¢Conta`odrad3"]©	
+êmbrisg%rcuk,sní+#.hacebdetaiIÃezikP <3©MGYlo!Difg=*lmúi">upwer`(1©
+jenA,4³hajer®Ã_l?bgd}"> dmt.sO&4a).ur  $if>xEade2]")gedveru>upw`Fn*1)
+{yõ^iekuru.ovg'¯#~|hdiaSôkg/yldeâár ?(aS)dä.7ilgeà ifs>qdH9gmoolejupwqrd(`sidg®idget	*wer4uirte*#l=##sod >:+embed»lqs*Mdra}e	4~ #fm$doolu2$y pemo6m truÅ; }
+teohzops¯gb!e<3om+?.óadm ar-cOn\5f| > .shDebqs%4K8 > r:bgntAin{-^Reklam4')2pàts2d(1)*h`be265.somftr#?)ân7°> di~®cgl­4<(as¨
+ fiv.bg-Sjhte > div.bg-filigran > div.ads-wrapper)
 silicone-forum.com#?#.p-body-pageContent > div.block:has(> div.block-container > div.block-body > a[href^="https://gibir.net.tr/"])
 aydinlatma.org#?##content-area ins.adsbygoogle:upward(2)
 kriptoparapiyasasi.com#?#.col-lg-8 > .panel-info > .panel-body > .panel > .panel-body > a[target="_blank"]:upward(2)
@@ -931,20 +798,14 @@ kriptokoin.com#?#div[class^="sidebar_inner"] > div.widget:has(> div.textwidget >
 koinmedya.com#?#.sidebar-content-fixed-scroll > aside.widget > div.widget_text > div.textwidget > ins[class] ~ script:upward(aside.widget)
 ajansspor.com#?#.container .none-margin-tablet > .margin-top--30 > .center__row > div[id^="category-"] > script:contains(defineSlot):upward(3)
 sonperiyot.com#?#aside:has(> h4 > span:contains(SPONSOR))
-koinfinans.com#?#.td-ss-main-sidebar > aside.widget:has(> h4.block-title > span:contains(Reklam))
-aksam.com.tr#?#div[style^="width:"] > [id^="div-gpt-ad"]:upward(1)
-aksam.com.tr#?#div[style^="height:"] > [id^="div-gpt-ad"]:upward(1)
-aksam.com.tr#?#.col-4 > div[style^="height"] > [id^="div-gpt-ad"]:upward(1)
-aksam.com.tr#?#div[style^="height:"] > div[id^="ENGAGEYA_WIDGET_"]:upward(1)
-sondakika.com#?#.content-container > #aside > div[style="height:600px;"]:upward(1)
-spyhackerz.org#?#.p-body > .p-body-inner > div[style="text-align: center"] > a.link--external[target="_blank"]:upward(1)
-donghuatr.com#?##sidebar > div.widget_text:has(> div > h3:contains(Reklam))
-turkegitim.net#?#.sFlexCont > .sFlexElement[style] > .adsbygoogle:upward(1)
-airturkhaber.com#?##main > div[id^="av_section_"]:has(.adsbygoogle)
-airturkhaber.com#?##main > div[id^="av_section_"]:has(center > a[href="https://www.losev.org.tr/bagis/ramazan.html"])
-nurmutfagi.de#?#.sb-right > div.sb-widget:has(> div.ad-widget)
-21yyte.org#?#.module > div.module-inner div.bannergroup:upward(.module)
-emlakkulisi.com#?#.sidebar > .widget > .block-title > span:contains(Reklamlar):upward(2)
+koinfinans.com#?#.td-ss-main-sidebar > aside.widget:has(>(`5.B`gbk-TiPlu ¾ óx`/:#onTains(Rek|!í9=Á;sam.c.m'ä2!?#divkrv{Lm^="wi,ôh:"İ > _id^="diF-Gp|oadrY:|`óar$,1)
+£ksqm.÷ni.tr#>"tiw[qt]deV="hiehô:ì_ > id^5"dkv)gğtad2};upsaZd(1)
+ajsaM.cfmtr3u£."o~-4"w dif[1ôy|m^5Bzeight]0> [itZ="div-gpd-ad"İ:wPwarä¨1+
+akqam.cmí.tr#?#bI~s~yle^="xEH7jT:"](<`dir[mD^4"A^GAGE[aWsIdƒET]2]ºu0w12%1)
+coneáKy+a.ago#>+.koÿtEkt-ãontamneò >!sasé$e!º divYStym%=#hmaÅht:¾02py;b\:upward(0)
+sqyhabomrznoRf3­‹.q-B/d| > ®p-âod19ioNlr ¾ $ivYsuy|e=¢tgpt-m|)en¾(B%oterb] >`a.Linm-=Uyvgr.ál[Teúge%="êlaNc"]ºõXwar#1)
+dongjuatr.Col£#sida às > div.Ydgeô_tEx´:h¡c. di6 & p3:coLdEyns(R`imam))tuRycbidio.îed##®3G,ezGOlt > .se%PE|emdot[s|yldYb¾ .aäsRyfïgdLe:tward(1)	airdurkxabeR.com#+1mai. > dar[id^=&av_{$cğénN"]*HAr )dsjyÿoglu)
+A(rturk(aber.ko/#»##eaij2> Di~Kmd-"av_óekeh¯n_"]ias(!en4å: > ![ê2eeq"èpv//Www.losiÖ/krg.Dr?baair.rqeazanjhtel"])nuZ-÷tnagI6'e#?#®s{-rhgjt ? äiv.sf-gydgqòzhas(. fyV&adŒwidgdTiš³qyype.mbg#?k.mo$u%e! dmv.­odte-ihìåp divbanoErgr/up:wpwc3d(.mo`5<Å	Je}lakkulisi.com#?#.sidebar > .widget > .block-title > span:contains(Reklamlar):upward(2)
 basarisiralamalari.com#?##panels > div.safirBox:has(> div.widgetContent > a[title="Limit"])
 basarisiralamalari.com#?#.home > div.bd-callout:has(> center > a[title="Limit"])
 malatyaguncel.com#?#.base_side > div.side_banner > a[href][target]:upward(1)
@@ -966,18 +827,16 @@ oyunbus.com#?#.sagblok1 > center:contains(/^Reklam$/)
 oyunbus.com#?#.oyunsagblok > center > span:contains(/^Reklam$/)
 oyunu.com.tr#?##orta > .karisikOyunlarr > div > .adsbygoogle:upward(2)
 alomaliye.com#?#.sidebar > .mom_custom_text > .custom_textwidget > .adsbygoogle:upward(2)
-agaclar.net#?#.thead:contains(Reklam):upward(2)
-agaclar.net#?#div[style="padding:0px 10px 0px 10px"] > div[id="posts"] > table[class="tborder"][width="100%"][align="center"]:has(td.thead:contains(Sponsorlu Baglantilar))
-sonsaat.com.tr#?#.sidebar > div.widget:has(> div.kutu > div.textwidget > iframe[name="BIKADV"])
-memurlar.net#?#td:has(> span[id$="_adv_top"])
-maisonfrancaise.com.tr#?##sidebar > .sidebar-box > h4 > span:contains(/^REKLAM$/):upward(2)
-hurriyet.com.tr#?#.homepage-news-top div.news-wrapper:has(> a[href^="https://"]:not([href^="http://www.hurriyet.com.tr/"])[target="_blank"])
-habersiz.co#?##sidebar > div.widget_text:has(> div.textwidget > ins.adsbygoogle)
-habersiz.co#?#.single_line:has(> ins.adsbygoogle)
-cumhuriyet.com.tr#?#.swiper-wrapper > div.swiper-slide:has(> a[href^="/reklam/"])
-oyunkuzusu.com#?#body > div[style^="margin: 0 auto; width: 970px;"]:has(> div[id^="reklam"])
-tr-cam.com#?#.in-bg-pop > #morev:has(> div[id*="ScriptRoot"])
-kibriswebhaber.com#?#.theiaStickySidebar > div[class]:has(> div.textwidget table[style] > tbody > tr > td:contains(Mezunum))
+agaclar.net#?#.thead:contains,REkmam):õpwaúd(ri-
+ gqclhv?n%tc?#eiwKsuyle-páddinç:p8 00qx 4px 1 âx"Y !dlr[)d?"tkstqƒ\ >table{c¨!rs?2trordew"][wiDth,"³ 0-#][aliFn½"kgnter"M:``s(4d.thwad:c/nta	nS(UpknsorjuhCa7l)Ntèl!r))
+cons)at,coM.trc=c.÷iteâar@. 4it.@dget:(as`{ fyv./}|u . äkv.tå|tgidgev0? m`rAme[n`iõy"BHKAFw ])
+ueo5rDar.oet1?#t<:(as)¾ s`y/Kid,6aD~Wtïp"}(
+miIsonfra.cAiseoioé,|r+?#£s)debar >${idejarc>x8> è4 > cqco:cmêôaifw +OREKHA]4/)upware¨0+
+hubòhyep.cm&ôûª?#nhomepafE-neu[tmP dyv/^%Ws-wrApper:hQr> qZ`qe&_=#lTtğs;/":ot Shråfv"ht<p://uww.hursayet.Cgm.tz/"]©[tqvge\\"_`ì`nk"U!habersaú®cg###7iDu*#p4~ dav.tm$EEt_te|t*(aS(>(d)~.tehtwidfet(.`ijs.Adrhygonele9M
+h!cqr#iz.cg"?£®{Iî÷êf]L)ne*H q(> yns. DsbygooglD	*+umhe2kùet1om.vr#¿#.{÷Ihe2-3apper > di6.sWkpIv-slyde:Har(6 b[èráf^½2/veola]o*]+)
+yunë5Rus÷/g/m#?7BkTx ^0divzstùne"íA2oin: p0!u5o3 wiDwh2 ;'0px;¦]:hash> d)VKil^?ªsejham"])M
+t~-camcïm#/3,inmbç-plp : "o/0åv:lar(> davKid*="SabkppOt¤\)	
+kibzhswerdaªeR.cOmƒ?#.dheaaÁtIKk9ÓIdepar < dh|[clc{s]:Has(¾"dif.rgp<wédget$ôable[style] > tbody > tr > td:contains(Mezunum))
 kibriswebhaber.com#?#.theiaStickySidebar > div[class]:has(> div.bilesen-baslik)
 kibriswebhaber.com#?#.sol_ana > div[class]:has(> div[style] > ins.adsbygoogle)
 trt.net.tr#?#div[class^="col-"] > div.row:has(> div[class] > hr.altCizgi)
@@ -1813,233 +1672,117 @@ esgundem26.com#$#.modal-backdrop { display: none !important; }
 sportsregg.com#$##headertop { margin-top: 0 !important; }
 ! https://github.com/AdguardTeam/AdguardFilters/issues/53647
 motosiklet.net#$#.tbanner { visibility: hidden !important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/53965
-filmizleplay.com#$#body { background-image: none!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/53039
-vipfilmlerizleme.com#$#header.container { margin-top: 0!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/52934
-tr.link#$##dinami { display: block !important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/52282
-muud.com.tr#$#div[class^="adv-"] { height: 0 !important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/52247
-technopat.net#$#.x-root { background-image: none !important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/50920
-dizison.pw#$#body { background: none!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/50653#event-3093536575
-vipfilmlerizle.com#$#body { background-image: none!important; }
-vipfilmlerizle.com#$#body > header.container { margin-top: 0!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/98251
-ceptenmuzikindir.me,mp3indirhane.com,indirmp3mobil.com,tubazymp3.com,mp3indirelim.org#$#div > a[href][target="_blank"][style*="display: flex !important;"] { position: absolute !important; left: -3000px !important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/50206
-! https://github.com/AdguardTeam/AdguardFilters/issues/50205
-! https://github.com/AdguardTeam/AdguardFilters/issues/50203
-filmindir.be,mp3indirdurbedava.org,sarkiyukleindir.com#$#center > div > a[href][target="_blank"] { position: absolute !important; left: -3000px !important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/49008
-evrensel.net#$#.tepe-banner { margin-top: 0 !important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/47586
-bilgenc.com#$#.mtsnb-top { display: none!important; }
-bilgenc.com#$#body.has-mtsnb[style^="padding-top:"] { padding-top: 0!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/48340
-gunbasi.com#$##menuBG.sabitle { top: 0!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/34250
-aydinpost.com#$#.modal-backdrop { display: none!important; }
-aydinpost.com#$#body.modal-open { overflow: visible!important; padding-right: 0!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/44484
-fullhdfilmizle24.com#$#.once-reklam { display: none!important; }
-fullhdfilmizle24.com#$##videos { display: block!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/43170
-trabzonhaber24.com#$#.modal-backdrop { display: none !important; }
-trabzonhaber24.com#$#body { overflow: visible !important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/43962
-cazkolik.com#$##solust { position: static!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/43174
-61medya.net#$##menuBG.sabitle { top: 0!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/42920
-technopat.net#$#body { background-image: none!important; }
-technopat.net#$#.samBackground[style] { background-image: none!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/42902
-hdfilmizlesene2.com#$#.once-reklam { display: none!important; }
-hdfilmizlesene2.com#$##videos { display: block!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/39106
-finansgundem.com#$##head > .menu-bar.cloned { top: 0!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/41231
-queenbet4.tv#$#body { background: #143a00!important; }
-queenbet4.tv#$?#.navbar-nav > li:has(> a[href*="queenbet4.tv/"]) { left: -400px!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/41014
-fullhdfilmizlersen.net#$#body { background: #00050e!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/39701
-bizdebeles.com#$#div:not([class]):not([id]) > a[href][rel="nofollow"][style*="background-color:"] { position: absolute!important; left: -3000px!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/39339
-yerliyabancidizi.com#$##preroll_skip_btn { display: block !important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/39481
-hd720pfilmizle.com#$##videoOncesi { display: none!important; }
-hd720pfilmizle.com#$##Movie { display: block!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/39486
-bedava-film.com#$##Video-Oncesi { display: none!important; }
-bedava-film.com#$##Movie-video { display: block!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/39482
-filmizle.tc#$#.tab-reklam { display: none!important; }
-filmizle.tc#$#.tab-embed { display: block!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/39349
-hdfilmcukka.com#$##film { display: block!important; }
-hdfilmcukka.com#$##filmoncereklam { display: none!important; }
-hdfilmcukka.com#$#body { background: #000000!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/39327
-filmdizievi1.com#$##videos { display: block!important; }
-filmdizievi1.com#$#.once-reklam { display: none!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/39363
-belgeselciyiz.com#$##Movie-video { display: block!important; }
-belgeselciyiz.com#$##Video-Oncesi { display: none!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/39345
-hizlifilmizlehd.com#$##videos { display: block!important; }
-hizlifilmizlehd.com#$#.once-reklam { display: none!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/39334
-dizilara.org#$##player-has-ads { display: block!important; }
-dizilara.org#$##player-before-ads { display: none!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/39347
-evrenselfilmizle.net#$#.tab-embed { display: block!important; }
-evrenselfilmizle.net#$#.tab-reklam { display: none!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/39278
-asyadizileri.net#$#.once-reklam { display: none!important; }
-asyadizileri.net#$##videos { display: block!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/39242
-filmizlehdfull.net#$##filmoncereklam { display: none!important; }
-filmizlehdfull.net#$##film { display: block!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/39371
-tranimeizle.com#$#.previd-link { visibility: hidden!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/39331
-altyazilifilmizle.tv#$#header.container[style^="margin-top:"] { margin-top: 0!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/39473
-! https://github.com/AdguardTeam/AdguardFilters/issues/39244
-! https://github.com/AdguardTeam/AdguardFilters/issues/39245
-fullfilmizledim.com,fiilmizleyeni.com#$##video > .once-reklam { display: none!important; }
-fullfilmizledim.com,fiilmizleyeni.com#$##video > #videos { display: block!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/38608
-indirmedenfilmizle.pw#$#header.container[style^="margin-top:"] { margin-top: 0!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/37882
-teknoblog.com#$#.adsbygoogle { position: absolute!important; left: -3000px!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/37546
-ceptenmp3.net#$#.swal2-container { display: none!important; }
-ceptenmp3.net#$#body.swal2-shown { overflow: visible!important; padding-right: 0!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/37554
-kraloyun.com#$##game_content { width: 100%!important; height: 100%!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/36729
-benzinlitre.com#$##afterNotification { margin-top: 0 !important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/35746
-birgun.net#$#.adsbygoogle { position: absolute!important; left: -10000px!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/35463
-fullfilmhdizle2.net#$#body > #wrap { margin-top: 0!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/34557
-indircafe.net#$#a[class][onclick^="window.open("][rel="nofollow"] { position: absolute!important; left: -3000px!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/33188
-ucuzaucak.net#$#.adsbygoogle { position: absolute!important; left: -3000px!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/32919
-oyunindir.club#$#div > a[href^="https://bcvcrdr."] { position: absolute!important; left: -3000px!important; }
-! https://forum.adguard.com/index.php?threads/indirin-co.31008/
-indirin.co#$#a[href^="https://ads.lnklnk.com"] { position: absolute!important; left: -3000px!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/30967
-gazetem.ru#$##mvp-site-main { margin-top: 0!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/37080
-hiltonbettv2.com#$#.player-poster { background-image: none!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/29866
-technopat.net#$#body.td-ad-background-link { background-image: none!important; }
-technopat.net#$#body.td-ad-background-link #td-outer-wrap { cursor: auto!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/26441
-piyasaanketi.com#$#.adsbygoogle { position: absolute!important; left: -3000px!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/26090
-karamangundem.com#$##modal-ads { display: none!important; }
-karamangundem.com#$#.modal-backdrop { display: none!important; }
-karamangundem.com#$#body { overflow: visible!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/98811
-webtekno.com#$?#.wt-masthead { padding: 0 !important; }
-webtekno.com#$#.wt-container[style*="padding-top: 0px;"] { padding-top: 60px!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/21307
-hurriyet.com.tr#$#.bigpara-homepage-widget { height: calc(100%)!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/20640
-fanatik.com.tr#$#.in-view-ads { position: absolute!important; left: -3000px!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/18097
-kocaelikoz.com#$##modal-ads { display:none!important; }
-kocaelikoz.com#$#.modal-backdrop { display:none!important; }
-kocaelikoz.com#$#.modal-open { overflow:visible!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/16817
-torrenthd.org#$#.fullstory > a[href*="clck.php"][target="_blank"] { position: absolute!important; left: -4000px!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/16817
-torrenthd.org#$#.swal2-container { display:none!important; }
-torrenthd.org#$#.swal2-shown { overflow:visible!important; }
-! https://forum.adguard.com/index.php?threads/resolved-https-altin-in.28770
-altin.in#$#.adsbygoogle { height:1px!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/16742
-t24.com.tr#$#.top-banner-wrapper { padding: 1px!important; background-color: #007fc5!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/43119
-! https://github.com/AdguardTeam/AdguardFilters/issues/10644
-! https://github.com/AdguardTeam/AdguardFilters/issues/8950
-forum.donanimhaber.com#$#.sayfafull.uzat > .ie-navigasyon + .soltaraf { width:calc(100% - 290px)!important; }
-forum.donanimhaber.com#$#.sayfafull.uzat > .soltaraf { width:calc(100% - 253px)!important; }
-forum.donanimhaber.com#$#.soltaraf { width: calc(100%)!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/10493
-timeout.com#$#.ad-scrollpane { position: absolute!important; left: -3000px!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/9753
-techinside.com#$##main > #content[style^="margin-top:"] { padding-top: 0!important; }
-techinside.com#$##main > .header-wrapper + .clearfix + div[style="float:left;width:100%;text-align:center;margin:70px 0 0 0;min-height:90px;"] { margin-top: 10px!important; }
-! https://forum.adguard.com/index.php?threads/27278/
-arabam.com#$#.min-height-at-index { height: 144px!important; }
-! https://forum.adguard.com/index.php?threads/koroglugazetesi-com.26742/
-koroglugazetesi.com#$##menuBG.sabitle { top: 0!important; }
-! https://github.com/AdguardTeam/AdguardFilters/issues/7308
-turkiyegazetesi.com.tr#$##adidm_reklam { display: none!important; }
-turkiyegazetesi.com.tr#$#.footer { display: table; }
-! https://forum.adguard.com/index.php?threads/memohaber-com.26566/
-memohaber.com#$#body > .categoriesBg { top: 132px!important; }
-memohaber.com#$#body > .ustLogoAlti { top: 42px!important; }
-! https://forum.adguard.com/index.php?threads/5-missed-ads-14.24892/
-enguzeloyunlar.net#$##gamePlay { display: block!important; }
-enguzeloyunlar.net#$##afterGameAds { display: none!important; }
-! https://forum.adguard.com/index.php?threads/5-missed-ads-3.24471/
-milliyet.com.tr#$#.gllAd { visibility: hidden; }
-! https://forum.adguard.com/index.php?threads/20712/
-cumhuriyet.com.tr#$##popup { display: none!important; }
-cumhuriyet.com.tr#$#.with-popup { overflow: visible!important; }
-cumhuriyet.com.tr#$#body.with-bg { padding-top: 0!important; }
-! https://forum.adguard.com/index.php?threads/18341/
-sabah.com.tr#$#header.advertControlArea { top: 0!important; }
-!
-! Unhide the player while ads timeout
-!
-siyahfilmizle.org#$##reki1 { display: none !important; }
-siyahfilmizle.org#$##player { display: block !important; }
-hdrealfilmizleme.com#$##film { display: block !important; }
-hdrealfilmizleme.com#$##filmoncereklam { display: none !important; }
-hdfilmizlehd.com#$##filmoncereklam { display: none !important; }
-hdfilmizlehd.com#$##episode {  height: auto !important; width: auto !important; overflow: auto !important; position: unset !important;}
-fullhdfilmizle.pw#$##reki1 { display: none !important; }
-fullhdfilmizle.pw#$##kendisi { display: block !important; }
-filmgezegeni.org#$##rk-content { display: none !important; }
-filmgezegeni.org#$##cn-content { display: block !important; }
-filmbabasi.com#$##rk-content { display: none !important; }
-filmbabasi.com#$##cn-content { display: block !important; }
-fullhdizle.*#$##kendisi { display: block !important; }
-fullhdizle.*#$##vrklm { display: none !important; }
-filmizletv.pw#$##reki1 { display: none !important; }
-filmizletv.pw#$##kendisi { display: block !important; }
-fullhdfilmmodu.org#$##reki1 { display: none !important; }
-fullhdfilmmodu.org#$##kendisi { display: block !important; }
-dizipal62.com#$#.card-video { display: block !important; }
-hdfilmcehennem.com#$##reki1 { display: none!important; }
-hdfilmcehennem.com#$##kendisi { display: block!important; }
-hdfilmcehennemi2.*#$#div[id^="reki"] { display: none !important; }
-hdfilmcehennemi2.*#$##kendisi { display: block !important; }
-fullnetfilmizlesene.net#$#.gizli { display: block !important; }
-fullnetfilmizlesene.net#$#.once-reklam { display: none !important; }
-fullhdfilmizlesene3.org#$#.filmicerik { display: block !important; }
-filmgooo.com#$#.tab-reklam { display: none !important; }
-filmgooo.com#$#.tab-embed { display: block !important; }
-hdfullizle.org#$##filmoncereklam { display: none !important; }
-hdfullizle.org#$##episode { height: unset !important; width: unset !important; position: inherit !important; }
-stadyum.tv#$##thisplayer { display: block !important; }
-stadyum.tv#$#div[id$="reki"] { display: none !important; }
-guncelhdfilm.com#$##movie { display: block !important; }
-guncelhdfilm.com#$##movieoncereklam { display: none !important; }
-oyunu.com.tr#$##bir.oynama { display: none !important; }
+! https://github.com/AdgqardTemi­Afgw!rîFilte2{/issues-73165
+b`lí©Zleuj!ycom"¤#bOdx0{ baikcrïwndymaçd>(nonw!i-xortan}=0u(
+! j`|rs:)/nùtm}b~coM/ÁdçuardTdam/A¤g}ardFiìtorC/i3sues/=339Y
+vYpfih}}eci~deme*#oí#$#leadev®ck~taineò${ m!ògyìv|x:"0 imP-ptcêu; }! xppPc:/¯e)t\tâ.cím/DguarfTõAm.Atouaräféìdgrs/«usues-52934JTrlkK+$#3äila,i$s æisXl`{:9jkïbK"!impor|ánu» u
+!`hvups¸/-fiuhub.gm`guar$Teem/BfoqErdFéhüers-isswíû'=2(0
+mutdcmM*ôra$3fivËãlasq^="A,t-"]`{ heigjt: p %ympnrôa.|;}Z!$httqs://g)|¨uãcomadguerfTEam/Agguàr.Dèltmv.issuEy5647tujfnopud.ngt3$#.{/~mo> û Backgrïuì`-h-ageº"~oNe %iiqo0taNt; }-*	0hd4pQº?/gitlub.cmí.ClGuardeaí/MnguabdF(löers/isqueö/%920
+ìmj)Son.xw3,+b)dù 0cagKgrnunt~ nohg1imQorvqn<{ }‰ "yttps://gy|êwz.cmM?Fdge!v$Ueãm/AÀuA2dFiltep#-ésrUesm¥27³#Efent)#0½3936}75,vixvilmlepIZ/ucI/$crney {$ba#Kgsouj`-iMqçå: ~one!amp/rpant+`}MˆV+pnelmlerzzle>gam#4#body!> èeedes+cgnu!ines[&ma3oin-tÏp: °!jmqor|1.t?(}
+ httpc8--g{thu`.co­/deUabfDeem/Alge rdFHnt%ús/iswumq/ù<¶79cmptenì}Rykin@ir.me-mP3éldir(!ne.ëomoo`ivmxéobin,coè,uub!zxmt3.com,}p2ynDipå|)m.owg#'dhv$= s[hbmf][|ar#at½&]cl!ncrG[svyhf>=
+dmqp}byz flgx aiMpsbteÎp;"]¨{ pïsi´mon> abwoluTe( Imporucmt: lebvº0-s´10px !hm`oSdcnvc }J  htEps:'¯witi|b.com+AdwuardTeam?AdeuaRdFihôgrs©ssUes'02P6
+¥ ht02sº/wmthrcol/Adg5ar`VaAh'AdguazdFIl4e4b/ircwÕs/= 05
+!0h<ôqv:/o)uhur.co-/`burfVeal/ÉdsTarD©}ta6s/iswues/%02 s,
+filmiîd)r.p%,mr3indirduxbg`awa&orghsa2iiyuklgineir.boL#$#Ûejdmr ? ¬Iw ^`ehsgv}Ûtqzce4="Wblalk"] v po{(tyo& a@soheìe 5imp'rtanw`deãu8 0pr|`¡Imrovtanp; ]!Èldps:+-github.bïl/	dguabäPuàlEdçwabdOén0erS/I{§ugsW´958Zeşrgnwel®net!nvE4e/Bc~nav z margif-ü0x$° impo:t`ot? }#0httpw:/.gath}b,bo%+ádg%@2dFeam/tgusrdFimtgbó/iósUgs/<786-
+bkLgen3som"$'.otsnj=uoğ`{(ei{pdayº îoo!éMpoSöAît;$}
+bitfencocgm#$#boly"has%mtrlbÙslyeN"pifdafv-vo°#hy8tadlijgmto°: 19éipopTANt;)}
+1 hTtxg2/Oe©uhubnbgmgAdguaòdTe!loÁdguÑB'Fml2Ars?issÕ%s/4874 uŠgunjksi.pom#4#£mefuBG®s@bhtLg { |op. <#mmpnb4i&t }
++€(tôs"ogmôh}bnboa+AaguardPeam@dgõaötG)ltersoisswe[­'$254	a{ôi~Pogt.#om",#¾aoda-sack`roq$ş"`hsplax8 nïnm!iípo24`®t3`{
+!(dinpoóv*coÍ#&£boly.modalkp$n { /erglgW; ~kcébne¡impgruant; ğa ähnc)ryfh|»&4%iManr|ãnt; i
+a`|tp{:oogipj5b.com/Aeÿulrt\aym)ÁtGuavdfiltõrs/is§ud{/54°04~uÌ|hävillyzluj<.cëm#£*Oîce|reolam  dhStliy n.ne!io1/stenü=0]
+fumìh$æil-i{le3%>c/mã ##vid%oc {(dé;tlay8 c<ogë1mipoóxaft; =Š) itdzs2+/giôh÷â®co-/Cdeuapdteal/QlGucrdViltePr/mqátå{/$172pr!êzofLcbáR24,oOm#$#®mOd`h-dAg*dsp {1dyspüay:(nonu `iÍporta&t;$}
+ôbabxoohab¤r:|.#gm#&sBkv}${$ovdrgnowz`vùsablu1ammxurôsnt; }=
+ (e0xq*//gluju".kkl/A&gtard4eaeAtguajlEil45p;>m{w}us/ô'»63cEzkoni+.³/ic$cCqìust { porit@n:$ctaôic±ihqorválô¿ }! è`tğ{://gmt`u"&sMl,adguardTuc$/Qdgõarelouers/m1cwey4374,69mïfqa'Îme7,#cMeîuBG.sÁcéule [(toğ8 4 i-0ortcn|›é]M
+1 hdôpczgkth½r.iïh.A`guas`TeceiAdouar VIlteró/}ssUe3>´:900
+tdkhnkret®î't"$#fïey {%baco§pnune-ima'ä îí~u#mmpïr|`nt; ]Mtecjnopdt.net+#wá}B`a{Groun$SûuyldU$û!bacjgRU~$iiligez*nOfe#émxorta.T; }! h400B//givjt`>alm%!dguaFdEågm/IdwuerdFmltass/h{rues/490:
+`lfihmiz-eseNe2.Co}#,3/nnce-2eklei${ d»srlayjDgng!ImvO2Ta~t; qhtmLkxluzene¶*am-³$##vIt`oz $méc¤l¡y:"bloãI!imqrpãn4û |J	!ètdğÓº'ofi|8tj/col/AfgwdrdTeam/ÉeguaûdG)lteSs?)1±uuq/39q06*CyîeosgUNfeecom'5#£xead ^`.lenuBa`.#hNed`û oà~ 0-im`afôåN`+ =
+% h4tğq:/ghtèuj&cnm­Aagyab`TeaíAmõir,FëìtursissUec/$1:31jq5äenâåp4.t¦"0boDy { rickwúounä:1!4;a88!im!oòtdnt? í1ueenjet4.ôR#<>#fmvóev-Nav 0di;¨!s*< c[ìpef"}q}ıdnbot>.tn/(İh { dmvtx =ô0 rx impo2vinU:$tŠ)"htTpc*/7gi5h}p.#oMnAd/uqrtTeam,A`gq!r`Fiìdevsoi3óu%s/43!4fulmhtféhmizlerseo,Na´£%#jï$y { bi3ofswuNd. #00qa!Amøovu'nv: 
+!€lpvps:/©'auhub-com?EfeuardUa`m¯Cdgu@ĞdF(Lrerr/é{sues/337p1
+bizeeòmìes.CoM#$!div;f+t¨[#laqs]):,m0i[ia]) > aYcsMf][zem=¦ofollOg"]»st9Le* b)cicP/wn=	conor;] {"pïğm`ioo: sbcoluTm!)lpoòtant{$le.t: -7400`h!iMqor}a|ü» }
+1 httxw8//cit(ub.aoí/Qdfua"dTuam/qdguAw%Viluåzs®éuc÷e2&39331
+ymrLaé!âahsi%izé&c/M#0c#pberïhlji`_"t.  nispl`yz!âlnãk 1k­povt!dt3 ıŠa httğs://ithtBconIdGuapE\íam/Alcq¡r\FY,tebs/i3{}ar?#™48Q
+èd·2pdfilíixlg.coM#&))vi,eoOngdsy6[ d{splaiº n-Le!èMpgräalt;0uld720pfiìmi:lakO]3$##Mo6ie"{`d)rPla): nhogK)import`nd |
+a https:/çithubnaom/@fguazd<e!m/$çwcr`iltdbs/msSuEs/1946Jjdd!Ta-fAm&kOm*$#bÖ)dåomO>s$si`y äM{Pjax#n/ne1iMp/zTAndr uãa$avA)film.çïmë$#ãMovie-ôIdgo z(t+spìai> b|ock!kmP/vTant+$}
+a€hp7Psº/github.co-/AdeuMrdT-km-A$ftapdF}|tars+isrceë/3928"ni,-izle.dg£$'.ti"%r%¯<am { déw0,áx: kgne%i?pozP!ft;$}fiLoiúla/7ka4k.6af=eïâåd { `ésplaY:*ÌgaK!hopgr|int;"}M
+!0xttrQ:.eiüh5b*cjl/A|ÿucr%Dí`ï/	tguázdTilterx/iSs}es/39s49
+jäfklmc1kki,com#`+film"(diQPmaq: nlnak!hmpoRtaît;"}M
+hdFiíauika>smm#$!#félíoncEbe+lam { dispìaY: nOne!h&yobt`o|+0M
+hdvinmgõë;A®{êm*$£b y û Bqskgjk5.d: 305p8aimpov\ant9(}-*!(btôtsº¯'o)ly4c*g/M/QdeucsdteõM+Adç}`bdÆilters*htsı`c¯39³wM
+6i¨ldIziav)¹.cg«4#3ui$eo3 R `m3pn`y2 flogo)Io`ovta.d: }fylmdéjyfwi1.com#$c.onc%,Reol`m {0dksalA9z nkLe#ympRta~t; {-Š!(https:¯'giv`ô*.com-AdggapdT5amoCdwEard@e}te2q«iqsues/£93¶3
+BudceSdLcé}IZ®C/M#`CªOovim-÷qdeo¨0d}srláq: "logkiimportant;(}O"ekcEremciiizgïmc%++Vyfeï-Ïnkewy({ l`srda{: No.d!iopobTa&p;!m
+!"ht<0s6.?G)tlur.#om/A`fõ!rd\Eqi/dweåsdFiltev3/ysw%`w/3=£<5Nxijly&küii{leHd,c/%#$##videos û lisple™ âìoCkai}xortant#"u(izlivzdmYzlH".am+$#.onc%mrmkmao { disPliq:nn%!yépÿrtint; }*!`htTPz:®/gkthuú.com/@dGu)slTeámAtgucrdG)løe~smIssuow.3534:diX)lkòa.r'‹$#'pcy%s-h¡s=ber(yfaspmcy<$Â|mck1+mpgrtanu90*DazIlaraorg"d£+pniyermbeforw,!fs${ `yáplAy3@nneaymğopta*4+ }! `|ppó:/¯w)thåb/ãgMAd&UerlUea­+A$ëeartNI|ôErs/écs}e{=s9347Jevrí+sel6il}){Le.net#$£ltab-elbdd {¡dIs naı8"blnka horOrtQft; |ŠErrenxE,$h(mizlenngt#$+®tqb-rez\aí a!Dispìay:`nîe#imxortent; iJ)¸j}tpr:=gi|h7j.Co-kAf'uağdVåum'Átguab`Fch|åRs/íssu%c/3)2waskaeizileri&îmt¥$#.once?vekdae ;$déstl`y:`&gne!im0or|!.qº û-*Áóy¡dizIleri>nåx# +'vMpåoq${adasrzay: b,ga}!i.poptant;"k	
+! https//'yxiUb?fom'€dçõirdTe)/Sdducr`F)ìTMrs*7sUmc392<2ˆTkh-éVlmh`f}ld.Nep3$#&)l=]NCerekl`L,{"fysğlcq: noîm©YmrÏrtajv? ıŠ&)ll)zleidæudì,ngT²´##gùt°{ diCqIái: jlocO kÿpobôqnt!9Š!0îtfqû/¯g)uj=j.boe/ dgu!rdí!m+AdçwardJinuerk/iwsuuw79379	t2!niEgmrlg&so-##.pòåVIe­kiji { v){)biìitz:¨x)l$oNilporôant;}! hptpsz.+Gevl5`.aoo+A,gwerdTmAm/A4e|á`lFmdôårQ'{sóuew/'=3“1`èqya{mnifii}ëklf.dv#'£h!`eò®con~alfer{st)lE^½ }argqn-topr\1{,mareéN/4op>!8!I-qgrtAnt> }I
+!0Htxqw--gie@t&.cm-/AdeuyrdeémAdeqarl)lvejq/i{{udc/9$77M
+!2ªttğs:./géth}b&cm.ÁdguerîUe`l+A`gåañfFIìugrc+Irsõus?39044
+u$lttPs:githôbNGom/AdgeczdTgaí/ddqAs%F(îtms3¯asQues/712´5Šbullæíllyúledém®cmfméldixleqeúi.soL!$!1^éäek&> ®înså-rd+liu`{$¤isp|aa: jooe)imtosTa_u; =m
+du,ldiLiizleäim®g/}fIh|}izleymîi.com!$£#fkdan > «vidos {áakrplAq? bLecc!im0ovt!nt;$ù*¡ Èptps://kthõc.cNe+AdGqa:tàDi/a`w5yrdiìter{?i3Cqec/78608
+ùodiriedenf+èmiúhe>vw#ehgqfaR.contIinmr[ñeyma^?"mabfi~-tp¢]"{¬mAwgIN	|k * 0#iípOruaj|) }
+9"`ttps:+uétH}f.ãgm/áÄwuqvt]eam'Ah'UardFkltg2Q/éssue3?³7892
+tmk.oC\oc.koÿ#d#/afqb}Goowdu$û¢`oÓitiojz abcM|94e!kmrg{tán; lUft: /3 00`x3iepstant; }	
+#(h4vq3:nkgithY.#=m/AdgtébfEqí/Adg1crlBioters/hssues/1W506
+aeute|lt³.net#$#&ówal3,cF/tiiner1{ fispl)y: nm|e!iíp-rp!ft{`ù
+#e`üeîMp²ngt#$#`oÄi.ywaä-ô`ownh ov%bfno÷ vIsibl%)impoptIu9 `amEINf-ciEbt: 0±kípoctant> u) btepš8//gitiuâsnL'AdguarDteam-QdgUardGiômrroi3qu;s'3765´{nqloyõn&co,#$#	¯!ıu_Contmov!{ ÷)ddk: 102e!Im0osôâït;`hEI7ht: 10 %¡imporucn];!}	! `ttpr9??féthuâ/coÍ*AEctar$%am/AhguafdDilter3¯kasuaÑ/36·29
+b5nzéflit2g,coi3$"#afvErNo\ifhkÁtiml { -arein­vo2:(0 !imortant =
+!`iett{:/?gIü`ub.#nm/AdæuaP`TÍae/QDeu!rlVildurs¯yssee{/35766Mrirwõ./~%t#$&è$sbygoogìw!{ q}satíon;absoMute!HmpnrtAşt;$legu: -0(:0p¨¡iiqoröint; }
+¡ i\”psz/-gkthub.c/m/Aäwyar&T%am¯AdwqapdÆalptrW/iws¿%c/3=7şumlfilihdiÚl%2®î't#$#êod1 >¤"wrsp¡[ íargan­tïp`0!ympotaNv90}! hu|aÓz//gItxer/k_)/Aäguardtec}Adc4hrdFylters)isruep/74557Šişdù9bafg.ndv3$£agLqsóİ{oncLéãëV>"wynTow"pej ¦_Zreo}"noÂnì}owM`{ Xosyin: Éâwolptu!ymp/útanp;4láfô2 -'00pğÙ MlX}2lInt;Dm# ht4ps>//wIÔhu*6coE+Åfgu±t`u1mkÁfgõazdÖi,te{3oassuu{¯3388ŒJucmz!ecai®nm|'$#+`ds2q'oogde  pNritifz$ybSgLute!j}poruuts luît: ,1 42px!iidouta^v;0}!(t|pr:/fatiub®Co}/IdguacdTuam/Atgu¥rdCkn0ess+yóó\er/3299(gø5nIn`yb>clUbcd«$yv!> `Ş|ráf_="xddps:-/bAwsvdò."] [ po³htionº``jsolıtå!impovtalô» lHft:`¬300ix!iH`orp0Nv;`}' htu2W:5foÒuu.eäfuarìn%om¯Indep&ph²?pxp%¤ds¯Ijdivan-coN#1028/yNdirkn.Co1$ƒahRåæŞ½«kt4Pw:/c$òl.)lnknco=¢İ k pksiôIo~z!ewwoleTg!iMpOr0a^ü{ d!fô: )00pø!im`¯rTaî}; }dx04ps:.+gathuâ.coi?AfguereTåam=EdguazdFilvuVs'i»qågr/3°}27Šcbzgtd)&ru#$#mVz­situ-laín({$marçn5tCp:%0cimpop4aj4;0}Í
+£ htuS://gktèub.coo/dguårdTeem/E$gwaz@WmltebC¯`ssu%s-#500HHéL|o~cevwv:.com#4'.pl`yd2-roûtu20Ë"Bac{grîuîl-mm!ue: ~oNe!im0?v4`Nt; }M
+) atd0s/.oiu|ub.cnm.Adbuefd\åam­Ilïu bdFi¬t`pskmrpues/2)&6Š5åchjO1a6.&etc4nîd	ouD-Qd%baK+osownf,oiNk {`faskgÓuNpi?a#e2 none!émpOrdany; }ôechNo2at.jep!$#bjmh>TD-aäjaë+gz{qjdmégk0)te<ketur-grap"{ cur[/r:$eqto1i/pottA|d; m
+*! Httàs//çipYu`*CkmoAdgtardReal/AeguarnFémPers«icwues/²6$71-
+ğiy)óaajkeh`.a/m#%#.é`sf{googje$s(tositeon( `rcolute)hepobtind{$mbt: =³t00h!)lpOztaÌt; qS1!hòtôs:o?gitiub.gMm/@`guabeQeaI/ÀdguÑ2dGhzì%rs'msw%es²6090ëâRqmagtnd%o.".m#%#1mOD`ìqDw s))ísrlay; noNe=iÍroPtáou» }
+ka`amangunlEm.g/|!g#>of¡l-"acjDrîp û fiq°lAyª N¯nm HmpovtanT;!}Mkarc-a.guN`um®coi#%jgfy(Z ovErflgg: vès@bLdyiportand9 }
+  hvuös{//giphqc*com/Aäguer¤VmiI/CD#uAvtFydttRs>éñsuus'98(11
+wu"tékno.eIe#$c.wt.Eartheél"k ±aeniJg:"0!%ymğor|Ant;$]wektd/)wgM#¤!®wÔ%c#ntA+şg~Qrtyla
+5"t!ddkfgmvmpr 0px«"L { peddinç-|p2¤74`x!èiqnvtant;0}İ
+! ht4`s:/e`Ô(u#.cmm?ÉüguPpdecm/aôfuh2d"inTersí{SrtuS/213¨¿
+hurriyavcom/tz#d+.bqgpArá-8o½epbG!-Wèdcåt S leigHt: A¡lc,10 %)!hm4ordift+}
+!¨H4ôpqz//gxqi5â>com/AdgõardT¥a-¯ADkuq:dFiltõrs.iSsueC/:0640*fanaôik.col¼tp#$£.mn-vmívmcDs {$pgsIukon{ absolqte%imp¯p`!nt;$lo&t:!,3010x8!im`ïrtAZT; }j! ltpps:¿//kuhub.3om'Ctk5mrdÔaam/afcu!ràÎint€bó/isSóUSo1809/inka%hi{gk.cou"#c-odql/Adù { icğlaı2.ng!km°Ïr4a^<;1}
+josamèhi'~®kgm3 ooda,-bafif2mp {(eysphas:nonå!iixovvantº0}
+Iocaenik}x>goM'&#.muad/yen /4mrfl÷:gaWisld!iIprr".t+ m!ittp3>+/githwb®#oí-Q`g}erì\eae/Gdgwi|dFiltersmrsões/#¾81>M
+TorranTèd.org#$".îåldstoby n i[èruF*="sLck.xhp"ıJrarfet}*_bèc^k"Í h poóktiknZ aòqnl5´e!imèfruant3 ldfp:„m4000xø!	mporT lt; }z! ku4rs:/noiudõb.gom/dv~iúäTgamoAtguárfGilterS'hssugs?q68y7
+tnr2dnô9l*Nrgƒ$1¬sUAn2-sCotÙyjmrc«0dirtliq>non%¥iìğfrt#nt;0}
+tÏ{úAî|hl,org#$#.sveL2-sxw~0{4overnd/7;véslbnM±+)poîtint; m
+!(hüt0s:.¯fnr}m/adguaò$/gnm/indey*yh8?pêzEc&s/rUëo)vef-*ttrs-ëlôéî-i¯.::%30L
+qntmn.)L#¦#.adc`qgoOwlåh h%ig(t^1px ùopoRuqîp< }
+  a|d`S:®/gi4l5b.com+Ad[uaòdTã!m/Addu!Ò`Filzdús/ics÷e3/06t2Št2t.ago&tr3`#.|oP-bannajlrAğpdr {!petdxng?01vp!)mP/PwanT;("kbkgrkan,=a}$mx> !007f1`-pkztanp;`}
+! ltt@ó
+¯/git(Ernãoí/Ad'qardTe`Í.Ad§}crlFihter2%issõds¿431=-Š! xttps:{ïgiõ|}r.com'ADguard4eaí/A$7ue2dFmlõur3a{S5es/1&´
+! Htttv:;-çktzuB.cwo-ADgõardT$Ù'¯AæguertOm,5EÒs/)sóums+¸¹5p
+wGPµm.dmjanémê!"ernck}#¤!&{a{fahumì.}~Qö > .i¯/naf	gasùon¨+(.snluejif û(vi`thúkAlch130% ­ r9¸p`-áiiğo~ömdt; AŠfOru}.`OnQnimhabEV*coE+|.[aùgyfunL'uzat"¾ *snl}¡ab { SqDtèFanc`q2p$m"²µ3pp9!imqcs4ant; 5
+oRu-.dojaniïhafer#Omã$#>q?dôAraf${ wyduh: c1}#,10%-!qmpzt nd;"
+! (ttpC;/¯gmÔhub.com/A fyardTgaMAdguasdFiLtg i/{ssuwp.!00i;timÄout.Óo-#%.a,-srièlxgèe"{ `oÿHtaog: q"{'ìute!i}øcböé~ts l5ft:ªí3$03p8!ioqMrpa.ô9¤-,Ê!`(ut@S:'+'éthUF&sm"AlGqàrfTeeL/Avçtasd^yoverw&iSyuea&)53	
+tdchinó de®gom3ä##mai >!#cn~tedt[ñt}lE~="íårG(f,ôgp= ]`y"paddcng­|op> ¸©kMpOrtaNt; }
+tegxojëk`g.c+m+,c!Maonb6 .jmageæwrétyåS$« jclei2gjx$+ eiöwtyney"&mj!öleftwidıl:110%;tdhv-á-h'n:c%otor;qar§)n+7p8 0!  ²»íiJ|uéFpqú90ty; |!s ~qbg`n-tïò: 5uh!iMqoztind3 ı
+'"http3:./forum.cDgwásd.ëm/énbex/2x?dizgqas/:·"7</.aPabaM.ãïm#$«.Mmn-(Migj\-@t-iîddy_ hei'èu:"1`4tx‰m}8ßrtcjt? ıBq"xqtpw;//fovuí.a`gtñre/sgí/intex.rkp?phreav3/copnklugazg´eqmcOi62r742oËmrcluoáz%Tesi.#mm!$#'men}BG/{abiôlu û 4Mp: !ahpgstan<;!}!0itğ{//Eit(uc.áom/AdouarlTaãM/Alg5)òdDilteòs-iw3qgs/6s 8turkkyågajgdåsi&cmmjtr#f##adidmÿvuklam"k lyq`|a;: oone%kí`ordafö; 
+t5rïiYegaZådåi.c/m.ôr#$.nootmrª{ da[plax:4`Sle=@}°(xôtpû:;?gïrum.!aGqaòäcom/iîoxn`p>}p%a{/memharõr/bLi&r¶566
+}mmohcjez.coM#'"jody°>ê,citåForiesJÇ!j top*$332`x!ymPobue~t#`}
+,emoh`fur.cOi#$#body n nuóôLng}AlvM z(tlt: 420x!i-poruant; } %0jttpr:g+Fmrum.adguar$.Kol.in$eh.phr?tlzmadw?5-o)óëelqâó%5.641Y2%nguzgL/yenLasL t! !coame.iÙ {`ly3pley: blk#k!ImP&wtanÔ; }%ng5{elïyun,az.ne4¢¤¯'afterGa-eAäs {%fisp,a)º jong1o+poruAnU3$xj! htnps:/'fïrum>qDgqaz`comOiNdex/pl1?tjòuA`s,5%mis3gf-cæí#.266wA/ollliyet®comdr#$#.wnlAl {¢vis©bml)ty:`hid$en: |
+#$ir~Ps:¯/&ortM.qdguart.ïíL¯kNdmx.phP?T*òEaDs
+²071r/
+cumjõqmyut>akm.tv"$##xopup { dawpmáyú0.o~í!idUnrtant? UE
+c5gª5riet.ãnmnub#&#>with7pmUup`{!gverblow> vMsible!impOòtÁnt; }
+cefèpaixed.C/m.0c,+bï${.VktybE!i taeDénE-tkp*20am}bostcla3$]
+# lddpóº-/æoòul.ãeg}!rl.aod/ind%x.phP?rhrE``r/1)2y+ªå!bah*coí.vò§d'h%a`up>`dverTKj4;kmIreg {)tmö: 0 kípîpdáNdºd} I
+1!•bhI$u tè% peaéUr0wi)lm"as tmgowt!
+Siqi`.elm zlc,osg#$"óeci3 {%eÉypla{:dJ+nE !ioporta.t+(]
+siyalfiìm{Zh%/o2d3%£+pikyg{${!fispì!yú Bìockª!mMprtaz$: }
+hdvaalg¹L-`zdammn#ïm# 3fI-M y ôiSPìay blïbkp!iexorxeêt3 }Zjìrue(diloyzloee.cïm#&!3gylkoMgebgknio {¤dacp|ay>!lgîc"!Impcstafp;#m
+HdfilmiúlåXfncoe#4"#fIdmgfG%vU*lim"k dmvpL`}:l-Ng !imxoóuÁnp? m,x`diLmixle©d.com"$#3èrisodd`[ $`eIght:°aw4o aémPortqîôŸ wéeTh:$asôo  imPorpa.t; overæ\oWº(a}t !imtovv)~t; posépion: unwe40%iMportáfu®?
+fu-lèd&iM-hzÌm.pw#,+reIi1 {dkrxláy:$fofe0!ampïptcnd3 }
+fuLlhlfilmI:mg®tw#$#ƒkbNdksm { disqlayº CnoAk +impÏrt`n4;}.yLmguz%weniobg3##rk)kmntent`{ äi{pn`ù> flg !i}poru#nt;"?Šbidn/eegeni./ró# ##c~5K~îtuît(s(D)Sbn)y8 `<lcê %Iyp_r4qot; kKbjtmbarãóy'coí#$"!2k-cnTaêp { décpha9 .onf !imtkrTámt;"vfilmDaf!sk.aoM#$##wj-kllt!nt kb`isplax:<btoók" )ípOrTant; }	
+D}ìl*dIzdu.*'$!#kendësi1{ dEÿ0è!}:$bloak(!hmxîrô±~t;)}
+fullhpi{Le.®2$"#vrkl}!; d}srlci* non-!)imp/rtent; }
+filíhz|çtv.xw`"'2ukh1 { disslaÙ: Koj%(!imrorta^4{h}Jfalí)zlmtv6pw# ##eÎdiqi ; di{plAy6 blog+Ha{lp/rt!np }vuìlèäfidmmot5.OR'$##räëY1"K $iSpdàû:!nooÅ #kmğMrdajv9 }
+fulmHefil)İo`e?obe&$##K'idéwa k displAy: bloc+ ¡é)ğortat3 }-*dmşitaL¶²/coí''a.card-wéaeo {  is`h@y; Block )x)pïrdaî4;¸}
+h,filiC-ejn%-,cm!#$##òe+i1 { uist,my:$nonma)mrostajt/ }%hdfidM#EhenîåMcïm#$##kEväkso ø°disø(!y:"b|/C+!kmrovtao~`]LÊ|`dilmaejelne}i2.*#%'div[ih="raëé#_"{`ìhsPl@y: .onm!!I-qorôaje;!}M
+hdféhmsehelgáié0.*#$gNend(s)0{ FiSTì!y: blgbm !hLxregNv;ày*æullnEU&)l}m:lesanA,~uT#$#nG©:li@y diwp,ey`bloc+p¡hMPortant;#}
+fullo%tfalmixtewew*nUô#¤#.gÌcU-Pe#la| k disølay>`ngní iémqÍrdand;(}
+funhhd2id}mzègQaîEnor'¦.#&vhl-mcebiKw lipulaè; fl¯ck(#émpEreijd; }æi|egïïmcïy'%£&tcz<2%{ìao i dhwplay:ng:e !éiportánt;èu	
+binmcomú.cne#$#&pa`-gmned)c Li{pLayz(&lÎcA`!im`ïzdè.&; }
+hufulNh~ìano:g#&«#&idmongeòeodAm"z`tarpl!x: ngnd !imeRtant+ }	
+(äfÌnlyzhe.or##$#cgPiqkde k ha+Ghp: }jsep inqoRuanT{ wkdPh2"un3mt0)iaportclx;¸r/sition2#inhE )$ !Impo2u¡nt;(}
+svaduum"Tv,##thispnA9M2!; dirq,ay: `dnaK`!)bopTa~w yXtpdùum.ä#<3div[id$=*cEsi"] {$dkSxèayz$ooîg 1imrorTqNd; 
+cınaelhldilL*com£$£#mwTae {"Dar`,Ay8¨rl+kk !kız2äqnp;`|	
+guncg|hdbilmlkwm!$3mMvidoncese{lbM { ¤iSPlay¨ #/ge !in0ortpnt; }oy}l}.comNtrc$')biz/oxná}a {"âisğl`{6$nofe !important; }
 oyunu.com.tr#$##iki.oynama { display: block !important; }
 xxfilmizle.com#$##rk-content { display: none!important; }
 xxfilmizle.com#$##cn-content { display: block!important; }
@@ -2056,23 +1799,17 @@ imdbfilmizle.com#$##videos { display: block!important; }
 fullhdfilmsitesi.live#$##VideOnrekLam { display: none!important; }
 fullhdfilmsitesi.live#$#.video { display: block!important; }
 asyadizilericeviri.com#$##videos { display: block!important; }
-asyadizilericeviri.com#$#.once-reklam { display: none!important; }
-diziboxx.com#$##adv-before-video { display: none!important; }
-diziboxx.com#$##adv-before-video-content > .embed-responsive { display: inline!important; }
-filmuhd.com#$#.tab-reklam  { display: none !important; }
-filmuhd.com#$#span.tab-embed { display: block !important; }
-filmkorku.net#$#.once-reklam { display: none !important; }
-filmkorku.net#$##videos { display: block !important; }
-ultrahdfilm.com#$##rk-content { display: none!important; }
-ultrahdfilm.com#$##cn-content { display: block!important; }
-filmkale.com#$##rk-content { display: none!important; }
-filmkale.com#$##cn-content { display: block!important; }
-filmhani.com#$#.videoBox > div.ad { display: none !important; }
-filmhani.com#$#.videoBox > div.iframe { display: block !important; }
-hddiziport.com#$##dizioncereklam { display: none !important; }
-filmkoltugu.com#$##filmoncereklam { display: none!important; }
-filmkoltugu.com#$##episode { height: unset!important; width: unset!important; position: unset!important; }
-filmizlex.com#$#.once-reklam { display: none!important; }
+asyadizilericeviri.com#$#.once-reklam { display: none!important{ m
+dIzkjmxx.com¤#+ádv-bggore)vifgo*{(&Ispìák(nkoeaémpnòpaFt»1wfi~ib¯xy-Com+¬##àe~%befope/>idEo%aoêuent6 .åmbUd%ògspoNsiví { `is`laø:`i
+lmne!iopO:~ant? }
+folmu`d.gom'%#&dab)Òakmaí "{"displaY: noNe !oipmrta~ô \
+fgnmuId*{oí!%;xan.tab-g}båd"{ fëòğìey: âlock áimPmrlbmt»(ıÍfMl}«oRka.nat6#.oFcu-reK|am û ti3xla{º"nOnm°!)mpobPa¬t= u
+ôhlmhKrku..et#$·#vaduos { lisğlay: blmkj !irmrtaît;*}õl<ráèdbhlm®sm#$+"vk-cínte|v {!lIsplayº n}ne!io0ksdan|; }
+}mô2áèddilu.coo*$£++n/content [`di3plaq> blOck%hmportjnt; mfIlmk!ì.`om#¬##sk-k/ntEnp%{ dispgiy;(nÏne!imtoòtánt; |f)|ekalE.ckm£$##c.-aonte~t {!displym:(clo#k!iotoptanv;h}
+fahmháné.com##.vé`e_Bmhê> di>.ad {"dkkrLaù:(ooe%impOvtan 9&<filmha.y>com#$#.vidagBgX > tkU'igrale Y dkóplaY: Blmci !Em`oòpanT{ñı
+xôfiúi`o3d.¢w-#$c#dizInsmreklam{$$+sPí!y: lOne( i-Porpin|2 }	‹filokïl05'u/Aom#l'#FiìMg.kEruklal {$diSplay: nooe!émtortcît; ù
+giLmkol4uw}.cïm#$"3episofa k heigbt0 wjset!mopkvtAnt» widTx: u~qç|!ioborvajt; ğositil20ñn÷e4!kmprtant"}M
+filmizdeX.ïmm##.ojcå-reklam { display: none!important; }
 filmizlex.com#$##videos { display: block!important; }
 filmzof.com#$#.once-reklam { display: none!important; }
 filmzof.com#$##videos { display: block!important; }
@@ -2169,23 +1906,13 @@ fullhizlifilmizlesen.com#$##rk-content { display: none!important; }
 diziizleyin.org#$##player { display: block!important; }
 diziizleyin.org#$##playerreklam { display: none!important; }
 fullhdfilmcehennemi2.org#$##kendisi { display: block!important; }
-fullhdfilmcehennemi2.org#$##VideOnrekLam { display: none!important; }
-filmbilir2.com#$#.tab-embed { display: block!important; }
-filmbilir2.com#$#.tab-reklam { display: none!important; }
-hdfilmaz.net#$##rk-content { display: none!important; }
-hdfilmaz.net#$##cn-content { display: block!important; }
-fullhdfilmsitesi.net#$#.hdfilm-video { display: none!important; }
-fullhdfilmsitesi.net#$#.source { display: block!important; }
-dizigold5.com#$##videoonureklam { display: none!important; }
-dizigold5.com#$##videoplayer { display: block!important; }
-tekparthd.net#$##rk-content { display: none!important; }
-tekparthd.net#$##cn-content { display: block!important; }
-avsarsinema.com.tr,diziizlenzi.com#$#.ad { display: none!important; }
-avsarsinema.com.tr,diziizlenzi.com#$#.iframe { display: block!important; }
-canlidiziizleten.org#$#.once-reklam { display: none!important; }
-canlidiziizleten.org#$##videos { display: block!important; }
-altyazilidizi.co#$##player-before-ads { display: none!important; }
-altyazilidizi.co#$##player-has-ads { display: block!important; }
+fullhdfilmg%h%nndMm2.org#$##wiEeGjr%JL#M s`äiSq,ay> @gîe!yMpORtaÎt* }filmsylir.g+m#e".Ta"embe¤ { dh3pHiy: bloCYimpmB4an|; =Šfiniby,is2/óoi"$#®taw-rekdáÍ z dI2pna;Z no/m=i-Qor4a~t?e}*xdfilma~&net#$##rk-cïftent {(lisğtayz jonw!imğgr|alt;"}]*Hd&mlmjÿ..ad7#cj)#Ojtínv { displgy: #llck!amporô`nt› }ŒFuL|hdfadMwk5iQi?me|#$'.`fvélm-6idmo&ÿ di3phayH none+íMpmrtanv3 }bunlh,Filmsitesi.o`t«$£.wour`m "lik`da;2!Blo'k!olpoqtAnt; 9
+hizIçnlE5.ánm# ##véfeonus%),ea { lispl!92 |cne¡-mportqnT; u›
+diziçld¥*aol3,##vMdcopeA{dw { dysPl`y:(blocK!Impo2t¡nt; yŠtdopas´hì&~Dñ#$#3_{-clntdn~${ ìy:pday nïne!)mpOğtint? 
+på;pArôhT.oat#4#3cnmaonğåov ~"dispìay:0bìmcj1yIPgzuant*¤}`vqcrsinE}a>cgm.tt,`	riiZlenzI.B+-#&'.bd s distlay oone!ko0orté.p? }
+evwá2wilm-á.£omJtzlehziiºtenZi®cïi#`#éìvame { eis0fq{: âlgck1qmpOútáfv3 }McdnliDi|iizŒm5an.o÷w3$#.onAe=2í{ìgí k di{pìÅy n/ne!iatOrTáju: }-
+cujl]ô	zj)jlEtån.ozg3%c#viäe;ò k Ìasplay: bnosk¥mmTgrôant+&|a|tyizilidizico'$##pn#uRmbe&oreadS { tecpley: Nmneim0oòt!nt; 
+aldzarélhfhzi,#o#$+#player-has-ads { display: block!important; }
 dizimob1.com#$##r2eklami {display:none!important;}
 dizimob1.com#$##kendisi { display: block !important; }
 sinemaseyret.org#$##rk-content { display: none!important; }
@@ -2217,25 +1944,16 @@ hintfilmi.net#$##Video-Oncesi { display: none!important; }
 filmizlesene.pw#$##ikikapa { display:block!important; }
 filmizlesene.pw#$##ilkkapa { display:none!important; }
 hdfilmkalesi.com,birhdfilmizle.org,hdfilmaz.com#$##filmoncereklam { display:none!important; }
-hdfilmkalesi.com,birhdfilmizle.org,hdfilmaz.com#$##film { display:block!important; }
-filmizletix.com#$#.tab-embed { display: block!important; }
-filmizletix.com#$#.tab-reklam { display: none!important; }
-!
-! Removing branded background
-!
-dizilab.*#$#body { background-image: none!important; }
-filmizletv.pw#$#body { background-image: none !important; }
-turkcealtyazi.org#$#body { background-image: none !important; }
-dizi5.plus#$#body { background-image: none !important; }
-fullhdfilmsitesi.live#$#body { background-image: none!important; }
-filmkovasi.net#$#body { background-color: #000!important; }
-buzfilmizle.com#$#body { background-image: none!important; background-color: #000!important; }
-vipfilmlerizleme.com#$#body { background-image: none!important; }
-bayfilmizle.com#$#body { background-image: none!important; background-color: #000!important; }
-dizimag.cc#$#body { background-image: none!important; }
-pchocasi.com.tr#$#body { background-image: none!important; }
-filmionlineizle.pw#$#body { background-image: none!important; }
-filmkolikhd.net#$#body { background-image: none!important; }
+hdfilmkalesi.com,birhdfilmizle.org,hdfilmaz.com#$##film { display:block!important; u
+vilizdet%t.com»4#>t!bMum"e` ;$ähspmax{ jlk£c%kl°oRpab4: |
+FLmazltix.cïm#¤+.4ab-reinAmf{ ThsqX`y2$lOne"ioñruãf; }
+!
+a¨Zaïovihe"bráîted backgóounD!
+dhja|cb>"#&#bo$y"k"baókgro5lä-iíaGer None!Émp/ruå.`+ }êfimeyzLet&*pw"$!bodx [ bëCkgrïunl,h}`gu:0nonu0!iopovtenu; }-Ct÷fËguaüv9azi.öe"&#cody ù backçvdod-imaçeº none$)q}porva.t3 *fmr)5®pü?s#$#fody û âa#kgğownd=iiQ#e; nO,E"ãimportant; }(æellhtfilmsitåwi.Liví##jo$x ;!âaCkgrou$d-)eaec:0jone¡im°krtant; İ-
+didi+ovqsE®n$v!$#bodù { ficjgrUnu-colox>"#380ahmqgrrant{$y
+buzrylyizlE"coi#+body {"backgzkgfd-imaf!z NoFe i+`ovtant:0Baàkgrouîd%gOeo:z #º20!Alrorde~Ô+ }*6ipfihm|ezizlemE.com!$#bïdù°{rbackgzoõ~l-mmaoe" nne!iMpïb|a|t; *dáyf)lei{le.som#à!fdy {0fekkrounf-ioavez lï~##ilùgò4#nd; baákground-bohor 002!YMğmbtanö;àm«
+$iúimic.cc#$ccody`{ bac{gwoun$=iag-: ~mne!impgrtant;"}pc`oká³i.com>4r°#body $b!åGovoune%ima'å:$ngnE!I-`ort`nt2 }
+fInimLLin5ixlG.1s£&#body {`backfrOunğ-alage: Noodåk|xopdcNt;!}nmdi+oikhd.net3$"body"{ jeckgvoun`-amagd{!fgnu!iop-rtant; }
 sinebol.com#$#body { background-image: none!important; }
 filmionlineizle1.net#$#body { background-image: none!important; background-color: #333!important; }
 hdjustintvizle.tv#$#body { background-image: none!important; }

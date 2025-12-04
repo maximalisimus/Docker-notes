@@ -1,0 +1,561 @@
+﻿
+https://markaicode.com/deploy-rocket-chat-self-hosted-tutorial/
+
+
+# Create project directory
+mkdir -p /opt/rocket.chat/{data,uploads,scripts,config,logs}
+cd /opt/rocket.chat
+
+# Set proper permissions
+sudo chown -R $USER:$USER /opt/rocket.chat
+chmod 755 /opt/rocket.chat
+
+# docker-compose.yml
+version: '3.8'
+
+services:
+  rocketchat:
+    image: rocket.chat:latest
+    container_name: rocketchat
+    restart: unless-stopped
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017/rocketchat?replicaSet=rs0
+      - MONGO_OPLOG_URL=mongodb://mongodb:27017/local?replicaSet=rs0
+      - ROOT_URL=https://your-domain.com
+      - PORT=3000
+      - DEPLOY_METHOD=docker
+      - OVERWRITE_SETTING_Show_Setup_Wizard=completed
+    depends_on:
+      - mongodb
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./data/uploads:/app/uploads
+      - ./data/scripts:/app/scripts
+    networks:
+      - rocket-chat-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.rocketchat.rule=Host(`your-domain.com`)"
+      - "traefik.http.routers.rocketchat.tls=true"
+      - "traefik.http.routers.rocketchat.tls.certresolver=letsencrypt"
+
+  mongodb:
+    image: mongo:4.4
+    container_name: mongodb
+    restart: unless-stopped
+    environment:
+      - MONGO_INITDB_DATABASE=rocketchat
+      - MONGO_REPLICA_SET_NAME=rs0
+    command: mongod --replSet rs0 --oplogSize 128 --storageEngine wiredTiger
+    volumes:
+      - ./data/db:/data/db
+      - ./data/dump:/dump
+    ports:
+      - "27017:27017"
+    networks:
+      - rocket-chat-network
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx-proxy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./config/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./config/ssl:/etc/nginx/ssl:ro
+      - ./logs/nginx:/var/log/nginx
+    depends_on:
+      - rocketchat
+    networks:
+      - rocket-chat-network
+
+networks:
+  rocket-chat-network:
+    driver: bridge
+
+volumes:
+  mongodb-data:
+  rocketchat-uploads:
+
+
+
+
+# Configure MongoDB Replica Set
+# Start MongoDB container
+docker-compose up -d mongodb
+
+# Wait for MongoDB to start
+sleep 10
+
+# Initialize replica set
+docker exec -it mongodb mongo --eval "
+rs.initiate({
+  _id: 'rs0',
+  members: [{
+    _id: 0,
+    host: 'mongodb:27017'
+  }]
+})
+"
+
+# Verify replica set status
+docker exec -it mongodb mongo --eval "rs.status()"
+
+
+
+# Configure Nginx Reverse Proxy
+
+# config/nginx.conf
+events {
+    worker_connections 1024;
+}
+
+http {
+    upstream rocketchat {
+        server rocketchat:3000;
+    }
+
+    # HTTP to HTTPS redirect
+    server {
+        listen 80;
+        server_name your-domain.com;
+        return 301 https://$server_name$request_uri;
+    }
+
+    # HTTPS configuration
+    server {
+        listen 443 ssl http2;
+        server_name your-domain.com;
+
+        # SSL certificate configuration
+        ssl_certificate /etc/nginx/ssl/fullchain.pem;
+        ssl_certificate_key /etc/nginx/ssl/privkey.pem;
+        
+        # SSL security settings
+        ssl_protocols TLSv1.2 TLSv1.3;
+        ssl_ciphers ECDHE-RSA-AES256-GCM-SHA512:DHE-RSA-AES256-GCM-SHA512:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES256-GCM-SHA384;
+        ssl_prefer_server_ciphers off;
+        ssl_session_cache shared:SSL:10m;
+        ssl_session_timeout 10m;
+
+        # Security headers
+        add_header Strict-Transport-Security "max-age=63072000" always;
+        add_header X-Frame-Options DENY always;
+        add_header X-Content-Type-Options nosniff always;
+
+        # Proxy configuration
+        location / {
+            proxy_pass http://rocketchat;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection "upgrade";
+            proxy_set_header Host $http_host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_set_header X-Nginx-Proxy true;
+            proxy_redirect off;
+        }
+
+        # File upload configuration
+        client_max_body_size 200M;
+        proxy_connect_timeout 60s;
+        proxy_send_timeout 60s;
+        proxy_read_timeout 60s;
+    }
+}
+
+
+
+
+# Obtain SSL Certificates
+
+# Install Certbot
+sudo apt install certbot -y
+
+# Stop nginx if running
+docker-compose stop nginx
+
+# Obtain SSL certificate
+sudo certbot certonly --standalone -d your-domain.com
+
+# Copy certificates to nginx directory
+sudo mkdir -p /opt/rocket.chat/config/ssl
+sudo cp /etc/letsencrypt/live/your-domain.com/fullchain.pem /opt/rocket.chat/config/ssl/
+sudo cp /etc/letsencrypt/live/your-domain.com/privkey.pem /opt/rocket.chat/config/ssl/
+
+# Set proper permissions
+sudo chown -R $USER:$USER /opt/rocket.chat/config/ssl
+
+
+
+
+# Create SSL renewal script:
+
+#!/bin/bash
+# scripts/renew-ssl.sh
+
+# Stop nginx
+docker-compose stop nginx
+
+# Renew certificate
+certbot renew --quiet
+
+# Copy new certificates
+cp /etc/letsencrypt/live/your-domain.com/fullchain.pem /opt/rocket.chat/config/ssl/
+cp /etc/letsencrypt/live/your-domain.com/privkey.pem /opt/rocket.chat/config/ssl/
+
+# Restart nginx
+docker-compose start nginx
+
+# Make script executable
+chmod +x scripts/renew-ssl.sh
+
+
+# Deploy Rocket.Chat
+
+# Navigate to project directory
+cd /opt/rocket.chat
+
+# Update docker-compose.yml with your domain
+sed -i 's/your-domain.com/youractual-domain.com/g' docker-compose.yml
+sed -i 's/your-domain.com/youractual-domain.com/g' config/nginx.conf
+
+# Start all services
+docker-compose up -d
+
+# Check service status
+docker-compose ps
+
+# View logs
+docker-compose logs -f rocketchat
+
+
+
+
+# Initial Rocket.Chat Configuration
+Access your Rocket.Chat instance at https://your-domain.com and complete the setup:
+
+Administrator Account Setup
+Navigate to your Rocket.Chat URL
+Create administrator account
+Configure organization details
+Set up user registration preferences
+Essential Configuration Settings
+
+
+
+
+// Access Administration > Settings via web interface
+
+// General Settings
+Site_Name: "Your Company Chat"
+Site_URL: "https://your-domain.com"
+Language: "en"
+
+// Accounts Settings
+Accounts_AllowRealNameChange: true
+Accounts_AllowUserProfileChange: true
+Accounts_AllowPasswordChange: true
+
+// File Upload Settings
+FileUpload_MaxFileSize: 104857600  // 100MB
+FileUpload_MediaTypeWhiteList: "image/*,audio/*,video/*,application/pdf"
+
+// Email Settings (SMTP Configuration)
+SMTP_Host: "your-smtp-server.com"
+SMTP_Port: 587
+SMTP_Username: "your-email@domain.com"
+SMTP_Password: "your-email-password"
+From_Email: "noreply@your-domain.com"
+
+
+
+
+
+
+
+
+# Database Backup Configuration
+
+#!/bin/bash
+# scripts/backup-mongodb.sh
+
+BACKUP_DIR="/opt/rocket.chat/data/backups"
+DATE=$(date +%Y%m%d_%H%M%S)
+BACKUP_NAME="rocketchat_backup_$DATE"
+
+# Create backup directory
+mkdir -p $BACKUP_DIR
+
+# Create MongoDB dump
+docker exec mongodb mongodump --db rocketchat --out /dump/$BACKUP_NAME
+
+# Copy backup to host
+docker cp mongodb:/dump/$BACKUP_NAME $BACKUP_DIR/
+
+# Compress backup
+tar -czf $BACKUP_DIR/$BACKUP_NAME.tar.gz -C $BACKUP_DIR $BACKUP_NAME
+rm -rf $BACKUP_DIR/$BACKUP_NAME
+
+# Remove backups older than 30 days
+find $BACKUP_DIR -name "*.tar.gz" -type f -mtime +30 -delete
+
+echo "Backup completed: $BACKUP_NAME.tar.gz"
+
+
+
+
+
+# Set up automated backups with cron:
+
+# Add to crontab
+crontab -e
+
+# Add daily backup at 2 AM
+0 2 * * * /opt/rocket.chat/scripts/backup-mongodb.sh >> /opt/rocket.chat/logs/backup.log 2>&1
+
+
+
+
+
+# Performance Optimization
+
+
+# Add to docker-compose.yml services
+services:
+  rocketchat:
+    # ... existing configuration
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: '1.0'
+        reservations:
+          memory: 1G
+          cpus: '0.5'
+
+  mongodb:
+    # ... existing configuration
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: '0.5'
+        reservations:
+          memory: 512M
+          cpus: '0.25'
+
+
+
+# MongoDB Performance Tuning
+
+// Connect to MongoDB and run these commands
+docker exec -it mongodb mongo rocketchat
+
+// Create indexes for better performance
+db.rocketchat_message.createIndex({"rid": 1, "ts": 1})
+db.rocketchat_subscription.createIndex({"u._id": 1})
+db.users.createIndex({"username": 1})
+db.users.createIndex({"emails.address": 1})
+
+// Enable MongoDB profiling
+db.setProfilingLevel(1, {slowms: 100})
+
+
+
+
+# Monitoring and Health Checks
+
+#!/bin/bash
+# scripts/health-check.sh
+
+ROCKET_CHAT_URL="https://your-domain.com"
+LOG_FILE="/opt/rocket.chat/logs/health-check.log"
+
+# Check Rocket.Chat availability
+if curl -f -s $ROCKET_CHAT_URL/api/info > /dev/null; then
+    echo "$(date): Rocket.Chat is healthy" >> $LOG_FILE
+else
+    echo "$(date): Rocket.Chat is down - restarting services" >> $LOG_FILE
+    cd /opt/rocket.chat
+    docker-compose restart
+fi
+
+# Check MongoDB status
+if docker exec mongodb mongo --eval "db.adminCommand('ismaster')" > /dev/null 2>&1; then
+    echo "$(date): MongoDB is healthy" >> $LOG_FILE
+else
+    echo "$(date): MongoDB is down - restarting" >> $LOG_FILE
+    docker-compose restart mongodb
+fi
+
+# Check disk space
+DISK_USAGE=$(df /opt/rocket.chat | tail -1 | awk '{print $5}' | sed 's/%//')
+if [ $DISK_USAGE -gt 80 ]; then
+    echo "$(date): Warning - Disk usage is ${DISK_USAGE}%" >> $LOG_FILE
+fi
+
+
+
+
+
+
+
+
+
+
+
+# Security Hardening
+
+# Configure UFW firewall
+sudo ufw enable
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+
+# Allow SSH, HTTP, and HTTPS
+sudo ufw allow ssh
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
+
+# Block direct access to MongoDB
+sudo ufw deny 27017
+
+# Apply rules
+sudo ufw reload
+
+
+
+
+
+# Docker Security Settings
+
+# Update docker-compose.yml with security options
+services:
+  rocketchat:
+    # ... existing configuration
+    security_opt:
+      - no-new-privileges:true
+    read_only: false
+    tmpfs:
+      - /tmp:noexec,nosuid,size=100M
+
+  mongodb:
+    # ... existing configuration
+    security_opt:
+      - no-new-privileges:true
+
+
+
+
+
+
+# Rocket.Chat Won't Start
+
+# Check container logs
+docker-compose logs rocketchat
+
+# Common fixes:
+# 1. Ensure MongoDB replica set is initialized
+# 2. Check environment variables
+# 3. Verify port availability
+sudo netstat -tulpn | grep :3000
+
+
+
+
+
+# SSL Certificate Issues
+
+# Test SSL certificate
+openssl s_client -connect your-domain.com:443 -servername your-domain.com
+
+# Renew certificate manually
+sudo certbot renew --force-renewal
+
+
+
+# Performance Problems
+
+# Monitor resource usage
+docker stats
+
+# Check MongoDB performance
+docker exec -it mongodb mongo rocketchat --eval "db.runCommand({serverStatus: 1})"
+
+# Analyze slow queries
+docker exec -it mongodb mongo rocketchat --eval "db.getProfilingData().pretty()"
+
+
+# Update Rocket.Chat
+
+# Backup before updating
+./scripts/backup-mongodb.sh
+
+# Pull latest image
+docker-compose pull rocketchat
+
+# Restart with new image
+docker-compose up -d rocketchat
+
+# Verify update
+docker-compose logs rocketchat
+
+
+
+
+
+
+# Database Restoration
+
+
+
+# Restore from backup
+BACKUP_FILE="rocketchat_backup_20240515_020001.tar.gz"
+tar -xzf /opt/rocket.chat/data/backups/$BACKUP_FILE
+
+# Restore to MongoDB
+docker exec -i mongodb mongorestore --db rocketchat --drop /dump/rocketchat_backup_20240515_020001/rocketchat/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
