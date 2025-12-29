@@ -1,0 +1,194 @@
+
+Session
+
+Настройка firewalld: отдельная зона для Session
+
+sudo firewall-cmd --permanent --new-zone=session
+
+sudo firewall-cmd --permanent --zone=session --add-service={http,https}
+sudo firewall-cmd --permanent --zone=session --add-port=8300/tcp
+
+Ограничение по IP (опционально)
+
+sudo firewall-cmd --permanent --zone=session --add-source=203.0.113.45
+
+Для подсети:
+
+sudo firewall-cmd --permanent --zone=session --add-source=192.168.1.0/24
+
+Активация правил
+
+sudo firewall-cmd --reload
+
+Проверка
+
+sudo firewall-cmd --zone=session --list-all
+
+Через Docker (рекомендуется)
+
+Структура проекта
+
+$HOME/session-oxen/
++-- docker-compose.yml
++-- config/
+¦   L-- oxen-service.conf
+L-- data/          # будет создан автоматически
+
+
+
+
+$ nano docker-compose.yml
+
+version: '3.8'
+
+networks:
+  session-net:
+    driver: bridge
+
+volumes:
+  oxen-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: $HOME/session-oxen/data
+      o: bind
+
+services:
+  oxen:
+    image: oxen/service:latest
+    container_name: session-oxen
+    restart: unless-stopped
+    volumes:
+      - oxen-data:/data
+      - $HOME/session-oxen/config/oxen-service.conf:/data/oxen-service.conf:ro
+    ports:
+      - "8300:8080"  # Внешний порт 8300 > внутренний 8080 (Oxen)
+    networks:
+      - session-net
+
+
+
+
+
+
+$ nano $HOME/Session-Oxen/config/oxen/oxen-service.conf
+
+service-node-public-host = session.yourdomain.com
+service-node-port = 8080
+storage-directory = /data
+tls-certificate-file = /etc/letsencrypt/live/session.yourdomain.com/fullchain.pem
+tls-private-key-file = /etc/letsencrypt/live/session.yourdomain.com/privkey.pem
+
+
+
+
+$ sudo nano /etc/nginx/sites-available/session.conf
+
+server {
+    listen 80;
+    server_name session.yourdomain.com;
+
+    # Редирект на HTTPS
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name session.yourdomain.com;
+
+    # Пути к сертификатам Let's Encrypt
+    ssl_certificate /etc/letsencrypt/live/session.yourdomain.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/session.yourdomain.com/privkey.pem;
+
+    # Основные SSL-настройки
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384;
+    ssl_prefer_server_ciphers on;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 10m;
+
+    # Защита
+    add_header X-Frame-Options DENY;
+    add_header X-Content-Type-Options nosniff;
+    add_header X-XSS-Protection "1; mode=block";
+    add_header Referrer-Policy "no-referrer-when-downgrade";
+
+    # Проксирование на Oxen (порт 8300 контейнера)
+    location / {
+        proxy_pass http://localhost:8300;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Real-IP $remote_addr;
+
+        # Для WebSocket (если используется)
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_read_timeout 86400;
+    }
+
+    access_log /var/log/nginx/session_access.log;
+    error_log /var/log/nginx/session_error.log;
+}
+
+
+
+
+
+
+Активация конфига
+
+$ sudo ln -s /etc/nginx/sites-available/session.conf /etc/nginx/sites-enabled/
+
+$ sudo nginx -t
+
+Перезапустите Nginx:
+
+$ sudo systemctl restart nginx
+
+$ sudo systemctl status nginx
+
+
+
+Получение сертификатов Let’s Encrypt
+
+sudo certbot --nginx -d session.yourdomain.com
+
+
+
+https://session.yourdomain.com
+curl -vI https://session.yourdomain.com 2>&1 | grep "SSL"
+sudo tail -f /var/log/nginx/session_error.log
+sudo tail -f /var/log/nginx/session_access.log
+curl http://localhost:8300/status
+
+sudo certbot renew --dry-run
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
