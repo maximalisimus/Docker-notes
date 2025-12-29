@@ -1,0 +1,109 @@
+﻿
+Jami сервер.
+• Сервер с подходящими характеристиками. Минимальные требования: 2 ядра CPU, 2 ГБ ОЗУ, 1 ГБ места для установки, доступ к портам 5060/5061. Поддерживаемые ОС: Linux (RHEL, Debian, Ubuntu и др.), macOS (10.14+), Windows (Windows Server 2016+ или Windows 10), FreeBSD (11.0+).
+• Установка зависимостей. Необходимы libdbus-1-3 и libavcodec58.
+• Настройка JAMS. В документации Jami есть раздел, посвящённый JAMS, где описаны шаги по созданию администратора, настройке центра сертификации, базы данных пользователей и параметров сервера.
+• Управление доступом. JAMS позволяет интегрироваться с LDAP и применять групповые настройки.
+https://docs.jami.net/ru/user/jami-for-servers.html
+
+Jami for servers
+Примечание
+
+Add an existing Jami account with group conversations on servers that are always online to facilitate message exchange. Set up multiple servers for redundancy and fault tolerance.
+
+Create a user account on the server
+It is recommended that a user account, without root permissions, be added to the server to run Jami. In this example, the jamiserver user account was added with the command:
+
+useradd -s /bin/bash -m jamiserver
+Install the Jami daemon on the server
+Only the Jami daemon installation is required on the server. The full Jami client is not required to be installed, especially if the server does not have a graphical user interface. In the last command line of the installation instructions for the server’s GNU/Linux distribution at the setup instructions, replace the text:
+
+install jami
+with the text:
+
+install jami-daemon dbus-x11
+Copy the Jami configuration files
+A copy of the Jami configuration files is required on the server. If the Jami account is already configured on a computer (in this example, a computer is running GNU/Linux), copy the .local/share/jami and .config/jami directories to the server.
+
+The commands below must be run from the home directory of the user. The server must be accessible via SSH from the computer where Jami is already installed, and the jamiserver user on the server must have a password (or the public SSH key of the user on the already configured computer).
+
+cd
+rsync -av .local/share/jami jamiserver@SERVER_NAME_OR_IP_ADDR:~/.local/share/
+rsync -av .config/jami jamiserver@SERVER_NAME_OR_IP_ADDR:~/.config/
+On the server, log in as the jamiserver user and ensure that the directories have been copied correctly.
+
+cd
+ls -a .local/share/jami
+ls -a .config/jami
+Примечание
+
+The owner of the server directories must be the jamiserver user, not the root user.
+
+Create a script file to launch Jami on the server
+Create a script file to launch Jami on the server with the Jami Daemon (jamid) and the D-Bus (dbus) by creating (as root) the /usr/local/bin/launchjami file and adding the following contents:
+
+#!/bin/bash
+dbus-launch --auto-syntax|grep DBUS_SESSION_BUS_ADDRESS >/tmp/env-jamiserver
+source /tmp/env-jamiserver
+/usr/libexec/jamid
+Примечание
+
+The /usr/libexec/jamid file was created from the jami-daemon package installed at the beginning.
+
+Ensure that the script file is executable with:
+
+chmod +x /usr/local/bin/launchjami
+Совет
+
+The jamiserver.service file can be created and edited as root with a text editor using the terminal command sudo nano /etc/systemd/system/jamiserver.service.
+
+To start Jami on the server as a service, create the jamiserver systemd unit file that will run the script file by creating the /etc/systemd/system/jamiserver.service file as root and adding the following configuration:
+
+[Unit]
+Description=Daemon Jami for my project
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/launchjami
+ExecStop=/usr/bin/pkill -u jamiserver jamid
+User=jamiserver
+Group=jamiserver
+
+[Install]
+WantedBy=default.target
+Retrieve the systemd configuration with:
+
+systemctl daemon-reload
+Then start the service with:
+
+systemctl start jamiserver.service
+To start Jami automatically when the server starts, the following command is required:
+
+systemctl enable jamiserver.service
+With the command:
+
+systemctl status jamiserver.service
+The service must be set to active:
+
+# systemctl status jamiserver.service
+● jamiserver.service - Daemon Jami for my project
+     Loaded: loaded (/etc/systemd/system/jamiserver.service; disabled; preset: enabled)
+     Active: active (running) since Fri 2025-03-14 05:29:18 UTC; 17min ago
+   Main PID: 982 (launchjami)
+      Tasks: 35 (limit: 2260)
+     Memory: 65.9M (peak: 70.4M)
+        CPU: 24.966s
+     CGroup: /system.slice/jamiserver.service
+             ├─982 /bin/bash /usr/local/bin/launchjami
+             ├─988 /usr/bin/dbus-daemon --syslog --fork --print-pid 4 --print-address 6 --session
+             └─989 /usr/libexec/jamid
+Важно
+
+If further changes are made to the Jami configuration on the computer after installation on the server, it is required to copy the configuration files back to the server (rerun the rsync commands) and restart the service.
+
+
+
+
+
+

@@ -1,0 +1,25 @@
+﻿
+
+Portainer-SSH-SOCKS5
+
+Доступ к Portainer через SSH‑туннель (SOCKS5)
+
+Ваш подход с -D верен. Разберём детали.
+
+ssh -p 2222 -D 1080 -CfnNT utv2@utv2-pc
+socks5://localhost:1080
+
+--proxy-server="socks5://localhost:1080"
+
+http://localhost:9000
+http://localhost:9000
+http://utv2-pc:9000
+
+
+pkill -f "ssh -D 1080"
+
+ps aux | grep "ssh -D"
+
+
+
+

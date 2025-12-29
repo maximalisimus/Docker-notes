@@ -1,0 +1,594 @@
+
+
+
+Matrix (Element)
+
+Matrix — это протокол для децентрализованной коммуникации, а Element — клиент для работы с ним. Сервер Matrix называется Synapse.
+
+• Подготовка сервера. Требования: ОС Ubuntu 24.04 LTS, минимум 2 ГБ RAM, 2 ядра CPU, 20 ГБ SSD, статический IP и доступ к интернету.
+• Настройка DNS. Обязательна запись A для домена (например, matrix.example.com) и SRV-запись для федерации (_matrix-fed._tcp.matrix.example.com). 
+• Обновление системы. sudo apt update && sudo apt upgrade -y
+• Установка зависимостей и репозитория Matrix.
+
+sudo apt install -y lsb-release wget apt-transport-https
+sudo wget -O /usr/share/keyrings/matrix-org-archive-keyring.gpg https://packages.matrix.org/debian/matrix-org-archive-keyring.gpg
+echo "deb [signed-by=/usr/share/keyrings/matrix-org-archive-keyring.gpg] https://packages.matrix.org/debian/ 
+
+
+Структура проекта
+
+$HOME/Element-Matrix/
++-- docker-compose.yml
++-- config/
+¦   +-- synapse/
+¦   ¦   +-- homeserver.yaml
+¦   ¦   L-- registration_shared_secret
+¦   +-- postgres/
+¦   ¦   L-- init-db.sh
+¦   +-- element/
+¦   ¦   L-- config.json
+¦   L-- nginx/
+¦       +-- nginx.conf
+¦       +-- certs/
+¦       L-- sites-enabled/
+L-- data/
+    +-- synapse/
+    +-- postgres/
+    L-- element/
+
+
+
+
+
+$ nano docker-compose.yml
+
+version: '3.8'
+
+networks:
+  matrix-network:
+    driver: bridge
+
+volumes:
+  synapse-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: $HOME/Element-Matrix/data/synapse
+      o: bind
+  postgres-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: $HOME/Element-Matrix/data/postgres
+      o: bind
+  element-data:
+    driver: local
+    driver_opts:
+      type: none
+      device: $HOME/Element-Matrix/data/element
+      o: bind
+
+services:
+  synapse:
+    image: matrixdotorg/synapse:latest
+    container_name: matrix-synapse
+    restart: unless-stopped
+    volumes:
+      - synapse-data:/data
+      - $HOME/Element-Matrix/config/synapse/homeserver.yaml:/data/homeserver.yaml:ro
+      - $HOME/Element-Matrix/config/synapse/registration_shared_secret:/data/registration_shared_secret:ro
+    environment:
+      - SYNAPSE_SERVER_NAME=matrix.yourdomain.com
+      - SYNAPSE_REPORT_STATS=no
+    networks:
+      - matrix-network
+    expose:
+      - 8008
+      - 8448
+
+  postgres:
+    image: postgres:14
+    container_name: matrix-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: synapse
+      POSTGRES_USER: synapse
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+    secrets:
+      - postgres_password
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - $HOME/Element-Matrix/config/postgres/init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
+    networks:
+      - matrix-network
+    expose:
+      - 5432
+
+  element:
+    image: vectorim/element-web:latest
+    container_name: matrix-element
+    restart: unless-stopped
+    volumes:
+      - element-data:/app/data
+      - $HOME/Element-Matrix/config/element/config.json:/app/config.json:ro
+    networks:
+      - matrix-network
+    expose:
+      - 80
+
+  # Вариант 1: Nginx внутри Docker (рекомендуется для изоляции)
+  nginx:
+    image: nginx:alpine
+    container_name: matrix-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - $HOME/Element-Matrix/config/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - $HOME/Element-Matrix/config/nginx/certs:/etc/nginx/certs:ro
+      - $HOME/Element-Matrix/config/nginx/sites-enabled:/etc/nginx/sites-enabled:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro  # если используете certbot
+    networks:
+      - matrix-network
+    depends_on:
+      - synapse
+      - element
+
+secrets:
+  postgres_password:
+    file: $HOME/Element-Matrix/config/postgres/.postgres_password
+
+
+
+
+
+
+
+$ nano config/synapse/homeserver.yaml
+
+server_name: "matrix.yourdomain.com"
+
+database:
+  name: psycopg2
+  args:
+    user: synapse
+    password: <postgres_password>
+    database: synapse
+    host: postgres
+    port: 5432
+    cp_min: 5
+    cp_max: 10
+
+listeners:
+  - port: 8008
+    tls: false
+    type: http
+    x_forwarded: true
+    resources:
+      - names: [client, federation]
+        compress: true
+
+  - port: 8448
+    type: http
+    tls: true
+    x_forwarded: true
+    resources:
+      - names: [federation]
+        compress: false
+
+registration_shared_secret: "<registration_secret>"
+
+enable_registration: false
+
+federation_domain_whitelist:
+  - matrix.yourdomain.com
+
+
+
+
+
+
+$ nano config/postgres/init-db.sh
+
+#!/bin/bash
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
+    CREATE USER synapse WITH PASSWORD '${POSTGRES_PASSWORD}';
+    CREATE DATABASE synapse;
+    GRANT ALL PRIVILEGES ON DATABASE synapse TO synapse;
+EOSQL
+
+
+
+
+
+$ nano config/element/config.json
+
+{
+  "base_url": "https://matrix.yourdomain.com",
+  "room_directory": {
+    "servers": ["matrix.yourdomain.com"]
+  },
+  "m3o_url": "",
+  "piwik": {
+    "url": "",
+    "siteId": ""
+  },
+  "default_theme": "light",
+  "update_base_url": "/updates",
+  "settingDefaults": {
+    "theme": "light"
+  }
+}
+
+
+
+
+
+$ nano config/nginx/nginx.conf
+
+user nginx;
+worker_processes auto;
+error_log /var/log/nginx/error.log notice;
+pid /var/run/nginx.pid;
+
+events {
+    worker_connections 1024;
+}
+
+http {
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+
+    log_format main '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+
+    access_log /var/log/nginx/access.log main;
+
+    sendfile on;
+    keepalive_timeout 65;
+
+    include /etc/nginx/sites-enabled/*.conf;
+}
+
+
+
+
+
+$ nano config/nginx/sites-enabled/matrix.conf
+
+server {
+    listen 80;
+    server_name matrix.yourdomain.com;
+
+    # Обработка Matrix-специфичных .well-known запросов (важно для федерации)
+    location /.well-known/matrix/ {
+        alias /var/www/matrix/;
+        try_files $uri $uri/ =404;
+    }
+
+    # Редирект всех HTTP-запросов на HTTPS
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
+
+server {
+    listen 443 ssl;
+    server_name matrix.yourdomain.com;
+
+    # Пути к сертификатам (настройте под свою систему)
+    ssl_certificate /etc/nginx/certs/fullchain.pem;
+    ssl_certificate_key /etc/nginx/certs/privkey.pem;
+
+    # Основные SSL-настройки
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384;
+    ssl_prefer_server_ciphers on;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 10m;
+
+    # Защита от некоторых атак
+    add_header X-Frame-Options DENY;
+    add_header X-Content-Type-Options nosniff;
+    add_header X-XSS-Protection "1; mode=block";
+    add_header Referrer-Policy "no-referrer-when-downgrade";
+
+    # Корневой путь — проксируем на Element
+    location / {
+        proxy_pass http://element:80;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Real-IP $remote_addr;
+
+        # Настройки буферизации для WebSocket
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_read_timeout 86400;
+    }
+
+    # API Matrix (клиентская часть и федерация)
+    location /_matrix {
+        proxy_pass http://synapse:8008;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Real-IP $remote_addr;
+
+        # Для WebSocket-соединений
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_read_timeout 86400;
+    }
+
+    # Альтернативный путь для клиента (если нужен отдельный доступ)
+    location /client/ {
+        proxy_pass http://element:80/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # Статика Element (иконки, CSS и т.п.)
+    location /static/ {
+        proxy_pass http://element:80/static/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+    }
+
+    # Защита административных эндпоинтов
+    location = /_synapse/admin {
+        deny all;
+    }
+
+    # Логирование
+    access_log /var/log/nginx/matrix_access.log;
+    error_log /var/log/nginx/matrix_error.log;
+}
+
+
+
+
+
+
+
+
+Чтобы вынести Nginx за пределы Docker и использовать глобальный Nginx (на хосте) с сертификатами Let’s Encrypt, выполните следующие шаги.
+
+sudo apt install nginx
+sudo apt install certbot python3-certbot-nginx
+
+sudo ufw allow 80
+sudo ufw allow 443
+
+sudo firewall-cmd --permanent --zone=public --add-service=http
+sudo firewall-cmd --permanent --zone=public --add-service=https
+sudo firewall-cmd --permanent --zone=public --add-port=8448/tcp
+sudo firewall-cmd --reload
+sudo firewall-cmd --list-all
+
+$ nano docker-compose.yml
+
+Удалите сервис nginx
+Откройте порты Synapse и Element напрямую (временно для сертификации):
+
+services:
+  synapse:
+    # ... (прежние настройки)
+    ports:
+      - "8008:8008"  # временно для certbot
+      - "8448:8448"  # федерация
+
+
+  element:
+    # ... (прежние настройки)
+    ports:
+      - "8080:80"  # временно для certbot
+
+docker-compose up -d
+
+sudo certbot --nginx -d matrix.yourdomain.com
+
+Настройка глобального Nginx (ручной конфиг)
+
+$ nano /etc/nginx/sites-available/matrix.yourdomain.com
+
+server {
+    listen 80;
+    server_name matrix.yourdomain.com;
+
+    # Временный редирект для проверки сертификата
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name matrix.yourdomain.com;
+
+    # Пути к сертификатам (автоматически обновляются Certbot)
+    ssl_certificate /etc/letsencrypt/live/matrix.yourdomain.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/matrix.yourdomain.com/privkey.pem;
+
+    # Основные SSL-настройки
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:...;
+    ssl_prefer_server_ciphers on;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 10m;
+
+
+    # Защита
+    add_header X-Frame-Options DENY;
+    add_header X-Content-Type-Options nosniff;
+    add_header X-XSS-Protection "1; mode=block";
+    add_header Referrer-Policy "no-referrer-when-downgrade";
+
+
+    # Проксирование на Element (порт 8080 в Docker)
+    location / {
+        proxy_pass http://localhost:8080;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Real-IP $remote_addr;
+
+
+        # Для WebSocket
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_read_timeout 86400;
+    }
+
+
+    # API Matrix (Synapse)
+    location /_matrix {
+        proxy_pass http://localhost:8008;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Real-IP $remote_addr;
+
+
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_read_timeout 86400;
+    }
+
+    # .well-known для федерации
+    location /.well-known/matrix/ {
+        alias /var/www/matrix/;
+        try_files $uri $uri/ =404;
+    }
+
+    access_log /var/log/nginx/matrix_access.log;
+    error_log /var/log/nginx/matrix_error.log;
+}
+
+Активируйте сайт:
+
+sudo ln -s /etc/nginx/sites-available/matrix.yourdomain.com /etc/nginx/sites-enabled/
+sudo nginx -t && sudo systemctl reload nginx
+
+Отключение временных портов в Docker
+
+Удалите проброс портов из docker-compose.yml:
+
+services:
+  synapse:
+    # ports: <- удалите эти строки
+    #   - "8008:8008"
+    #   - "8448:8448"
+
+  element:
+    # ports: <- удалите эти строки
+    #   - "8080:80"
+
+Перезапустите контейнеры:
+
+docker-compose down && docker-compose up -d
+
+Автоматическое обновление сертификатов
+
+sudo systemctl list-timers | grep certbot
+
+sudo certbot renew --dry-run
+
+Откройте в браузере: https://matrix.yourdomain.com > должен загрузиться Element.
+Другие проверки
+curl -k https://matrix.yourdomain.com:8448/_matrix/federation/v1/version
+openssl s_client -connect matrix.yourdomain.com:443 -servername matrix.yourdomain.com
+
+
+
+
+
+
+Настройка Firewalld для Matrix?сервера (по принципам из статьи)
+
+Исходя из концепции разделения зон (как в вашей статье), оптимально создать отдельную зону для Matrix?сервисов. Это даст:
+
+• чёткое разграничение трафика;
+• лёгкость аудита правил;
+• возможность быстро отключить/изменить правила для Matrix без влияния на другие сервисы.
+
+Создание зоны matrix
+
+sudo firewall-cmd --permanent --new-zone=matrix
+
+Назначение интерфейсов (если нужно)
+
+sudo firewall-cmd --permanent --zone=matrix --add-interface=eth1
+
+Открытие портов в зоне matrix
+
+# HTTP/HTTPS для Let's Encrypt и работы Element
+sudo firewall-cmd --permanent --zone=matrix --add-service=http
+sudo firewall-cmd --permanent --zone=matrix --add-service=https
+# Порт федерации Matrix
+sudo firewall-cmd --permanent --zone=matrix --add-port=8448/tcp
+# Если нужен доступ к Portainer (например, порт 9000)
+sudo firewall-cmd --permanent --zone=matrix --add-port=9000/tcp
+
+Привязка IP?адреса (опционально)
+
+sudo firewall-cmd --permanent --zone=matrix --add-source=203.0.113.45
+
+Для нескольких IP:
+
+sudo firewall-cmd --permanent --zone=matrix --add-source=192.168.1.0/24
+
+Активация зоны и перезагрузка
+
+sudo firewall-cmd --reload
+
+Проверка
+
+# Посмотреть все правила зоны
+sudo firewall-cmd --zone=matrix --list-all
+# Проверить активные зоны
+sudo firewall-cmd --get-active-zones
+
+Итог:
+
+• Все правила для Matrix собраны в зоне matrix.
+• Если нужно отключить Matrix — достаточно удалить зону:
+
+sudo firewall-cmd --permanent --delete-zone=matrix
+sudo firewall-cmd --reload
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
